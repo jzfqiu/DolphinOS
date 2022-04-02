@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 // https://styled-components.com/docs/basics#attaching-additional-props
-// Props pass through attrs constructor for preprocessing
+// Props pass through attrs constructor for frequently updated attribute
 const StyledWindow = styled.div.attrs(props => ({
     style: {
         width: props.size ? props.size.x + "px" : "200px",
@@ -34,16 +34,13 @@ class Window extends Component {
         }
         // This binding is necessary to make `this` work in the callback
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind 
-        this.onMouseDown = this.onMouseDown.bind(this)
-        this.onMouseMove = this.onMouseMove.bind(this)
-        this.onMouseUp = this.onMouseUp.bind(this)
+        this.handleMouseDown = this.handleMouseDown.bind(this)
+        this.handleMouseMove = this.handleMouseMove.bind(this)
+        this.stopDragging = this.stopDragging.bind(this)
     }
 
-    componentDidUpdate() {
 
-    }
-
-    onMouseDown (e) {
+    handleMouseDown (e) {
         this.setState({
             dragging: true,
             relPos: {
@@ -53,7 +50,7 @@ class Window extends Component {
         })
     }
 
-    onMouseMove (e) {
+    handleMouseMove (e) {
         if (this.state.dragging) {
             this.setState({pos: {
                     x: e.clientX + this.state.relPos.x,
@@ -63,22 +60,22 @@ class Window extends Component {
         }
     }
 
-    onMouseUp (e) {
+    stopDragging (e) {
         this.setState({
             dragging: false,
             basePos: null
         })
     }
 
+
     render() {
         return <StyledWindow 
-            className={"window"}
-            onMouseDown={this.onMouseDown}
-            onMouseMove={this.onMouseMove}
-            onMouseUp={this.onMouseUp}
+            onMouseDown={this.handleMouseDown}
+            onMouseMove={this.handleMouseMove}
+            onMouseUp={this.stopDragging}
+            onMouseLeave={this.stopDragging}
             pos = {this.state.pos}
-            size = {this.state.size}
-            >
+            size = {this.state.size}>
             Hi
             </StyledWindow>;
     }
