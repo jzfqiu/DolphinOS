@@ -5,8 +5,8 @@ function App() {
   const initialSize = {'x': 100, 'y': 100}
   return (
     <Window 
-      initialPos={initialPos}
-      initialSize={initialSize}
+      // initialPos={initialPos}
+      // initialSize={initialSize}
     ></Window>
   );
 }

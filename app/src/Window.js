@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+/*
+
+Resizable & draggable component using React and Styled-Components
+
+*/
+
+
+
 // https://styled-components.com/docs/basics#attaching-additional-props
 // Props pass through attrs constructor for frequently updated attribute
 const StyledWindow = styled.div.attrs(props => ({
     style: {
-        width: props.size ? props.size.x + "px" : "200px",
-        height: props.size ? props.size.y + "px" : "200px",
+        width: props.size.x + "px",
+        height: props.size.y + "px",
         left: props.pos.x + "px",
         top: props.pos.y + "px",
       }
@@ -16,18 +24,17 @@ const StyledWindow = styled.div.attrs(props => ({
 `;
 
 
-// https://stackoverflow.com/questions/20926551/recommended-way-of-making-react-component-div-draggable
 class Window extends Component {
     constructor(props) {
         super(props);
         this.state = {
             pos: {
-                x: this.props.initialPos.x, 
-                y: this.props.initialPos.y
+                x: this.props.initialPos ? this.props.initialPos.x : 100, 
+                y: this.props.initialPos ? this.props.initialPos.y : 100
             },
             size: {
-                x: this.props.initialSize.x, 
-                y: this.props.initialSize.y
+                x: this.props.initialSize ? this.props.initialSize.x : 400, 
+                y: this.props.initialSize ? this.props.initialSize.y : 200
             },
             dragging: false,
             relPos: null, // cursor position when dragging starts
