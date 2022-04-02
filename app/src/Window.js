@@ -7,7 +7,23 @@ Resizable & draggable component using React and Styled-Components
 
 */
 
+// Default window position in px
+const DefaultPos = {
+    x: 100,
+    y: 100
+};
 
+// Default window size in px
+const DefaultSize = {
+    x: 400,
+    y: 300
+};
+
+// Size of resize corner
+const DraggableCornerSize = {
+    x: 20,
+    y: 20
+}
 
 // https://styled-components.com/docs/basics#attaching-additional-props
 // Props pass through attrs constructor for frequently updated attribute
@@ -17,6 +33,7 @@ const StyledWindow = styled.div.attrs(props => ({
         height: props.size.y + "px",
         left: props.pos.x + "px",
         top: props.pos.y + "px",
+        cursor: props.resizable ? "nwse-resize" : "auto"
       }
   }))`
   border: 2px solid black;
@@ -29,46 +46,65 @@ class Window extends Component {
         super(props);
         this.state = {
             pos: {
-                x: this.props.initialPos ? this.props.initialPos.x : 100, 
-                y: this.props.initialPos ? this.props.initialPos.y : 100
+                x: this.props.initialPos ? this.props.initialPos.x : DefaultPos.x, 
+                y: this.props.initialPos ? this.props.initialPos.y : DefaultPos.y
             },
             size: {
-                x: this.props.initialSize ? this.props.initialSize.x : 400, 
-                y: this.props.initialSize ? this.props.initialSize.y : 200
+                x: this.props.initialSize ? this.props.initialSize.x : DefaultSize.x, 
+                y: this.props.initialSize ? this.props.initialSize.y : DefaultSize.y
             },
             dragging: false,
+            resizable: false,
+            resizing: false,
             relPos: null, // cursor position when dragging starts
         }
         // This binding is necessary to make `this` work in the callback
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind 
         this.handleMouseDown = this.handleMouseDown.bind(this)
         this.handleMouseMove = this.handleMouseMove.bind(this)
-        this.stopDragging = this.stopDragging.bind(this)
+        this.outOfFrame = this.outOfFrame.bind(this)
     }
 
 
-    handleMouseDown (e) {
+
+    handleMouseDown (event) {
         this.setState({
-            dragging: true,
+            resizing: this.state.resizable,
+            dragging: !this.state.resizable,
             relPos: {
-                x: this.state.pos.x - e.clientX, 
-                y: this.state.pos.y - e.clientY,
+                x: this.state.pos.x - event.clientX, 
+                y: this.state.pos.y - event.clientY,
             }
         })
     }
 
-    handleMouseMove (e) {
+    handleMouseMove (event) {
+        const resizable = (
+            event.clientX - this.state.pos.x > this.state.size.x - DraggableCornerSize.x &&
+            event.clientY - this.state.pos.y > this.state.size.y - DraggableCornerSize.y
+        )
+        this.setState({resizable: resizable})
         if (this.state.dragging) {
-            this.setState({pos: {
-                    x: e.clientX + this.state.relPos.x,
-                    y: e.clientY + this.state.relPos.y
+            this.setState({
+                pos: {
+                    x: event.clientX + this.state.relPos.x,
+                    y: event.clientY + this.state.relPos.y
+                }
+            });
+        } else if (this.state.resizing) {
+            this.setState({
+                size: {
+                    x: event.clientX - this.state.pos.x,
+                    y: event.clientY - this.state.pos.y
                 }
             });
         }
     }
 
-    stopDragging (e) {
+    outOfFrame (event) {
         this.setState({
+            resizable: false,
+            resizing: false,
             dragging: false,
             basePos: null
         })
@@ -79,10 +115,11 @@ class Window extends Component {
         return <StyledWindow 
             onMouseDown={this.handleMouseDown}
             onMouseMove={this.handleMouseMove}
-            onMouseUp={this.stopDragging}
-            onMouseLeave={this.stopDragging}
+            onMouseUp={this.outOfFrame}
+            onMouseLeave={this.outOfFrame}
             pos = {this.state.pos}
-            size = {this.state.size}>
+            size = {this.state.size}
+            resizable = {this.state.resizable}>
             Hi
             </StyledWindow>;
     }
