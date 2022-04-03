@@ -83,9 +83,11 @@ export default class Window extends Component {
 				x: this.props.initialSize ? this.props.initialSize.x : DefaultSize.x,
 				y: this.props.initialSize ? this.props.initialSize.y : DefaultSize.y,
 			},
+			resizable: false,
 		};
+
+		// Change in class variable does not trigger re-render
 		this.dragging = false;
-		this.resizable = false;
 		this.resizing = false;
 		this.maximized = false;
 			
@@ -118,9 +120,6 @@ export default class Window extends Component {
 	// handles window resizing and dragging
 	handleMouseMove(event) {
 
-		// set resizable state here because we may need to update cursor style
-		this.setState({ resizable: this.isResizable() });
-
 		// if window is currently being dragged, update pos
 		if (this.dragging){
 			this.setState({
@@ -148,6 +147,9 @@ export default class Window extends Component {
 				y: event.clientY - this.state.pos.y,
 			};
 		}
+
+		// set resizable state because we may need to update cursor style
+		this.setState({ resizable: this.isResizable() });
 	}
 
 
@@ -169,7 +171,21 @@ export default class Window extends Component {
 
 
 	maximizeWindow () {
-
+		this.restore = {
+			size: this.state.size,
+			pos: this.state.pos
+		}
+		this.maximized = true;
+		this.setState({
+			pos: {
+				x: 0,
+				y: 0
+			},
+			size: {
+				x: window.innerWidth - 4, // 2*2 border size
+				y: window.innerHeight - 4,
+			}
+		})
 	}
 
 	closeWindow () {
@@ -177,7 +193,18 @@ export default class Window extends Component {
 	}
 
 	restoreWindow () {
-
+		this.maximized = false;
+		this.setState({
+			pos: {
+				x: this.restore.pos.x,
+				y: this.restore.pos.y
+			},
+			size: {
+				x: this.restore.size.x,
+				y: this.restore.size.y,
+			}
+		})
+		this.restore = null;
 	}
 
 
@@ -195,7 +222,7 @@ export default class Window extends Component {
 				<StyledWindowTopBar>
 					<StyledWindowTopBarTitle className={"DragArea"}>Title</StyledWindowTopBarTitle>
 					<StyledWindowTopBarButton onClick={this.minimizeWindow}>-</StyledWindowTopBarButton>
-					{this.state.maximized ? (
+					{this.maximized ? (
 						<StyledWindowTopBarButton onClick={this.restoreWindow}>r</StyledWindowTopBarButton>
 					) : (
 						<StyledWindowTopBarButton onClick={this.maximizeWindow}>M</StyledWindowTopBarButton>
