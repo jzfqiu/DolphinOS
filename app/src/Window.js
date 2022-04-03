@@ -1,13 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-/*
-
-Resizable & draggable component using React and Styled-Components
-
-*/
-
-
 
 // Default window position in px
 const DefaultPos = {
@@ -70,7 +63,14 @@ const StyledWindowTopBarButton = styled.button`
 	width: 28px;
 `;
 
-
+/**
+ * A draggable, resizable window that is able to minimize, maximize,
+ * restore to previous size, and close itself.
+ * @param {Object} initialPos Initial position of the window in the format `{x: left, y: top}`
+ * @param {Object} initialSize Initial size of the window in the format `{x: width, y: height}`
+ * @param {string} title
+ * @param {Object} content
+ */
 export default class Window extends Component {
 	constructor(props) {
 		super(props);
@@ -90,11 +90,11 @@ export default class Window extends Component {
 		this.dragging = false;
 		this.resizing = false;
 		this.maximized = false;
-			
-		// cursor position when dragging starts, updated when cursor move within component 
-		this.cursorPos = null; 
+
+		// cursor position when dragging starts, updated when cursor move within component
+		this.cursorPos = null;
 		this.restore = null; // store previous size and pos when maximized
-		
+
 		// This binding is necessary to make `this` work in the callback
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 		this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -104,9 +104,7 @@ export default class Window extends Component {
 		this.maximizeWindow = this.maximizeWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
 		this.closeWindow = this.closeWindow.bind(this);
-		
 	}
-
 
 	// Check if cursor is in the resize corner
 	isResizable() {
@@ -119,9 +117,8 @@ export default class Window extends Component {
 
 	// handles window resizing and dragging
 	handleMouseMove(event) {
-
 		// if window is currently being dragged, update pos
-		if (this.dragging){
+		if (this.dragging) {
 			this.setState({
 				pos: {
 					x: event.clientX - this.cursorPos.x,
@@ -135,8 +132,8 @@ export default class Window extends Component {
 			const resizeMargin = DraggableCornerSize / 2;
 			this.setState({
 				size: {
-					x: Math.max(event.clientX - this.state.pos.x + resizeMargin, 100), 
-					y: Math.max(event.clientY - this.state.pos.y + resizeMargin, 100)
+					x: Math.max(event.clientX - this.state.pos.x + resizeMargin, 100),
+					y: Math.max(event.clientY - this.state.pos.y + resizeMargin, 100),
 				},
 			});
 		}
@@ -152,61 +149,52 @@ export default class Window extends Component {
 		this.setState({ resizable: this.isResizable() });
 	}
 
-
 	handleMouseDown(event) {
 		this.resizing = this.state.resizable;
 		this.dragging = event.target.className.includes("DragArea");
 	}
-
 
 	stopWindowAction(event) {
 		this.dragging = false;
 		this.resizing = false;
 	}
 
+	minimizeWindow() {}
 
-	minimizeWindow () {
-
-	}
-
-
-	maximizeWindow () {
+	maximizeWindow() {
 		this.restore = {
 			size: this.state.size,
-			pos: this.state.pos
-		}
+			pos: this.state.pos,
+		};
 		this.maximized = true;
 		this.setState({
 			pos: {
 				x: 0,
-				y: 0
+				y: 0,
 			},
 			size: {
 				x: window.innerWidth - 4, // 2*2 border size
 				y: window.innerHeight - 4,
-			}
-		})
+			},
+		});
 	}
 
-	closeWindow () {
+	closeWindow() {}
 
-	}
-
-	restoreWindow () {
+	restoreWindow() {
 		this.maximized = false;
 		this.setState({
 			pos: {
 				x: this.restore.pos.x,
-				y: this.restore.pos.y
+				y: this.restore.pos.y,
 			},
 			size: {
 				x: this.restore.size.x,
 				y: this.restore.size.y,
-			}
-		})
+			},
+		});
 		this.restore = null;
 	}
-
 
 	render() {
 		return (
@@ -220,18 +208,27 @@ export default class Window extends Component {
 				resizable={this.state.resizable}
 			>
 				<StyledWindowTopBar>
-					<StyledWindowTopBarTitle className={"DragArea"}>Title</StyledWindowTopBarTitle>
-					<StyledWindowTopBarButton onClick={this.minimizeWindow}>-</StyledWindowTopBarButton>
+					<StyledWindowTopBarTitle className={"DragArea"}>
+						Title
+					</StyledWindowTopBarTitle>
+					<StyledWindowTopBarButton onClick={this.minimizeWindow}>
+						-
+					</StyledWindowTopBarButton>
 					{this.maximized ? (
-						<StyledWindowTopBarButton onClick={this.restoreWindow}>r</StyledWindowTopBarButton>
+						<StyledWindowTopBarButton onClick={this.restoreWindow}>
+							r
+						</StyledWindowTopBarButton>
 					) : (
-						<StyledWindowTopBarButton onClick={this.maximizeWindow}>M</StyledWindowTopBarButton>
+						<StyledWindowTopBarButton onClick={this.maximizeWindow}>
+							M
+						</StyledWindowTopBarButton>
 					)}
-					<StyledWindowTopBarButton onClick={this.closeWindow}>X</StyledWindowTopBarButton>
+					<StyledWindowTopBarButton onClick={this.closeWindow}>
+						X
+					</StyledWindowTopBarButton>
 				</StyledWindowTopBar>
 				<StyledWindowContent>Hi</StyledWindowContent>
 			</StyledWindow>
 		);
 	}
 }
-
