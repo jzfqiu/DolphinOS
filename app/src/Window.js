@@ -86,35 +86,46 @@ export default class Window extends Component {
 				x: this.props.initialSize ? this.props.initialSize.x : DefaultSize.x,
 				y: this.props.initialSize ? this.props.initialSize.y : DefaultSize.y,
 			},
-			dragging: false,
-			resizable: false,
-			resizing: false,
 		};
+		this.dragging = false;
+		this.resizable = false;
+		this.resizing = false;
+		this.maximized = false;
+			
 		// cursor position when dragging starts, updated when cursor move within component 
 		this.cursorPos = null; 
+		this.restore = null; // store previous size and pos when maximized
+		
 		// This binding is necessary to make `this` work in the callback
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
-		this.outOfFrame = this.outOfFrame.bind(this);
+		this.stopWindowAction = this.stopWindowAction.bind(this);
+		this.minimizeWindow = this.minimizeWindow.bind(this);
+		this.maximizeWindow = this.maximizeWindow.bind(this);
+		this.restoreWindow = this.restoreWindow.bind(this);
+		this.closeWindow = this.closeWindow.bind(this);
+		
 	}
 
+
+	// Check if cursor is in the resize corner
 	isResizable() {
 		return (
 			this.cursorPos &&
-			this.cursorPos.x > this.state.size.x - DraggableCornerSize.x &&
-			this.cursorPos.y > this.state.size.y - DraggableCornerSize.y
+			DraggableCornerSize.x > this.state.size.x - this.cursorPos.x &&
+			DraggableCornerSize.y > this.state.size.y - this.cursorPos.y
 		);
 	}
 
-
+	// handles window resizing and dragging
 	handleMouseMove(event) {
 
 		// set resizable state here because we may need to update cursor style
 		this.setState({ resizable: this.isResizable() });
 
 		// if window is currently being dragged, update pos
-		if (this.state.dragging){
+		if (this.dragging){
 			this.setState({
 				pos: {
 					x: event.clientX - this.cursorPos.x,
@@ -123,7 +134,7 @@ export default class Window extends Component {
 			});
 		}
 		// if window is currently being resized, update size
-		else if (this.state.resizing) {
+		else if (this.resizing) {
 			// margin in case cursor move too fast for update to catch up
 			const resizeMargin = 3;
 			this.setState({
@@ -142,38 +153,57 @@ export default class Window extends Component {
 		}
 	}
 
+
 	handleMouseDown(event) {
-		this.setState({
-			resizing: this.state.resizable,
-			dragging: event.target.className.includes("DragArea"),
-		});
+		this.resizing = this.state.resizable;
+		this.dragging = event.target.className.includes("DragArea");
 	}
 
-	outOfFrame(event) {
-		this.setState({
-			resizable: false,
-			resizing: false,
-			dragging: false,
-			relPos: null,
-		});
+
+	stopWindowAction(event) {
+		this.dragging = false;
+		this.resizing = false;
 	}
+
+
+	minimizeWindow () {
+
+	}
+
+
+	maximizeWindow () {
+
+	}
+
+	closeWindow () {
+
+	}
+
+	restoreWindow () {
+
+	}
+
 
 	render() {
 		return (
 			<StyledWindow
 				onMouseDown={this.handleMouseDown}
 				onMouseMove={this.handleMouseMove}
-				onMouseUp={this.outOfFrame}
-				onMouseLeave={this.outOfFrame}
+				onMouseUp={this.stopWindowAction}
+				onMouseLeave={this.stopWindowAction}
 				pos={this.state.pos}
 				size={this.state.size}
 				resizable={this.state.resizable}
 			>
 				<StyledWindowTopBar>
 					<StyledWindowTopBarTitle className={"DragArea"}>Title</StyledWindowTopBarTitle>
-					<StyledWindowTopBarButton>-</StyledWindowTopBarButton>
-					<StyledWindowTopBarButton>O</StyledWindowTopBarButton>
-					<StyledWindowTopBarButton>X</StyledWindowTopBarButton>
+					<StyledWindowTopBarButton onClick={this.minimizeWindow}>-</StyledWindowTopBarButton>
+					{this.state.maximized ? (
+						<StyledWindowTopBarButton onClick={this.restoreWindow}>r</StyledWindowTopBarButton>
+					) : (
+						<StyledWindowTopBarButton onClick={this.maximizeWindow}>M</StyledWindowTopBarButton>
+					)}
+					<StyledWindowTopBarButton onClick={this.closeWindow}>X</StyledWindowTopBarButton>
 				</StyledWindowTopBar>
 				<StyledWindowContent>Hi</StyledWindowContent>
 			</StyledWindow>
