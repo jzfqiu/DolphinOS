@@ -22,10 +22,7 @@ const DefaultSize = {
 };
 
 // Size of resize corner
-const DraggableCornerSize = {
-	x: 20,
-	y: 20,
-};
+const DraggableCornerSize = 10;
 
 // https://styled-components.com/docs/basics#attaching-additional-props
 // Props pass through attrs constructor for frequently updated attribute
@@ -113,8 +110,8 @@ export default class Window extends Component {
 	isResizable() {
 		return (
 			this.cursorPos &&
-			DraggableCornerSize.x > this.state.size.x - this.cursorPos.x &&
-			DraggableCornerSize.y > this.state.size.y - this.cursorPos.y
+			DraggableCornerSize > this.state.size.x - this.cursorPos.x &&
+			DraggableCornerSize > this.state.size.y - this.cursorPos.y
 		);
 	}
 
@@ -136,7 +133,7 @@ export default class Window extends Component {
 		// if window is currently being resized, update size
 		else if (this.resizing) {
 			// margin in case cursor move too fast for update to catch up
-			const resizeMargin = 3;
+			const resizeMargin = DraggableCornerSize / 2;
 			this.setState({
 				size: {
 					x: Math.max(event.clientX - this.state.pos.x + resizeMargin, 100), 
