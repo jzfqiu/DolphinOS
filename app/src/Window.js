@@ -26,6 +26,7 @@ const StyledWindow = styled.div.attrs((props) => ({
 		left: props.pos.x + "px",
 		top: props.pos.y + "px",
 		cursor: props.resizable ? "nwse-resize" : "auto",
+    display: props.display ? "block" : "none"
 	},
 }))`
 	min-width: 200px;
@@ -69,7 +70,6 @@ const StyledWindowTopBarButton = styled.button`
  * @param {Object} initialPos Initial position of the window in the format `{x: left, y: top}`
  * @param {Object} initialSize Initial size of the window in the format `{x: width, y: height}`
  * @param {string} title
- * @param {Object} content
  */
 export default class Window extends Component {
 	constructor(props) {
@@ -84,6 +84,7 @@ export default class Window extends Component {
 				y: this.props.initialSize ? this.props.initialSize.y : DefaultSize.y,
 			},
 			resizable: false,
+      display: true,
 		};
 
 		// Change in class variable does not trigger re-render
@@ -159,7 +160,9 @@ export default class Window extends Component {
 		this.resizing = false;
 	}
 
-	minimizeWindow() {}
+	minimizeWindow() {
+    this.props.callbacks.minimize();
+  }
 
 	maximizeWindow() {
 		this.restore = {
@@ -179,7 +182,10 @@ export default class Window extends Component {
 		});
 	}
 
-	closeWindow() {}
+	closeWindow() {
+    console.log("close");
+    this.setState({display: false});
+  }
 
 	restoreWindow() {
 		this.maximized = false;
@@ -206,10 +212,12 @@ export default class Window extends Component {
 				pos={this.state.pos}
 				size={this.state.size}
 				resizable={this.state.resizable}
+        // https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
+        display={this.state.display ? 1 : 0} 
 			>
 				<StyledWindowTopBar>
 					<StyledWindowTopBarTitle className={"DragArea"}>
-						Title
+						{this.props.title || "Untitled"}
 					</StyledWindowTopBarTitle>
 					<StyledWindowTopBarButton onClick={this.minimizeWindow}>
 						-
@@ -227,7 +235,9 @@ export default class Window extends Component {
 						X
 					</StyledWindowTopBarButton>
 				</StyledWindowTopBar>
-				<StyledWindowContent>Hi</StyledWindowContent>
+				<StyledWindowContent>
+          {this.props.children}
+        </StyledWindowContent>
 			</StyledWindow>
 		);
 	}
