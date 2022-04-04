@@ -87,6 +87,8 @@ export default class Window extends Component {
       display: true,
 		};
 
+    this.pid = this.props.pid;
+
 		// Change in class variable does not trigger re-render
 		this.dragging = false;
 		this.resizing = false;
@@ -104,7 +106,7 @@ export default class Window extends Component {
 		this.minimizeWindow = this.minimizeWindow.bind(this);
 		this.maximizeWindow = this.maximizeWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
-		this.closeWindow = this.closeWindow.bind(this);
+		// this.closeWindow = this.closeWindow.bind(this);
 	}
 
 	// Check if cursor is in the resize corner
@@ -182,11 +184,6 @@ export default class Window extends Component {
 		});
 	}
 
-	closeWindow() {
-    console.log("close");
-    this.setState({display: false});
-  }
-
 	restoreWindow() {
 		this.maximized = false;
 		this.setState({
@@ -212,6 +209,7 @@ export default class Window extends Component {
 				pos={this.state.pos}
 				size={this.state.size}
 				resizable={this.state.resizable}
+        // styled-component specific tweak
         // https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
         display={this.state.display ? 1 : 0} 
 			>
@@ -219,7 +217,7 @@ export default class Window extends Component {
 					<StyledWindowTopBarTitle className={"DragArea"}>
 						{this.props.title || "Untitled"}
 					</StyledWindowTopBarTitle>
-					<StyledWindowTopBarButton onClick={this.minimizeWindow}>
+					<StyledWindowTopBarButton onClick={this.props.minimizeCallbacks}>
 						-
 					</StyledWindowTopBarButton>
 					{this.maximized ? (
@@ -231,7 +229,7 @@ export default class Window extends Component {
 							M
 						</StyledWindowTopBarButton>
 					)}
-					<StyledWindowTopBarButton onClick={this.closeWindow}>
+					<StyledWindowTopBarButton onClick={this.props.unmountCallbacks}>
 						X
 					</StyledWindowTopBarButton>
 				</StyledWindowTopBar>
