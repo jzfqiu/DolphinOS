@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 
-
 // Default window position in px
 const DefaultPos = {
 	x: 100,
@@ -32,9 +31,9 @@ const StyledWindow = styled.div.attrs((props) => ({
 	min-height: 100px;
 	border: 2px solid black;
 	position: absolute;
-  background-color: white;
-  display: ${props => props.display ? "block" : "none"};
-  z-index: ${props => props.zIndex};
+	background-color: white;
+	display: ${(props) => (props.display ? "block" : "none")};
+	z-index: ${(props) => props.zIndex};
 `;
 
 const StyledWindowContent = styled.div`
@@ -86,10 +85,9 @@ export default class Window extends Component {
 				y: this.props.initialSize ? this.props.initialSize.y : DefaultSize.y,
 			},
 			resizable: false,
-      display: true,
 		};
 
-    this.program = this.props.program;
+		this.program = this.props.key;
 
 		// Change in class variable does not trigger re-render
 		this.dragging = false;
@@ -108,7 +106,6 @@ export default class Window extends Component {
 		this.minimizeWindow = this.minimizeWindow.bind(this);
 		this.maximizeWindow = this.maximizeWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
-		// this.closeWindow = this.closeWindow.bind(this);
 	}
 
 	// Check if cursor is in the resize corner
@@ -155,20 +152,21 @@ export default class Window extends Component {
 	}
 
 	handleMouseDown(event) {
-    this.props.sendToFrontCallbacks();
+		this.props.sendToFrontCallbacks();
 		this.resizing = this.state.resizable;
 		this.dragging = event.target.className.includes("DragArea");
 	}
 
-	stopWindowAction(event) {
+	stopWindowAction() {
 		this.dragging = false;
 		this.resizing = false;
 	}
 
 	minimizeWindow() {
-    this.props.callbacks.minimize();
-  }
+		this.props.callbacks.minimize();
+	}
 
+	// Make window fill the page
 	maximizeWindow() {
 		this.restore = {
 			size: this.state.size,
@@ -187,6 +185,7 @@ export default class Window extends Component {
 		});
 	}
 
+	// Restore to size before maximizing
 	restoreWindow() {
 		this.maximized = false;
 		this.setState({
@@ -212,10 +211,10 @@ export default class Window extends Component {
 				pos={this.state.pos}
 				size={this.state.size}
 				resizable={this.state.resizable}
-        // styled-component specific tweak
-        // https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
-        display={this.state.display ? 1 : 0} 
-        zIndex={this.props.zIndex}
+				zIndex={this.props.zIndex}
+				// styled-component specific tweak
+				// https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
+				display={this.props.display ? 1 : 0}
 			>
 				<StyledWindowTopBar>
 					<StyledWindowTopBarTitle className={"DragArea"}>
@@ -237,9 +236,7 @@ export default class Window extends Component {
 						X
 					</StyledWindowTopBarButton>
 				</StyledWindowTopBar>
-				<StyledWindowContent>
-          {this.props.children}
-        </StyledWindowContent>
+				<StyledWindowContent>{this.props.children}</StyledWindowContent>
 			</StyledWindow>
 		);
 	}

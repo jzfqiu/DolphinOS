@@ -27,59 +27,64 @@ export default class Desktop extends Component {
 		super(props);
 		this.state = {
 			activePrograms: [],
-      windowsOrder: []
+			windowsOrder: [],
 		};
 		this.mountWindow = this.mountWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
-    this.sendToFront = this.sendToFront.bind(this);
+		this.sendToFront = this.sendToFront.bind(this);
 	}
 
 	mountWindow(program) {
 		// add variable key to state object: https://stackoverflow.com/a/58652613
-    // add element to state array: https://stackoverflow.com/a/26254086
-		this.setState(prevState => ({ 
-      activePrograms: {
-        ...prevState.activePrograms,
-        [program]: { 
-          minimized: false,
-        }
-      }, 
-      windowsOrder: [...prevState.windowsOrder, program]
-    }));
+		// add element to state array: https://stackoverflow.com/a/26254086
+		this.setState((prevState) => ({
+			activePrograms: {
+				...prevState.activePrograms,
+				[program]: {
+					minimized: false,
+				},
+			},
+			windowsOrder: [...prevState.windowsOrder, program],
+		}));
 	}
 
 	restoreWindow(program) {}
 
-  // Remove program from active
-  unmountWindow(program) {
-    let updatedActivePrograms = this.state.activePrograms;
-    delete updatedActivePrograms[program];
-    this.setState({activePrograms: updatedActivePrograms})
-  }
+	// Remove program from activeProgram list, destroy its state (size, pos)
+	unmountWindow(program) {
+		let updatedActivePrograms = this.state.activePrograms;
+		delete updatedActivePrograms[program];
+		this.setState({ activePrograms: updatedActivePrograms });
+	}
 
-  minimizeWindow(program) {
-    console.log("minimizing", program);
-  }
+	// Set program to be minimized
+	minimizeWindow(program) {
+		let updatedActivePrograms = this.state.activePrograms;
+		updatedActivePrograms[program].minimized = true;
+		this.setState({ activePrograms: updatedActivePrograms });
+	}
 
-  // remove the program from windowsOrder, then push to last
-  sendToFront(program) {
-    let updatedWindowsOrder = this.state.windowsOrder.filter(item => item !== program);
-    updatedWindowsOrder.push(program);
-    this.setState({windowsOrder: updatedWindowsOrder})
-  }
+	// remove the program from windowsOrder, then push to last (highest z-index)
+	sendToFront(program) {
+		let updatedWindowsOrder = this.state.windowsOrder.filter(
+			(item) => item !== program
+		);
+		updatedWindowsOrder.push(program);
+		this.setState({ windowsOrder: updatedWindowsOrder });
+	}
 
-  renderWindowComponent(program, programState) {
+	renderWindowComponent(program, programState) {
 		const data = programData[program];
 		return (
 			<Window
 				key={program}
 				title={data.title}
-				display={programState.minimized}
-        zIndex={this.state.windowsOrder.indexOf(program)}
-        // https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers 
-        unmountCallbacks={this.unmountWindow.bind(this, program)}
-        minimizeCallbacks={this.minimizeWindow.bind(this, program)}
-        sendToFrontCallbacks={this.sendToFront.bind(this, program)}
+				display={!programState.minimized}
+				zIndex={this.state.windowsOrder.indexOf(program)}
+				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers
+				unmountCallbacks={this.unmountWindow.bind(this, program)}
+				minimizeCallbacks={this.minimizeWindow.bind(this, program)}
+				sendToFrontCallbacks={this.sendToFront.bind(this, program)}
 			></Window>
 		);
 	}
@@ -93,15 +98,9 @@ export default class Desktop extends Component {
 		}
 		return (
 			<StyledDesktop>
-				<button onClick={this.mountWindow.bind(this, 'a')}>
-					1
-				</button>
-				<button onClick={this.mountWindow.bind(this, 'b')}>
-					2
-				</button>
-				<button onClick={this.mountWindow.bind(this, 'c')}>
-					3
-				</button>
+				<button onClick={this.mountWindow.bind(this, "a")}>1</button>
+				<button onClick={this.mountWindow.bind(this, "b")}>2</button>
+				<button onClick={this.mountWindow.bind(this, "c")}>3</button>
 				{windows}
 			</StyledDesktop>
 		);
