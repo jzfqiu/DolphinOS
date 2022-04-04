@@ -27,32 +27,25 @@ export default class Desktop extends Component {
 		super(props);
 		this.state = {
 			activePrograms: [],
+      windowsOrder: []
 		};
 		this.mountWindow = this.mountWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
-	}
-
-	renderProgram(program, programState) {
-		const data = programData[program];
-		return (
-			<Window
-				key={program}
-				title={data.title}
-				display={programState.minimized}
-        // https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers 
-        unmountCallbacks={this.unmountWindow.bind(this, program)}
-        minimizeCallbacks={this.minimizeWindow.bind(this, program)}
-			></Window>
-		);
+    this.sendToFront = this.sendToFront.bind(this);
 	}
 
 	mountWindow(program) {
 		// add variable key to state object: https://stackoverflow.com/a/58652613
-		const updatedActivePrograms = {
-			...this.state.activePrograms,
-			[program]: { minimized: false },
-		};
-		this.setState({ activePrograms: updatedActivePrograms });
+    // add element to state array: https://stackoverflow.com/a/26254086
+		this.setState(prevState => ({ 
+      activePrograms: {
+        ...prevState.activePrograms,
+        [program]: { 
+          minimized: false,
+        }
+      }, 
+      windowsOrder: [...prevState.windowsOrder, program]
+    }));
 	}
 
 	restoreWindow(program) {}
@@ -68,11 +61,34 @@ export default class Desktop extends Component {
     console.log("minimizing", program);
   }
 
+  // remove the program from windowsOrder, then push to last
+  sendToFront(program) {
+    let updatedWindowsOrder = this.state.windowsOrder.filter(item => item !== program);
+    updatedWindowsOrder.push(program);
+    this.setState({windowsOrder: updatedWindowsOrder})
+  }
+
+  renderWindowComponent(program, programState) {
+		const data = programData[program];
+		return (
+			<Window
+				key={program}
+				title={data.title}
+				display={programState.minimized}
+        zIndex={this.state.windowsOrder.indexOf(program)}
+        // https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers 
+        unmountCallbacks={this.unmountWindow.bind(this, program)}
+        minimizeCallbacks={this.minimizeWindow.bind(this, program)}
+        sendToFrontCallbacks={this.sendToFront.bind(this, program)}
+			></Window>
+		);
+	}
+
 	render() {
 		let windows = [];
 		for (const program in this.state.activePrograms) {
 			windows.push(
-				this.renderProgram(program, this.state.activePrograms[program])
+				this.renderWindowComponent(program, this.state.activePrograms[program])
 			);
 		}
 		return (

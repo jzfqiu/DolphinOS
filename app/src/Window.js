@@ -26,13 +26,15 @@ const StyledWindow = styled.div.attrs((props) => ({
 		left: props.pos.x + "px",
 		top: props.pos.y + "px",
 		cursor: props.resizable ? "nwse-resize" : "auto",
-    display: props.display ? "block" : "none"
 	},
 }))`
 	min-width: 200px;
 	min-height: 100px;
 	border: 2px solid black;
 	position: absolute;
+  background-color: white;
+  display: ${props => props.display ? "block" : "none"};
+  z-index: ${props => props.zIndex};
 `;
 
 const StyledWindowContent = styled.div`
@@ -87,7 +89,7 @@ export default class Window extends Component {
       display: true,
 		};
 
-    this.pid = this.props.pid;
+    this.program = this.props.program;
 
 		// Change in class variable does not trigger re-render
 		this.dragging = false;
@@ -153,6 +155,7 @@ export default class Window extends Component {
 	}
 
 	handleMouseDown(event) {
+    this.props.sendToFrontCallbacks();
 		this.resizing = this.state.resizable;
 		this.dragging = event.target.className.includes("DragArea");
 	}
@@ -212,6 +215,7 @@ export default class Window extends Component {
         // styled-component specific tweak
         // https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
         display={this.state.display ? 1 : 0} 
+        zIndex={this.props.zIndex}
 			>
 				<StyledWindowTopBar>
 					<StyledWindowTopBarTitle className={"DragArea"}>
