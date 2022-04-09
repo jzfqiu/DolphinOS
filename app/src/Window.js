@@ -98,6 +98,10 @@ export default class Window extends Component {
 		this.cursorPos = null;
 		this.restore = null; // store previous size and pos when maximized
 
+		// Desktop size:
+		this.desktopWidth = window.innerWidth - 4; // 2*2px border
+		this.desktopHeight = window.innerHeight - 44; // Taskbar height = 40px
+
 		// This binding is necessary to make `this` work in the callback
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 		this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -121,12 +125,16 @@ export default class Window extends Component {
 	handleMouseMove(event) {
 		// if window is currently being dragged, update pos
 		if (this.dragging) {
-			this.setState({
-				pos: {
-					x: event.clientX - this.cursorPos.x,
-					y: event.clientY - this.cursorPos.y,
-				},
-			});
+			const newX = event.clientX - this.cursorPos.x;
+			const newY = event.clientY - this.cursorPos.y;
+			// if window is moving within bound
+			if (newX >= 0 && newY >= 0 && 
+				newX + this.state.size.x <= this.desktopWidth && 
+				newY + this.state.size.y <= this.desktopHeight) {
+					this.setState({pos: {x: newX, y: newY}});
+			} else {
+				this.dragging = false;
+			}
 		}
 		// if window is currently being resized, update size
 		else if (this.resizing) {
@@ -179,8 +187,8 @@ export default class Window extends Component {
 				y: 0,
 			},
 			size: {
-				x: window.innerWidth - 4, // 2*2 border size
-				y: window.innerHeight - 4,
+				x: this.desktopWidth,
+				y: this.desktopHeight,
 			},
 		});
 	}
