@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Desktop from './Desktop';
+import System from './System';
 import reportWebVitals from './reportWebVitals';
+import './style.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Desktop />
+    <System />
   </React.StrictMode>,
   document.getElementById('root')
 );
