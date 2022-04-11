@@ -1,19 +1,24 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Window from "./Window";
+import Icon from "./Icon";
 
-const programData = {
+function getRandomInt(max) {
+	return Math.floor(Math.random() * max);
+  }
+
+const applications = {
 	a: {
-		title: "Window 1",
+		title: "Program a",
 		contents: "",
 	},
 	b: {
-		title: "Window 2",
+		title: "Program b",
 		contents: "",
 	},
 	c: {
-		title: "Window 3",
-		contents: "",
+		title: "Program c",
+		contents: "Some contents",
 	},
 };
 
@@ -52,10 +57,12 @@ export default class System extends Component {
 		this.state = {
 			processes: [],
 			windowsOrder: [],
-			inFocus: "",
+			windowInFocus: "",
+			iconsOrder: [],
 		};
 		this.mountWindow = this.mountWindow.bind(this);
-		this.sendToFront = this.sendToFront.bind(this);
+		this.sendToFrontWindow = this.sendToFrontWindow.bind(this);
+		this.sendToFontIcon = this.sendToFrontIcon.bind(this)
 	}
 
 	// Un-minimize a process, which could be a new process or an existing minimized process
@@ -73,11 +80,11 @@ export default class System extends Component {
 		// if program is already rendered, send the program to front
 		// instead of adding it to the window order list
 		if (this.state.windowsOrder.includes(program)) {
-			this.sendToFront(program);
+			this.sendToFrontWindow(program);
 		} else {
 			this.setState((prevState) => ({
 				windowsOrder: [...prevState.windowsOrder, program],
-				inFocus: program,
+				windowInFocus: program,
 			}));
 		}
 	}
@@ -88,7 +95,7 @@ export default class System extends Component {
 		delete updatedProcesses[program];
 		this.setState({
 			processes: updatedProcesses,
-			inFocus: "",
+			windowInFocus: "",
 		});
 	}
 
@@ -98,24 +105,32 @@ export default class System extends Component {
 		updatedProcesses[program].minimized = true;
 		this.setState({
 			processes: updatedProcesses,
-			inFocus: "",
+			windowInFocus: "",
 		});
 	}
 
 	// remove the program from windowsOrder, then push to last (highest z-index)
-	sendToFront(program) {
+	sendToFrontWindow(program) {
 		let updatedWindowsOrder = this.state.windowsOrder.filter(
 			(item) => item !== program
 		);
 		updatedWindowsOrder.push(program);
 		this.setState({
 			windowsOrder: updatedWindowsOrder,
-			inFocus: program,
+			windowInFocus: program,
 		});
 	}
 
+	sendToFrontIcon(program) {
+		let updatedIconsOrder = this.state.iconsOrder.filter(
+			(item) => item !== program
+		);
+		updatedIconsOrder.push(program);
+		this.setState({iconsOrder: updatedIconsOrder});
+	}
+
 	buildWindowComponent(program, programState) {
-		const data = programData[program];
+		const data = applications[program];
 		return (
 			<Window
 				key={program}
@@ -125,39 +140,57 @@ export default class System extends Component {
 				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers
 				unmountCallbacks={this.unmountWindow.bind(this, program)}
 				minimizeCallbacks={this.minimizeWindow.bind(this, program)}
-				sendToFrontCallbacks={this.sendToFront.bind(this, program)}
+				sendToFrontCallbacks={this.sendToFrontWindow.bind(this, program)}
 			/>
 		);
 	}
 
 	buildTaskComponent(program) {
-		console.log(program, this.state.windowsOrder);
 		return (
 			<StyledTask
 				key={program}
 				onClick={this.mountWindow.bind(this, program)}
-				active={program === this.state.inFocus ? 1 : 0}
+				active={program === this.state.windowInFocus ? 1 : 0}
 			>
 				{program}
 			</StyledTask>
 		);
 	}
 
+	buildIconComponent(program) {
+		const pos = {
+			x: getRandomInt(500),
+			y: getRandomInt(500),
+		}
+		return (
+			<Icon
+				key={program}
+				initialPos={pos}
+				doubleClickCallback={this.mountWindow.bind(this, program)}
+				sendToFrontCallbacks={this.sendToFrontIcon.bind(this, program)}
+			>
+				{program}
+			</Icon>
+		);
+	}
+
 	render() {
 		let windows = [];
 		let tasks = [];
+		let icons = [];
 		for (const program in this.state.processes) {
 			windows.push(
 				this.buildWindowComponent(program, this.state.processes[program])
 			);
 			tasks.push(this.buildTaskComponent(program));
 		}
+		for (const program in applications) {
+			icons.push(this.buildIconComponent(program));
+		}
 		return (
 			<StyledSystem>
 				<StyledDesktop>
-					<button onClick={this.mountWindow.bind(this, "a")}>1</button>
-					<button onClick={this.mountWindow.bind(this, "b")}>2</button>
-					<button onClick={this.mountWindow.bind(this, "c")}>3</button>
+					{icons}
 					{windows}
 				</StyledDesktop>
 				<StyledTaskbar>
