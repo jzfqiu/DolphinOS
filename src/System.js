@@ -63,6 +63,8 @@ const StyledTask = styled.button`
 		background-color: lightblue;
 	}
 	background: ${(props) => (props.active ? "steelblue" : "white")};
+	border: 0;
+	border-right: 2px solid black;
 `;
 
 export default class System extends Component {
