@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import browserIcon from "./assets/icons/browser.png"
+import folderIcon from "./assets/icons/folder.png"
+import linkIcon from "./assets/icons/export.png"
+import imageIcon from "./assets/icons/picture.png"
 
 // Default window position in px
 const DefaultPos = {
@@ -17,10 +21,22 @@ const StyledIcon = styled.div.attrs((props) => ({
 		top: props.pos.y + "px",
 	},
 }))`
-	border: 2px solid black;
 	position: absolute;
 	z-index: ${(props) => props.zIndex};
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
 `;
+
+const StyledIconImg = styled.img.attrs((props) => ({
+    src: props.src,
+    alt: props.alt,
+    draggable: "false",
+}))`
+    width: 50%;
+`
 
 
 
@@ -34,7 +50,7 @@ export default class Icon extends Component {
 			},
 		};
 
-        this.size = this.props.size ? this.props.size : {x: 50, y: 50};
+        this.size = this.props.size ? this.props.size : {x: 100, y: 100};
 
 		this.program = this.props.key;
 		this.dragging = false;
@@ -86,6 +102,23 @@ export default class Icon extends Component {
 
 
 	render() {
+        let image;
+        switch (this.props.appData.type) {
+            case "browser":
+                image = browserIcon;
+                break;
+            case "folder":
+                image = folderIcon;
+                break;
+            case "link":
+                image = linkIcon;
+                break;
+            case "image":
+                image = imageIcon;
+                break;
+            default:
+                image = browserIcon;
+        }
 		return (
 			<StyledIcon
 				onMouseDown={this.handleMouseDown}
@@ -97,7 +130,8 @@ export default class Icon extends Component {
 				size={this.size}
 				zIndex={this.props.zIndex}
 			>
-            {this.props.children}
+                <StyledIconImg src={image} alt={this.props.appData.title} />
+                {this.props.appData.title}
 			</StyledIcon>
 		);
 	}

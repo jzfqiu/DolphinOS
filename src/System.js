@@ -9,22 +9,36 @@ function getRandomInt(max) {
 
 const applications = {
 	a: {
-		title: "Program a",
+		type: "document",
+		title: "Document.docx",
 		contents: "",
 	},
 	b: {
-		title: "Program b",
+		type: "folder",
+		title: "Some Folder",
 		contents: "",
 	},
 	c: {
-		title: "Program c",
+		type: "link",
+		title: "Link to Site",
 		contents: "Some contents",
+	},
+	d: {
+		type: "folder",
+		title: "Another Folder",
+		contents: "",
+	},
+	e: {
+		type: "image",
+		title: "Some Image",
+		contents: "",
 	},
 };
 
 const StyledSystem = styled.div`
 	width: 100%;
 	height: 100vh;
+	font-family: sans-serif;
 `;
 
 const StyledDesktop = styled.div`
@@ -152,7 +166,7 @@ export default class System extends Component {
 				onClick={this.mountWindow.bind(this, program)}
 				active={program === this.state.windowInFocus ? 1 : 0}
 			>
-				{program}
+				{applications[program].title}
 			</StyledTask>
 		);
 	}
@@ -168,9 +182,8 @@ export default class System extends Component {
 				initialPos={pos}
 				doubleClickCallback={this.mountWindow.bind(this, program)}
 				sendToFrontCallbacks={this.sendToFrontIcon.bind(this, program)}
-			>
-				{program}
-			</Icon>
+				appData={applications[program]}
+			/>
 		);
 	}
 
