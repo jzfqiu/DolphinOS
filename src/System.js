@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Window from "./Window";
-import Taskbar from "./Taskbar"
 
 const programData = {
 	a: {
@@ -29,24 +28,38 @@ const StyledDesktop = styled.div`
 	z-index: -1;
 `;
 
+const StyledTaskbar = styled.div`
+    height: 40px;
+    width: 100%;
+    border-top: 2px solid black;
+    background-color: white;
+    position: absolute;
+`;
+
+const StyledTask = styled.button`
+    height: 40px;
+    min-width: 40px;
+    background-color: ${(props) => props.active ? "blue" : "gray"};
+`;
+
 export default class System extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			activePrograms: [],
+			processes: [],
 			windowsOrder: [],
 		};
 		this.mountWindow = this.mountWindow.bind(this);
-		this.restoreWindow = this.restoreWindow.bind(this);
 		this.sendToFront = this.sendToFront.bind(this);
 	}
 
+	// Un-minimize a process, which could be a new process or an existing minimized process
 	mountWindow(program) {
 		// add variable key to state object: https://stackoverflow.com/a/58652613
 		// add element to state array: https://stackoverflow.com/a/26254086
 		this.setState((prevState) => ({
-			activePrograms: {
-				...prevState.activePrograms,
+			processes: {
+				...prevState.processes,
 				[program]: {
 					minimized: false,
 				},
@@ -55,20 +68,18 @@ export default class System extends Component {
 		}));
 	}
 
-	restoreWindow(program) {}
-
-	// Remove program from activeProgram list, destroy its state (size, pos)
+	// Remove program from processes list, destroy its state (size, pos)
 	unmountWindow(program) {
-		let updatedActivePrograms = this.state.activePrograms;
-		delete updatedActivePrograms[program];
-		this.setState({ activePrograms: updatedActivePrograms });
+		let updatedProcesses = this.state.processes;
+		delete updatedProcesses[program];
+		this.setState({ processes: updatedProcesses });
 	}
 
 	// Set program to be minimized
 	minimizeWindow(program) {
-		let updatedActivePrograms = this.state.activePrograms;
-		updatedActivePrograms[program].minimized = true;
-		this.setState({ activePrograms: updatedActivePrograms });
+		let updatedProcesses = this.state.processes;
+		updatedProcesses[program].minimized = true;
+		this.setState({ processes: updatedProcesses });
 	}
 
 	// remove the program from windowsOrder, then push to last (highest z-index)
@@ -80,7 +91,7 @@ export default class System extends Component {
 		this.setState({ windowsOrder: updatedWindowsOrder });
 	}
 
-	renderWindowComponent(program, programState) {
+	buildWindowComponent(program, programState) {
 		const data = programData[program];
 		return (
 			<Window
@@ -92,16 +103,30 @@ export default class System extends Component {
 				unmountCallbacks={this.unmountWindow.bind(this, program)}
 				minimizeCallbacks={this.minimizeWindow.bind(this, program)}
 				sendToFrontCallbacks={this.sendToFront.bind(this, program)}
-			></Window>
+			/>
+		);
+	}
+
+	buildTaskComponent(program) {
+		return (
+			<StyledTask
+				key={program}
+				onClick={this.mountWindow.bind(this, program)}
+				active={program === this.state.windowsOrder[-1] ? 1 : 0}
+			>
+				{program}
+			</StyledTask>
 		);
 	}
 
 	render() {
 		let windows = [];
-		for (const program in this.state.activePrograms) {
+		let tasks = [];
+		for (const program in this.state.processes) {
 			windows.push(
-				this.renderWindowComponent(program, this.state.activePrograms[program])
+				this.buildWindowComponent(program, this.state.processes[program])
 			);
+			tasks.push(this.buildTaskComponent(program));
 		}
 		return (
 			<StyledSystem>
@@ -111,7 +136,10 @@ export default class System extends Component {
 					<button onClick={this.mountWindow.bind(this, "c")}>3</button>
 					{windows}
 				</StyledDesktop>
-				<Taskbar></Taskbar>
+				<StyledTaskbar>
+					<StyledTask>Start</StyledTask>
+					{tasks}
+				</StyledTaskbar>
 			</StyledSystem>
 		);
 	}
