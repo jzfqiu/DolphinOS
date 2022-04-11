@@ -29,17 +29,21 @@ const StyledDesktop = styled.div`
 `;
 
 const StyledTaskbar = styled.div`
-    height: 40px;
-    width: 100%;
-    border-top: 2px solid black;
-    background-color: white;
-    position: absolute;
+	height: 40px;
+	width: 100%;
+	border-top: 2px solid black;
+	background-color: white;
+	position: absolute;
 `;
 
 const StyledTask = styled.button`
-    height: 40px;
-    min-width: 40px;
-    background-color: ${(props) => props.active ? "blue" : "gray"};
+	height: 40px;
+	min-width: 70px;
+	/* transition-duration: 0.4s; */
+	&:hover {
+		background-color: lightblue;
+	}
+	background: ${(props) => (props.active ? "steelblue" : "white")};
 `;
 
 export default class System extends Component {
@@ -48,6 +52,7 @@ export default class System extends Component {
 		this.state = {
 			processes: [],
 			windowsOrder: [],
+			inFocus: "",
 		};
 		this.mountWindow = this.mountWindow.bind(this);
 		this.sendToFront = this.sendToFront.bind(this);
@@ -64,22 +69,37 @@ export default class System extends Component {
 					minimized: false,
 				},
 			},
-			windowsOrder: [...prevState.windowsOrder, program],
 		}));
+		// if program is already rendered, send the program to front
+		// instead of adding it to the window order list
+		if (this.state.windowsOrder.includes(program)) {
+			this.sendToFront(program);
+		} else {
+			this.setState((prevState) => ({
+				windowsOrder: [...prevState.windowsOrder, program],
+				inFocus: program,
+			}));
+		}
 	}
 
 	// Remove program from processes list, destroy its state (size, pos)
 	unmountWindow(program) {
 		let updatedProcesses = this.state.processes;
 		delete updatedProcesses[program];
-		this.setState({ processes: updatedProcesses });
+		this.setState({
+			processes: updatedProcesses,
+			inFocus: "",
+		});
 	}
 
 	// Set program to be minimized
 	minimizeWindow(program) {
 		let updatedProcesses = this.state.processes;
 		updatedProcesses[program].minimized = true;
-		this.setState({ processes: updatedProcesses });
+		this.setState({
+			processes: updatedProcesses,
+			inFocus: "",
+		});
 	}
 
 	// remove the program from windowsOrder, then push to last (highest z-index)
@@ -88,7 +108,10 @@ export default class System extends Component {
 			(item) => item !== program
 		);
 		updatedWindowsOrder.push(program);
-		this.setState({ windowsOrder: updatedWindowsOrder });
+		this.setState({
+			windowsOrder: updatedWindowsOrder,
+			inFocus: program,
+		});
 	}
 
 	buildWindowComponent(program, programState) {
@@ -108,11 +131,12 @@ export default class System extends Component {
 	}
 
 	buildTaskComponent(program) {
+		console.log(program, this.state.windowsOrder);
 		return (
 			<StyledTask
 				key={program}
 				onClick={this.mountWindow.bind(this, program)}
-				active={program === this.state.windowsOrder[-1] ? 1 : 0}
+				active={program === this.state.inFocus ? 1 : 0}
 			>
 				{program}
 			</StyledTask>
