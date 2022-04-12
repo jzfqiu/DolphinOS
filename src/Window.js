@@ -160,9 +160,12 @@ export default class Window extends Component {
 	}
 
 	handleMouseDown(event) {
-		this.props.sendToFrontCallbacks();
-		this.resizing = this.state.resizable;
-		this.dragging = event.target.className.includes("DragArea");
+		// if clicked on button, dont drag or send to front
+		if (event.target.tagName !== "BUTTON"){
+			this.props.sendToFrontCallbacks();
+			this.resizing = this.state.resizable;
+			this.dragging = event.target.className.includes("DragArea");
+		}
 	}
 
 	stopWindowAction() {

@@ -31,6 +31,9 @@ const StyledIcon = styled.div.attrs((props) => ({
 	user-select: none;
 	text-align: center;
 	background: ${(props) => (props.active ? "lightblue" : "none")};
+	& img {
+		margin: 5px;
+	}
 `;
 
 const StyledIconImg = styled.img.attrs((props) => ({
@@ -98,9 +101,9 @@ export default class Icon extends Component {
 
 	handleMouseDown(event) {
 		// Stops mousedown even from propagating into desktop DOM
+		event.stopPropagation();
 		this.props.sendToFrontCallbacks();
 		this.dragging = true;
-		event.stopPropagation();
 	}
 
 	stopWindowAction() {
