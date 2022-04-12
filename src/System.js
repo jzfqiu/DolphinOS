@@ -44,7 +44,6 @@ const StyledSystem = styled.div`
 const StyledDesktop = styled.div`
 	width: 100%;
 	height: calc(100% - 42px);
-	z-index: -1;
 `;
 
 const StyledTaskbar = styled.div`
@@ -74,11 +73,19 @@ export default class System extends Component {
 			processes: [],
 			windowsOrder: [],
 			windowInFocus: "",
-			iconsOrder: [],
+			iconsOrder: Object.keys(applications),
+			iconSelected: "",
 		};
 		this.mountWindow = this.mountWindow.bind(this);
 		this.sendToFrontWindow = this.sendToFrontWindow.bind(this);
-		this.sendToFontIcon = this.sendToFrontIcon.bind(this)
+		this.sendToFontIcon = this.sendToFrontIcon.bind(this);
+		this.deselectIcon = this.deselectIcon.bind(this);
+	}
+
+	// If click happens on an icon, propagation stops at the icon dom 
+	// and this function is not called.
+	deselectIcon() {
+		this.setState({iconSelected: ""});
 	}
 
 	// Un-minimize a process, which could be a new process or an existing minimized process
@@ -101,6 +108,7 @@ export default class System extends Component {
 			this.setState((prevState) => ({
 				windowsOrder: [...prevState.windowsOrder, program],
 				windowInFocus: program,
+				iconSelected: "",
 			}));
 		}
 	}
@@ -134,6 +142,7 @@ export default class System extends Component {
 		this.setState({
 			windowsOrder: updatedWindowsOrder,
 			windowInFocus: program,
+			iconSelected: "",
 		});
 	}
 
@@ -142,7 +151,10 @@ export default class System extends Component {
 			(item) => item !== program
 		);
 		updatedIconsOrder.push(program);
-		this.setState({iconsOrder: updatedIconsOrder});
+		this.setState({
+			iconsOrder: updatedIconsOrder,
+			iconSelected: program,
+		});
 	}
 
 	buildWindowComponent(program, programState) {
@@ -152,7 +164,7 @@ export default class System extends Component {
 				key={program}
 				title={data.title}
 				display={!programState.minimized}
-				zIndex={this.state.windowsOrder.indexOf(program)}
+				zIndex={this.state.windowsOrder.indexOf(program)+100}
 				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers
 				unmountCallbacks={this.unmountWindow.bind(this, program)}
 				minimizeCallbacks={this.minimizeWindow.bind(this, program)}
@@ -185,6 +197,8 @@ export default class System extends Component {
 				doubleClickCallback={this.mountWindow.bind(this, program)}
 				sendToFrontCallbacks={this.sendToFrontIcon.bind(this, program)}
 				appData={applications[program]}
+				active={this.state.iconSelected===program ? 1 : 0}
+				zIndex={this.state.iconsOrder.indexOf(program)}
 			/>
 		);
 	}
@@ -204,7 +218,7 @@ export default class System extends Component {
 		}
 		return (
 			<StyledSystem>
-				<StyledDesktop>
+				<StyledDesktop onMouseDown={this.deselectIcon}>
 					{icons}
 					{windows}
 				</StyledDesktop>
