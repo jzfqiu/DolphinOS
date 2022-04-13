@@ -113,7 +113,7 @@ export default class Icon extends Component {
 	render() {
 		let image;
 		switch (this.props.appData.type) {
-			case "browser":
+			case "document":
 				image = browserIcon;
 				break;
 			case "folder":

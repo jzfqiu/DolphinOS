@@ -2,38 +2,12 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import Window from "./Window";
 import Icon from "./Icon";
+import { applications } from "./AppData";
 
 function getRandomInt(max) {
 	return Math.floor(Math.random() * max);
   }
 
-const applications = {
-	a: {
-		type: "document",
-		title: "Document.docx",
-		contents: "",
-	},
-	b: {
-		type: "folder",
-		title: "Some Folder",
-		contents: "",
-	},
-	c: {
-		type: "link",
-		title: "Link to Site",
-		contents: "Some contents",
-	},
-	d: {
-		type: "folder",
-		title: "Another Folder",
-		contents: "",
-	},
-	e: {
-		type: "image",
-		title: "Some Image",
-		contents: "",
-	},
-};
 
 const StyledSystem = styled.div`
 	width: 100%;
@@ -158,11 +132,11 @@ export default class System extends Component {
 	}
 
 	buildWindowComponent(program, programState) {
-		const data = applications[program];
+		const appData = applications[program];
 		return (
 			<Window
 				key={program}
-				title={data.title}
+				appData={appData}
 				display={!programState.minimized}
 				zIndex={this.state.windowsOrder.indexOf(program)+100}
 				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers

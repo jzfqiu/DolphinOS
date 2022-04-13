@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import Markdown from "./Contents/Markdown";
 
 // Default window position in px
 const DefaultPos = {
@@ -9,8 +10,8 @@ const DefaultPos = {
 
 // Default window size in px
 const DefaultSize = {
-	x: 400,
-	y: 300,
+	x: 600,
+	y: 600,
 };
 
 // Size of resize corner
@@ -42,6 +43,7 @@ const StyledWindowContent = styled.div`
 	height: calc(100% - 30px);
 	border-top: 2px solid black;
 	position: absolute;
+	overflow: auto;
 `;
 
 const StyledWindowTopBar = styled.div`
@@ -50,6 +52,7 @@ const StyledWindowTopBar = styled.div`
 	position: absolute;
 	display: flex;
 	flex-direction: row;
+	user-select: none;
 `;
 
 const StyledWindowTopBarTitle = styled.div`
@@ -212,6 +215,21 @@ export default class Window extends Component {
 		this.restore = null;
 	}
 
+	renderWindowContents() {
+		switch (this.props.appData.type) {
+			case "document":
+				return <Markdown appData={this.props.appData}/>;
+			case "folder":
+				return <div>TODO</div>;
+			case "link":
+				return <div>TODO</div>;
+			case "image":
+				return <div>TODO</div>;
+			default:
+				return <div>TODO</div>;
+		}
+	}
+
 	render() {
 		return (
 			<StyledWindow
@@ -229,7 +247,7 @@ export default class Window extends Component {
 			>
 				<StyledWindowTopBar>
 					<StyledWindowTopBarTitle className={"DragArea"}>
-						{this.props.title || "Untitled"}
+						{this.props.appData.title || "Untitled"}
 					</StyledWindowTopBarTitle>
 					<StyledWindowTopBarButton onClick={this.props.minimizeCallbacks}>
 						-
@@ -247,7 +265,9 @@ export default class Window extends Component {
 						X
 					</StyledWindowTopBarButton>
 				</StyledWindowTopBar>
-				<StyledWindowContent>{this.props.children}</StyledWindowContent>
+				<StyledWindowContent>
+					{this.renderWindowContents()}
+				</StyledWindowContent>
 			</StyledWindow>
 		);
 	}
