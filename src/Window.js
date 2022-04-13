@@ -215,18 +215,17 @@ export default class Window extends Component {
 		this.restore = null;
 	}
 
+	// Link type contents are handled in System component
 	renderWindowContents() {
 		switch (this.props.appData.type) {
 			case "document":
 				return <Markdown appData={this.props.appData}/>;
 			case "folder":
 				return <div>TODO</div>;
-			case "link":
-				return <div>TODO</div>;
 			case "image":
 				return <div>TODO</div>;
 			default:
-				return <div>TODO</div>;
+				return <div>Unknown Contents</div>;
 		}
 	}
 

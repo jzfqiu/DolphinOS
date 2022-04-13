@@ -20,7 +20,8 @@ export const applications = {
 	},
 	c: {
 		type: "link",
-		title: "Link to Site",
+		title: "Github",
+		url: "https://github.com/jzfqiu",
 	},
 	d: {
 		type: "folder",

@@ -160,17 +160,23 @@ export default class System extends Component {
 	}
 
 	buildIconComponent(program) {
+		const appData = applications[program];
 		const pos = {
 			x: getRandomInt(500),
 			y: getRandomInt(500),
 		}
+		let doubleClickCallback;
+		if (appData.type === "link")
+			doubleClickCallback = () => window.open(appData.url, '_blank').focus();
+		else
+			doubleClickCallback = this.mountWindow.bind(this, program);
 		return (
 			<Icon
 				key={program}
 				initialPos={pos}
-				doubleClickCallback={this.mountWindow.bind(this, program)}
+				appData={appData}
+				doubleClickCallback={doubleClickCallback}
 				sendToFrontCallbacks={this.sendToFrontIcon.bind(this, program)}
-				appData={applications[program]}
 				active={this.state.iconSelected===program ? 1 : 0}
 				zIndex={this.state.iconsOrder.indexOf(program)}
 			/>
