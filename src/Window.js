@@ -14,8 +14,6 @@ const DefaultSize = {
 	y: 600,
 };
 
-// Size of resize corner
-const DraggableCornerSize = 10;
 
 // https://styled-components.com/docs/basics#attaching-additional-props
 // Props pass through attrs constructor for frequently updated attribute
@@ -105,14 +103,12 @@ export default class Window extends Component {
 				x: this.props.initialSize ? this.props.initialSize.x : DefaultSize.x,
 				y: this.props.initialSize ? this.props.initialSize.y : DefaultSize.y,
 			},
-			resizable: false,
 		};
 
 		this.program = this.props.key;
 
 		// Change in class variable does not trigger re-render
 		this.dragging = false;
-		this.resizing = false;
 		this.maximized = false;
 
 		// cursor position when dragging starts, updated when cursor move within component
@@ -133,15 +129,6 @@ export default class Window extends Component {
 		this.restoreWindow = this.restoreWindow.bind(this);
 	}
 
-	// Check if cursor is in the resize corner
-	isResizable() {
-		return (
-			this.cursorPos &&
-			DraggableCornerSize > this.state.size.x - this.cursorPos.x &&
-			DraggableCornerSize > this.state.size.y - this.cursorPos.y
-		);
-	}
-
 	// handles window resizing and dragging
 	handleMouseMove(event) {
 		// if window is currently being dragged, update pos
@@ -157,17 +144,6 @@ export default class Window extends Component {
 				this.dragging = false;
 			}
 		}
-		// if window is currently being resized, update size
-		else if (this.resizing) {
-			// margin in case cursor move too fast for update to catch up
-			const resizeMargin = DraggableCornerSize / 2;
-			this.setState({
-				size: {
-					x: Math.max(event.clientX - this.state.pos.x + resizeMargin, 100),
-					y: Math.max(event.clientY - this.state.pos.y + resizeMargin, 100),
-				},
-			});
-		}
 		// if window is not being dragged, only update cursorPos
 		else {
 			this.cursorPos = {
@@ -175,23 +151,18 @@ export default class Window extends Component {
 				y: event.clientY - this.state.pos.y,
 			};
 		}
-
-		// set resizable state because we may need to update cursor style
-		this.setState({ resizable: this.isResizable() });
 	}
 
 	handleMouseDown(event) {
 		// if clicked on button, dont drag or send to front
 		if (event.target.tagName !== "BUTTON"){
 			this.props.sendToFrontCallbacks();
-			this.resizing = this.state.resizable;
 			this.dragging = event.target.className.includes("DragArea");
 		}
 	}
 
 	stopWindowAction() {
 		this.dragging = false;
-		this.resizing = false;
 	}
 
 	minimizeWindow() {
