@@ -35,24 +35,41 @@ const StyledWindow = styled.div.attrs((props) => ({
 	background-color: white;
 	display: ${(props) => (props.display ? "block" : "none")};
 	z-index: ${(props) => props.zIndex};
+	overflow: auto;
+	resize: both;
+    &::-webkit-scrollbar {
+		width: 7px;
+		height: 7px;
+		display: block;
+	}
+	&::-webkit-scrollbar-track-piece {
+		background: lightgray;
+		margin-top: 28px; 
+		border-top: 2px solid black;
+	}
+	&::-webkit-scrollbar-thumb {
+		background: gray;
+	}
 `;
 
 const StyledWindowContent = styled.div`
 	top: 28px;
 	width: 100%;
 	height: calc(100% - 30px);
-	border-top: 2px solid black;
 	position: absolute;
-	overflow: auto;
 `;
 
 const StyledWindowTopBar = styled.div`
+	top: 0;
 	height: 28px;
 	width: 100%;
-	position: absolute;
+	position: sticky;
 	display: flex;
 	flex-direction: row;
 	user-select: none;
+	border-bottom: 2px solid black;
+	background-color: white;
+	z-index: 1;
 `;
 
 const StyledWindowTopBarTitle = styled.div`
@@ -64,8 +81,9 @@ const StyledWindowTopBarTitle = styled.div`
 `;
 
 const StyledWindowTopBarButton = styled.button`
-	height: 100%;
-	width: 28px;
+	height: 25px;
+	width: 25px;
+	margin: auto 0 auto 4px;
 `;
 
 /**
@@ -244,7 +262,9 @@ export default class Window extends Component {
 				// https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
 				display={this.props.display ? 1 : 0}
 			>
-				<StyledWindowTopBar>
+				<StyledWindowTopBar
+					top={this.state.pos.y}
+					>
 					<StyledWindowTopBarTitle className={"DragArea"}>
 						{this.props.appData.title || "Untitled"}
 					</StyledWindowTopBarTitle>
