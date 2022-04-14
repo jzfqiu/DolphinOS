@@ -127,6 +127,8 @@ export default class Window extends Component {
 		this.minimizeWindow = this.minimizeWindow.bind(this);
 		this.maximizeWindow = this.maximizeWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
+
+		this.ref = React.createRef();
 	}
 
 	// handles window resizing and dragging
@@ -172,7 +174,10 @@ export default class Window extends Component {
 	// Make window fill the page
 	maximizeWindow() {
 		this.restore = {
-			size: this.state.size,
+			size: {
+				x: this.ref.current.offsetWidth-4,
+				y: this.ref.current.offsetHeight-4,
+			},
 			pos: this.state.pos,
 		};
 		this.maximized = true;
@@ -225,9 +230,9 @@ export default class Window extends Component {
 				onMouseMove={this.handleMouseMove}
 				onMouseUp={this.stopWindowAction}
 				onMouseLeave={this.stopWindowAction}
+				ref={this.ref}
 				pos={this.state.pos}
 				size={this.state.size}
-				resizable={this.state.resizable}
 				zIndex={this.props.zIndex}
 				// styled-component specific tweak
 				// https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
