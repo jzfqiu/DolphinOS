@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import Markdown from "./Contents/Markdown";
+import "./styles/Window.sass";
 
 // Default window position in px
 const DefaultPos = {
@@ -13,76 +13,6 @@ const DefaultSize = {
 	x: 600,
 	y: 600,
 };
-
-
-// https://styled-components.com/docs/basics#attaching-additional-props
-// Props pass through attrs constructor for frequently updated attribute
-const StyledWindow = styled.div.attrs((props) => ({
-	style: {
-		width: props.size.x + "px",
-		height: props.size.y + "px",
-		left: props.pos.x + "px",
-		top: props.pos.y + "px",
-		cursor: props.resizable ? "nwse-resize" : "auto",
-	},
-}))`
-	min-width: 200px;
-	min-height: 100px;
-	border: 2px solid black;
-	position: absolute;
-	background-color: white;
-	display: ${(props) => (props.display ? "block" : "none")};
-	z-index: ${(props) => props.zIndex};
-	overflow: auto;
-	resize: both;
-    &::-webkit-scrollbar {
-		width: 7px;
-		height: 7px;
-		display: block;
-	}
-	&::-webkit-scrollbar-track-piece {
-		background: lightgray;
-		margin-top: 28px; 
-		border-top: 2px solid black;
-	}
-	&::-webkit-scrollbar-thumb {
-		background: gray;
-	}
-`;
-
-const StyledWindowContent = styled.div`
-	top: 28px;
-	width: 100%;
-	height: calc(100% - 30px);
-	position: absolute;
-`;
-
-const StyledWindowTopBar = styled.div`
-	top: 0;
-	height: 28px;
-	width: 100%;
-	position: sticky;
-	display: flex;
-	flex-direction: row;
-	user-select: none;
-	border-bottom: 2px solid black;
-	background-color: white;
-	z-index: 1;
-`;
-
-const StyledWindowTopBarTitle = styled.div`
-	height: 100%;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-`;
-
-const StyledWindowTopBarButton = styled.button`
-	height: 25px;
-	width: 25px;
-	margin: auto 0 auto 4px;
-`;
 
 /**
  * A draggable, resizable window that is able to minimize, maximize,
@@ -138,10 +68,13 @@ export default class Window extends Component {
 			const newX = event.clientX - this.cursorPos.x;
 			const newY = event.clientY - this.cursorPos.y;
 			// if window is moving within bound
-			if (newX >= 0 && newY >= 0 && 
-				newX + this.state.size.x <= this.desktopWidth && 
-				newY + this.state.size.y <= this.desktopHeight) {
-					this.setState({pos: {x: newX, y: newY}});
+			if (
+				newX >= 0 &&
+				newY >= 0 &&
+				newX + this.state.size.x <= this.desktopWidth &&
+				newY + this.state.size.y <= this.desktopHeight
+			) {
+				this.setState({ pos: { x: newX, y: newY } });
 			} else {
 				this.dragging = false;
 			}
@@ -157,9 +90,9 @@ export default class Window extends Component {
 
 	handleMouseDown(event) {
 		// if clicked on button, dont drag or send to front
-		if (event.target.tagName !== "BUTTON"){
+		if (event.target.tagName !== "BUTTON") {
 			this.props.sendToFrontCallbacks();
-			this.dragging = event.target.className.includes("DragArea");
+			this.dragging = event.target.className.includes("WindowTopBar");
 		}
 	}
 
@@ -175,8 +108,8 @@ export default class Window extends Component {
 	maximizeWindow() {
 		this.restore = {
 			size: {
-				x: this.ref.current.offsetWidth-4,
-				y: this.ref.current.offsetHeight-4,
+				x: this.ref.current.offsetWidth - 4,
+				y: this.ref.current.offsetHeight - 4,
 			},
 			pos: this.state.pos,
 		};
@@ -213,7 +146,7 @@ export default class Window extends Component {
 	renderWindowContents() {
 		switch (this.props.appData.type) {
 			case "document":
-				return <Markdown appData={this.props.appData}/>;
+				return <Markdown appData={this.props.appData} />;
 			case "folder":
 				return <div>TODO</div>;
 			case "image":
@@ -225,45 +158,53 @@ export default class Window extends Component {
 
 	render() {
 		return (
-			<StyledWindow
+			<div
+				className="Window"
+				style={{
+					left: this.state.pos.x + "px",
+					top: this.state.pos.y + "px",
+					width: this.state.size.x + "px",
+					height: this.state.size.y + "px",
+					zIndex: this.props.zIndex,
+					display: this.props.display ? "block" : "none",
+				}}
 				onMouseDown={this.handleMouseDown}
 				onMouseMove={this.handleMouseMove}
 				onMouseUp={this.stopWindowAction}
 				onMouseLeave={this.stopWindowAction}
 				ref={this.ref}
-				pos={this.state.pos}
-				size={this.state.size}
-				zIndex={this.props.zIndex}
-				// styled-component specific tweak
-				// https://stackoverflow.com/questions/49784294/warning-received-false-for-a-non-boolean-attribute-how-do-i-pass-a-boolean-f
-				display={this.props.display ? 1 : 0}
 			>
-				<StyledWindowTopBar
-					top={this.state.pos.y}
-					>
-					<StyledWindowTopBarTitle className={"DragArea"}>
+				<div className="WindowTopBar" top={this.state.pos.y}>
+					<div className={"WindowTopBarTitle"}>
 						{this.props.appData.title || "Untitled"}
-					</StyledWindowTopBarTitle>
-					<StyledWindowTopBarButton onClick={this.props.minimizeCallbacks}>
+					</div>
+					<button
+						className="WindowTopBarButton"
+						onClick={this.props.minimizeCallbacks}
+					>
 						-
-					</StyledWindowTopBarButton>
+					</button>
 					{this.maximized ? (
-						<StyledWindowTopBarButton onClick={this.restoreWindow}>
+						<button className="WindowTopBarButton" onClick={this.restoreWindow}>
 							r
-						</StyledWindowTopBarButton>
+						</button>
 					) : (
-						<StyledWindowTopBarButton onClick={this.maximizeWindow}>
+						<button
+							className="WindowTopBarButton"
+							onClick={this.maximizeWindow}
+						>
 							M
-						</StyledWindowTopBarButton>
+						</button>
 					)}
-					<StyledWindowTopBarButton onClick={this.props.unmountCallbacks}>
+					<button
+						className="WindowTopBarButton"
+						onClick={this.props.unmountCallbacks}
+					>
 						X
-					</StyledWindowTopBarButton>
-				</StyledWindowTopBar>
-				<StyledWindowContent>
-					{this.renderWindowContents()}
-				</StyledWindowContent>
-			</StyledWindow>
+					</button>
+				</div>
+				<div className="WindowContent">{this.renderWindowContents()}</div>
+			</div>
 		);
 	}
 }

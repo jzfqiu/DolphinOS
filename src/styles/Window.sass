@@ -1,0 +1,50 @@
+.Window
+	min-width: 200px
+	min-height: 100px
+	border: 2px solid black
+	position: absolute
+	background-color: white
+	overflow: auto
+	resize: both
+	&::-webkit-scrollbar 
+		width: 7px
+		height: 7px
+		display: block
+	
+	&::-webkit-scrollbar-track-piece 
+		background: lightgray
+		margin-top: 28px
+		border-top: 2px solid black
+	
+	&::-webkit-scrollbar-thumb 
+		background: gray
+	
+.WindowTopBar
+	top: 0
+	height: 28px
+	width: 100%
+	position: sticky
+	display: flex
+	flex-direction: row
+	user-select: none
+	border-bottom: 2px solid black
+	background-color: white
+	z-index: 1
+
+.WindowTopBarTitle
+	height: 100%
+	width: 100%
+	display: flex
+	align-items: center
+	justify-content: center
+
+.WindowTopBarButton
+	height: 25px
+	width: 25px
+	margin: auto 0 auto 4px
+
+.WindowContent
+	top: 28px
+	width: 100%
+	height: calc(100% - 30px)
+	position: absolute

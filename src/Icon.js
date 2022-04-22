@@ -1,48 +1,15 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import browserIcon from "./assets/icons/browser.png";
 import folderIcon from "./assets/icons/folder.png";
 import linkIcon from "./assets/icons/export.png";
 import imageIcon from "./assets/icons/picture.png";
+import "./styles/Icon.sass";
 
 // Default window position in px
 const DefaultPos = {
 	x: 100,
 	y: 100,
 };
-
-// https://styled-components.com/docs/basics#attaching-additional-props
-// Props pass through attrs constructor for frequently updated attribute
-const StyledIcon = styled.div.attrs((props) => ({
-	style: {
-		left: props.pos.x + "px",
-		top: props.pos.y + "px",
-	},
-}))`
-	max-width: 200px;
-	max-height: 200px;
-	padding: 10px;
-	position: absolute;
-	z-index: ${(props) => props.zIndex};
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	user-select: none;
-	text-align: center;
-	background: ${(props) => (props.active ? "lightblue" : "none")};
-	& img {
-		margin: 5px;
-	}
-`;
-
-const StyledIconImg = styled.img.attrs((props) => ({
-	src: props.src,
-	alt: props.alt,
-	draggable: "false",
-}))`
-	width: 50px;
-`;
 
 export default class Icon extends Component {
 	constructor(props) {
@@ -130,24 +97,24 @@ export default class Icon extends Component {
 		}
 
 		return (
-			<StyledIcon
+			<div
+				className={"icon"}
+				style={{
+					left: this.state.pos.x + "px",
+					top: this.state.pos.y + "px",
+					zIndex: this.props.zIndex,
+					background: this.props.active ? "lightblue" : "none",
+				}}
 				onMouseDown={this.handleMouseDown}
 				onMouseMove={this.handleMouseMove}
 				onMouseUp={this.stopWindowAction}
 				onMouseLeave={this.stopWindowAction}
 				onDoubleClick={this.props.doubleClickCallback}
-				pos={this.state.pos}
-				size={this.size}
-				zIndex={this.props.zIndex}
 				ref={this.ref}
-				active={this.props.active}
 			>
-				<StyledIconImg
-					src={image}
-					alt={this.props.appData.title}
-				/>
+				<img src={image} alt={this.props.appData.title} draggable={"false"} />
 				{this.props.appData.title}
-			</StyledIcon>
+			</div>
 		);
 	}
 }

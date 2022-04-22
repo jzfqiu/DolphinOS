@@ -1,44 +1,13 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import Window from "./Window";
 import Icon from "./Icon";
 import { applications } from "./AppData";
+import "./styles/System.sass"
 
 function getRandomInt(max) {
 	return Math.floor(Math.random() * max);
   }
 
-
-const StyledSystem = styled.div`
-	width: 100%;
-	height: 100vh;
-	font-family: sans-serif;
-`;
-
-const StyledDesktop = styled.div`
-	width: 100%;
-	height: calc(100% - 42px);
-`;
-
-const StyledTaskbar = styled.div`
-	height: 40px;
-	width: 100%;
-	border-top: 2px solid black;
-	background-color: white;
-	position: absolute;
-`;
-
-const StyledTask = styled.button`
-	height: 40px;
-	min-width: 70px;
-	/* transition-duration: 0.4s; */
-	&:hover {
-		background-color: lightblue;
-	}
-	background: ${(props) => (props.active ? "steelblue" : "white")};
-	border: 0;
-	border-right: 2px solid black;
-`;
 
 export default class System extends Component {
 	constructor(props) {
@@ -149,13 +118,14 @@ export default class System extends Component {
 
 	buildTaskComponent(program) {
 		return (
-			<StyledTask
+			<button
+				className="Task"
 				key={program}
 				onClick={this.mountWindow.bind(this, program)}
-				active={program === this.state.windowInFocus ? 1 : 0}
+				style={{background: program === this.state.windowInFocus ? "steelblue" : "white"}}
 			>
 				{applications[program].title}
-			</StyledTask>
+			</button>
 		);
 	}
 
@@ -197,16 +167,16 @@ export default class System extends Component {
 			icons.push(this.buildIconComponent(program));
 		}
 		return (
-			<StyledSystem>
-				<StyledDesktop onMouseDown={this.deselectIcon}>
+			<div className="System">
+				<div className="Desktop" onMouseDown={this.deselectIcon}>
 					{icons}
 					{windows}
-				</StyledDesktop>
-				<StyledTaskbar>
-					<StyledTask>Start</StyledTask>
+				</div>
+				<div className="Taskbar">
+					<button className="Task">Start</button>
 					{tasks}
-				</StyledTaskbar>
-			</StyledSystem>
+				</div>
+			</div>
 		);
 	}
 }
