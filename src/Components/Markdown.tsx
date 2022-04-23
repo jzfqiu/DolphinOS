@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactMarkdown from "react-markdown";
-import { AppData } from "../AppData";
+import { AppData } from "./AppData";
 import "../styles/Markdown.sass"
 
 /**

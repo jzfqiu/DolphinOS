@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
 import { applications } from "./AppData";
-import "./styles/System.sass";
+import "../styles/System.sass";
 
 function getRandomInt(max: number) {
 	return Math.floor(Math.random() * max);

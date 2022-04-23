@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import System from './System';
+import System from './Components/System';
 // import reportWebVitals from './reportWebVitals';
 import './styles/Index.sass';
 

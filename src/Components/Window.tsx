@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { AppData } from "./AppData";
 import { Point } from "./Utils";
-import Markdown from "./Contents/Markdown";
-import "./styles/Window.sass";
+import Markdown from "./Markdown";
+import "../styles/Window.sass";
 
 // Default window position in px
 const DefaultPos = {
