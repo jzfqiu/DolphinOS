@@ -1,38 +1,44 @@
 import React, { Component } from "react";
+import { AppData } from "./AppData";
+import { Point } from "./Utils";
 import browserIcon from "./assets/icons/browser.png";
 import folderIcon from "./assets/icons/folder.png";
 import linkIcon from "./assets/icons/export.png";
 import imageIcon from "./assets/icons/picture.png";
 import "./styles/Icon.sass";
 
-// Default window position in px
-const DefaultPos = {
-	x: 100,
-	y: 100,
+
+type IconProps = {
+	initialPos: Point,
+	appData: AppData,
+	zIndex: number,
+	active: boolean,
+	sendToFrontCallbacks: () => void, // program parameter bound in System component
+	doubleClickCallback: () => void,
 };
 
-export default class Icon extends Component {
-	constructor(props) {
+type IconState = {
+	pos: Point,
+};
+
+export default class Icon extends Component<IconProps, IconState> {
+	ref: React.RefObject<HTMLInputElement>;
+	dragging: boolean;
+	cursorPos: Point;
+
+	constructor(props: IconProps) {
 		super(props);
 		this.state = {
 			pos: {
-				x: this.props.initialPos ? this.props.initialPos.x : DefaultPos.x,
-				y: this.props.initialPos ? this.props.initialPos.y : DefaultPos.y,
+				x: this.props.initialPos ? this.props.initialPos.x : 100,
+				y: this.props.initialPos ? this.props.initialPos.y : 100,
 			},
 		};
 		this.ref = React.createRef();
-
-		this.size = this.props.size ? this.props.size : { x: 100, y: 100 };
-
-		this.program = this.props.key;
 		this.dragging = false;
 
 		// cursor position when dragging starts, updated when cursor move within component
-		this.cursorPos = null;
-
-		// Desktop size:
-		this.desktopWidth = window.innerWidth - 4; // 2*2px border
-		this.desktopHeight = window.innerHeight - 44; // Taskbar height = 40px
+		this.cursorPos = {x: 0, y: 0};
 
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -40,17 +46,18 @@ export default class Icon extends Component {
 	}
 
 	// handles window resizing and dragging
-	handleMouseMove(event) {
+	handleMouseMove(event: React.MouseEvent<HTMLElement>){
 		// if window is currently being dragged, update pos
 		if (this.dragging) {
 			const newX = event.clientX - this.cursorPos.x;
 			const newY = event.clientY - this.cursorPos.y;
 			// if window is moving within bound
 			if (
+				this.ref.current && 
 				newX >= 0 &&
 				newY >= 0 &&
-				newX + this.size.x <= this.desktopWidth &&
-				newY + this.size.y <= this.desktopHeight
+				newX + this.ref.current.offsetWidth <= window.innerWidth &&
+				newY + this.ref.current.offsetHeight <= window.innerHeight - 40 // Taskbar height = 40px
 			) {
 				this.setState({ pos: { x: newX, y: newY } });
 			} else {
@@ -66,7 +73,7 @@ export default class Icon extends Component {
 		}
 	}
 
-	handleMouseDown(event) {
+	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
 		// Stops mousedown even from propagating into desktop DOM
 		event.stopPropagation();
 		this.props.sendToFrontCallbacks();

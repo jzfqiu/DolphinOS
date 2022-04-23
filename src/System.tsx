@@ -2,18 +2,31 @@ import React, { Component } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
 import { applications } from "./AppData";
-import "./styles/System.sass"
+import "./styles/System.sass";
 
-function getRandomInt(max) {
+function getRandomInt(max: number) {
 	return Math.floor(Math.random() * max);
-  }
+}
 
+type SystemProps = {};
 
-export default class System extends Component {
-	constructor(props) {
+type SystemState = {
+	processes: { [pid: string]: ProcessState };
+	windowsOrder: string[];
+	windowInFocus: string;
+	iconsOrder: string[];
+	iconSelected: string;
+};
+
+type ProcessState = {
+	minimized: boolean;
+};
+
+export default class System extends Component<SystemProps, SystemState> {
+	constructor(props: SystemProps) {
 		super(props);
 		this.state = {
-			processes: [],
+			processes: {},
 			windowsOrder: [],
 			windowInFocus: "",
 			iconsOrder: Object.keys(applications),
@@ -21,18 +34,18 @@ export default class System extends Component {
 		};
 		this.mountWindow = this.mountWindow.bind(this);
 		this.sendToFrontWindow = this.sendToFrontWindow.bind(this);
-		this.sendToFontIcon = this.sendToFrontIcon.bind(this);
+		this.sendToFrontIcon = this.sendToFrontIcon.bind(this);
 		this.deselectIcon = this.deselectIcon.bind(this);
 	}
 
-	// If click happens on an icon, propagation stops at the icon dom 
+	// If click happens on an icon, propagation stops at the icon dom
 	// and this function is not called.
 	deselectIcon() {
-		this.setState({iconSelected: ""});
+		this.setState({ iconSelected: "" });
 	}
 
 	// Un-minimize a process, which could be a new process or an existing minimized process
-	mountWindow(program) {
+	mountWindow(program: string) {
 		// add variable key to state object: https://stackoverflow.com/a/58652613
 		// add element to state array: https://stackoverflow.com/a/26254086
 		this.setState((prevState) => ({
@@ -57,7 +70,7 @@ export default class System extends Component {
 	}
 
 	// Remove program from processes list, destroy its state (size, pos)
-	unmountWindow(program) {
+	unmountWindow(program: string) {
 		let updatedProcesses = this.state.processes;
 		delete updatedProcesses[program];
 		this.setState({
@@ -67,7 +80,7 @@ export default class System extends Component {
 	}
 
 	// Set program to be minimized
-	minimizeWindow(program) {
+	minimizeWindow(program: string) {
 		let updatedProcesses = this.state.processes;
 		updatedProcesses[program].minimized = true;
 		this.setState({
@@ -77,7 +90,7 @@ export default class System extends Component {
 	}
 
 	// remove the program from windowsOrder, then push to last (highest z-index)
-	sendToFrontWindow(program) {
+	sendToFrontWindow(program: string) {
 		let updatedWindowsOrder = this.state.windowsOrder.filter(
 			(item) => item !== program
 		);
@@ -89,7 +102,7 @@ export default class System extends Component {
 		});
 	}
 
-	sendToFrontIcon(program) {
+	sendToFrontIcon(program: string) {
 		let updatedIconsOrder = this.state.iconsOrder.filter(
 			(item) => item !== program
 		);
@@ -100,46 +113,48 @@ export default class System extends Component {
 		});
 	}
 
-	buildWindowComponent(program, programState) {
+	buildWindowComponent(program: string, programState: ProcessState) {
 		const appData = applications[program];
 		return (
 			<Window
 				key={program}
 				appData={appData}
 				display={!programState.minimized}
-				zIndex={this.state.windowsOrder.indexOf(program)+100}
+				zIndex={this.state.windowsOrder.indexOf(program) + 100}
 				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers
-				unmountCallbacks={this.unmountWindow.bind(this, program)}
-				minimizeCallbacks={this.minimizeWindow.bind(this, program)}
-				sendToFrontCallbacks={this.sendToFrontWindow.bind(this, program)}
+				unmountCallback={this.unmountWindow.bind(this, program)}
+				minimizeCallback={this.minimizeWindow.bind(this, program)}
+				sendToFrontCallback={this.sendToFrontWindow.bind(this, program)}
 			/>
 		);
 	}
 
-	buildTaskComponent(program) {
+	buildTaskComponent(program: string) {
 		return (
 			<button
 				className="Task"
 				key={program}
 				onClick={this.mountWindow.bind(this, program)}
-				style={{background: program === this.state.windowInFocus ? "steelblue" : "white"}}
+				style={{
+					background:
+						program === this.state.windowInFocus ? "steelblue" : "white",
+				}}
 			>
 				{applications[program].title}
 			</button>
 		);
 	}
 
-	buildIconComponent(program) {
+	buildIconComponent(program: string) {
 		const appData = applications[program];
 		const pos = {
 			x: getRandomInt(500),
 			y: getRandomInt(500),
-		}
-		let doubleClickCallback;
+		};
+		let doubleClickCallback: () => void;
 		if (appData.type === "link")
-			doubleClickCallback = () => window.open(appData.url, '_blank').focus();
-		else
-			doubleClickCallback = this.mountWindow.bind(this, program);
+			doubleClickCallback = () => {window.open(appData.url, "_blank")?.focus();}
+		else doubleClickCallback = this.mountWindow.bind(this, program);
 		return (
 			<Icon
 				key={program}
@@ -147,7 +162,7 @@ export default class System extends Component {
 				appData={appData}
 				doubleClickCallback={doubleClickCallback}
 				sendToFrontCallbacks={this.sendToFrontIcon.bind(this, program)}
-				active={this.state.iconSelected===program ? 1 : 0}
+				active={this.state.iconSelected === program}
 				zIndex={this.state.iconsOrder.indexOf(program)}
 			/>
 		);

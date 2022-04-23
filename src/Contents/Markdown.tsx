@@ -1,19 +1,20 @@
 import React, { Component } from "react";
 import ReactMarkdown from "react-markdown";
-import styled from "styled-components";
-
-const StyledMarkdown = styled.div`
-	padding: 10px;
-	max-width: 1000px;
-	margin: auto;
-`;
+import { AppData } from "../AppData";
+import "../styles/Markdown.sass"
 
 /**
  * Markdown contents inside of a window
- * @param {Object} appData: data about the file
  */
-export default class Markdown extends Component {
-	constructor(props) {
+type MarkdownState ={
+	content: string,
+}
+type MarkdownProps ={
+	appData: AppData,
+}
+
+export default class Markdown extends Component<MarkdownProps, MarkdownState> {
+	constructor(props: MarkdownProps) {
 		super(props);
 		this.state = {
 			content: "",
@@ -22,7 +23,7 @@ export default class Markdown extends Component {
 
 	// https://reactjs.org/docs/faq-ajax.html
 	componentDidMount() {
-		fetch(this.props.appData.filepath)
+		fetch(this.props.appData.filepath!)
 			.then((res) => res.text())
 			.then(
 				(result) => {
@@ -36,9 +37,9 @@ export default class Markdown extends Component {
 
 	render() {
 		return (
-			<StyledMarkdown>
+			<div className="Markdown">
 				<ReactMarkdown>{this.state.content}</ReactMarkdown>
-			</StyledMarkdown>
+			</div>
 		);
 	}
 }

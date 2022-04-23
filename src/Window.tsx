@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { AppData } from "./AppData";
+import { Point } from "./Utils";
 import Markdown from "./Contents/Markdown";
 import "./styles/Window.sass";
 
@@ -14,15 +16,39 @@ const DefaultSize = {
 	y: 600,
 };
 
+type WindowProps = {
+	initialPos?: Point;
+	initialSize?: Point;
+	key: string;
+	display: boolean;
+	appData: AppData;
+	zIndex: number;
+	sendToFrontCallback: () => void; // program parameter bound in System component
+	unmountCallback: () => void;
+	minimizeCallback: () => void;
+};
+
+type WindowState = {
+	pos: Point;
+	size: Point;
+};
+
 /**
  * A draggable, resizable window that is able to minimize, maximize,
  * restore to previous size, and close itself.
- * @param {Object} initialPos Initial position of the window in the format `{x: left, y: top}`
- * @param {Object} initialSize Initial size of the window in the format `{x: width, y: height}`
- * @param {string} title
  */
-export default class Window extends Component {
-	constructor(props) {
+export default class Window extends Component<WindowProps, WindowState> {
+	dragging: boolean;
+	maximized: boolean;
+	cursorPos: Point | null;
+	restore: {
+		size: Point;
+		pos: Point;
+	} | null;
+	desktopSize: Point;
+	ref: React.RefObject<HTMLInputElement>;
+
+	constructor(props: WindowProps) {
 		super(props);
 		this.state = {
 			pos: {
@@ -35,9 +61,6 @@ export default class Window extends Component {
 			},
 		};
 
-		this.program = this.props.key;
-
-		// Change in class variable does not trigger re-render
 		this.dragging = false;
 		this.maximized = false;
 
@@ -46,15 +69,16 @@ export default class Window extends Component {
 		this.restore = null; // store previous size and pos when maximized
 
 		// Desktop size:
-		this.desktopWidth = window.innerWidth - 4; // 2*2px border
-		this.desktopHeight = window.innerHeight - 44; // Taskbar height = 40px
+		this.desktopSize = {
+			x: window.innerWidth - 4, // 2*2px border
+			y: window.innerHeight - 44, // Taskbar height = 40px
+		};
 
 		// This binding is necessary to make `this` work in the callback
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
 		this.handleMouseDown = this.handleMouseDown.bind(this);
 		this.handleMouseMove = this.handleMouseMove.bind(this);
 		this.stopWindowAction = this.stopWindowAction.bind(this);
-		this.minimizeWindow = this.minimizeWindow.bind(this);
 		this.maximizeWindow = this.maximizeWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
 
@@ -62,17 +86,17 @@ export default class Window extends Component {
 	}
 
 	// handles window resizing and dragging
-	handleMouseMove(event) {
+	handleMouseMove(event: React.MouseEvent<HTMLElement>) {
 		// if window is currently being dragged, update pos
-		if (this.dragging) {
+		if (this.dragging && this.cursorPos) {
 			const newX = event.clientX - this.cursorPos.x;
 			const newY = event.clientY - this.cursorPos.y;
 			// if window is moving within bound
 			if (
 				newX >= 0 &&
 				newY >= 0 &&
-				newX + this.state.size.x <= this.desktopWidth &&
-				newY + this.state.size.y <= this.desktopHeight
+				newX + this.state.size.x <= this.desktopSize.x &&
+				newY + this.state.size.y <= this.desktopSize.y
 			) {
 				this.setState({ pos: { x: newX, y: newY } });
 			} else {
@@ -88,10 +112,11 @@ export default class Window extends Component {
 		}
 	}
 
-	handleMouseDown(event) {
-		// if clicked on button, dont drag or send to front
-		if (event.target.tagName !== "BUTTON") {
-			this.props.sendToFrontCallbacks();
+	// if clicked on button, dont drag or send to front
+	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
+		// event.target may not always be a dom
+		if (event.target instanceof Element && event.target.tagName !== "BUTTON") {
+			this.props.sendToFrontCallback();
 			this.dragging = event.target.className.includes("WindowTopBar");
 		}
 	}
@@ -100,16 +125,14 @@ export default class Window extends Component {
 		this.dragging = false;
 	}
 
-	minimizeWindow() {
-		this.props.callbacks.minimize();
-	}
-
 	// Make window fill the page
 	maximizeWindow() {
 		this.restore = {
+			// ref.current will never be null because the target window
+			// is always mounted when this method is called.
 			size: {
-				x: this.ref.current.offsetWidth - 4,
-				y: this.ref.current.offsetHeight - 4,
+				x: this.ref.current!.offsetWidth - 4,
+				y: this.ref.current!.offsetHeight - 4,
 			},
 			pos: this.state.pos,
 		};
@@ -120,8 +143,8 @@ export default class Window extends Component {
 				y: 0,
 			},
 			size: {
-				x: this.desktopWidth,
-				y: this.desktopHeight,
+				x: this.desktopSize.x,
+				y: this.desktopSize.y,
 			},
 		});
 	}
@@ -129,14 +152,16 @@ export default class Window extends Component {
 	// Restore to size before maximizing
 	restoreWindow() {
 		this.maximized = false;
+		// this method is only called when maximized is set to true
+		// so this.restore will never be null when accessed here
 		this.setState({
 			pos: {
-				x: this.restore.pos.x,
-				y: this.restore.pos.y,
+				x: this.restore!.pos.x,
+				y: this.restore!.pos.y,
 			},
 			size: {
-				x: this.restore.size.x,
-				y: this.restore.size.y,
+				x: this.restore!.size.x,
+				y: this.restore!.size.y,
 			},
 		});
 		this.restore = null;
@@ -174,13 +199,13 @@ export default class Window extends Component {
 				onMouseLeave={this.stopWindowAction}
 				ref={this.ref}
 			>
-				<div className="WindowTopBar" top={this.state.pos.y}>
+				<div className="WindowTopBar">
 					<div className={"WindowTopBarTitle"}>
 						{this.props.appData.title || "Untitled"}
 					</div>
 					<button
 						className="WindowTopBarButton"
-						onClick={this.props.minimizeCallbacks}
+						onClick={this.props.minimizeCallback}
 					>
 						-
 					</button>
@@ -198,7 +223,7 @@ export default class Window extends Component {
 					)}
 					<button
 						className="WindowTopBarButton"
-						onClick={this.props.unmountCallbacks}
+						onClick={this.props.unmountCallback}
 					>
 						X
 					</button>

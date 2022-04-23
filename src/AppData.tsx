@@ -8,11 +8,18 @@ Ref: https://create-react-app.dev/docs/using-the-public-folder/
 */
 const contentPath = process.env.PUBLIC_URL + "/contents/";
 
-export const applications = {
+export type AppData = {
+	type: string;
+	title: string;
+	filepath?: string;
+	url?: string;
+};
+
+export const applications: { [pid: string]: AppData } = {
 	a: {
 		type: "document",
 		title: "test.md",
-        filepath: contentPath + "test.md",
+		filepath: contentPath + "test.md",
 	},
 	b: {
 		type: "folder",
