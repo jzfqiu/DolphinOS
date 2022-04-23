@@ -171,20 +171,21 @@ export default class System extends Component<SystemProps, SystemState> {
 	render() {
 		let windows = [];
 		let tasks = [];
-		let icons = [];
+		let desktopIcons = [];
 		for (const program in this.state.processes) {
 			windows.push(
 				this.buildWindowComponent(program, this.state.processes[program])
 			);
 			tasks.push(this.buildTaskComponent(program));
 		}
-		for (const program in applications) {
-			icons.push(this.buildIconComponent(program));
+		// special apps like desktop is guaranteed to exist in applications
+		for (const program of applications.desktop.files!) {
+			desktopIcons.push(this.buildIconComponent(program));
 		}
 		return (
 			<div className="System">
 				<div className="Desktop" onMouseDown={this.deselectIcon}>
-					{icons}
+					{desktopIcons}
 					{windows}
 				</div>
 				<div className="Taskbar">

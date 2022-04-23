@@ -200,14 +200,11 @@ export default class Window extends Component<WindowProps, WindowState> {
 				ref={this.ref}
 			>
 				<div className="WindowTopBar">
-					<div className={"WindowTopBarTitle"}>
-						{this.props.appData.title || "Untitled"}
-					</div>
 					<button
 						className="WindowTopBarButton"
-						onClick={this.props.minimizeCallback}
+						onClick={this.props.unmountCallback}
 					>
-						-
+						X
 					</button>
 					{this.maximized ? (
 						<button className="WindowTopBarButton" onClick={this.restoreWindow}>
@@ -223,10 +220,13 @@ export default class Window extends Component<WindowProps, WindowState> {
 					)}
 					<button
 						className="WindowTopBarButton"
-						onClick={this.props.unmountCallback}
+						onClick={this.props.minimizeCallback}
 					>
-						X
+						-
 					</button>
+					<div className={"WindowTopBarTitle"}>
+						{this.props.appData.title || "Untitled"}
+					</div>
 				</div>
 				<div className="WindowContent">{this.renderWindowContents()}</div>
 			</div>
