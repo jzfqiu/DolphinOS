@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { AppData } from "./AppData";
+import { AppData, FolderAppData, MarkdownAppData } from "./AppData";
 import { Point } from "./Utils";
 import Markdown from "./Markdown";
 import "../styles/Window.sass";
+import Folder from "./Folder";
 
 // Default window position in px
 const DefaultPos = {
@@ -91,17 +92,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 		if (this.dragging && this.cursorPos) {
 			const newX = event.clientX - this.cursorPos.x;
 			const newY = event.clientY - this.cursorPos.y;
-			// if window is moving within bound
-			if (
-				newX >= 0 &&
-				newY >= 0 &&
-				newX + this.state.size.x <= this.desktopSize.x &&
-				newY + this.state.size.y <= this.desktopSize.y
-			) {
-				this.setState({ pos: { x: newX, y: newY } });
-			} else {
-				this.dragging = false;
-			}
+			this.setState({ pos: { x: newX, y: newY } });
 		}
 		// if window is not being dragged, only update cursorPos
 		else {
@@ -170,10 +161,10 @@ export default class Window extends Component<WindowProps, WindowState> {
 	// Link type contents are handled in System component
 	renderWindowContents() {
 		switch (this.props.appData.type) {
-			case "document":
-				return <Markdown appData={this.props.appData} />;
+			case "markdown":
+				return <Markdown appData={this.props.appData as MarkdownAppData} />;
 			case "folder":
-				return <div>TODO</div>;
+				return <Folder appData={this.props.appData as FolderAppData}/>;
 			case "image":
 				return <div>TODO</div>;
 			default:

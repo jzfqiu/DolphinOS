@@ -8,24 +8,43 @@ Ref: https://create-react-app.dev/docs/using-the-public-folder/
 */
 const contentPath = process.env.PUBLIC_URL + "/contents/";
 
-type AppType = "special" | "document" | "link" | "folder" | "image";
+export type AppType = "special" | "markdown" | "link" | "folder" | "image";
 
-export type AppData = {
+type BaseAppData = {
 	type: AppType;
 	title: string;
-	filepath?: string;
-	url?: string;
-	files?: string[];
 };
+
+export type FolderAppData = BaseAppData & {
+	files: string[];
+};
+
+export type MarkdownAppData = BaseAppData & {
+	filepath: string;
+};
+
+export type LinkAppData = BaseAppData & {
+	url: string;
+};
+
+export type ImageAppData = BaseAppData & {
+	filepath: string;
+};
+
+export type AppData =
+	| FolderAppData
+	| MarkdownAppData
+	| LinkAppData
+	| ImageAppData;
 
 export const applications: { [pid: string]: AppData } = {
 	desktop: {
-		type: "special",
+		type: "folder",
 		title: "Some Folder",
 		files: ["a", "b"],
 	},
 	a: {
-		type: "document",
+		type: "markdown",
 		title: "test.md",
 		filepath: contentPath + "test.md",
 	},
@@ -47,19 +66,20 @@ export const applications: { [pid: string]: AppData } = {
 	e: {
 		type: "image",
 		title: "Some Image",
+		filepath: ""
 	},
 	f: {
-		type: "document",
+		type: "markdown",
 		title: "test2.md",
 		filepath: contentPath + "test.md",
 	},
 	g: {
-		type: "document",
+		type: "markdown",
 		title: "test3.md",
 		filepath: contentPath + "test.md",
 	},
 	h: {
-		type: "document",
+		type: "markdown",
 		title: "test4.md",
 		filepath: contentPath + "test.md",
 	},

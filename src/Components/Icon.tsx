@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { AppData } from "./AppData";
-import { Point } from "./Utils";
-import browserIcon from "../assets/icons/browser.png";
-import folderIcon from "../assets/icons/folder.png";
-import linkIcon from "../assets/icons/export.png";
-import imageIcon from "../assets/icons/picture.png";
+import { getIcon, Point } from "./Utils";
 import "../styles/Icon.sass";
 
 
@@ -51,18 +47,7 @@ export default class Icon extends Component<IconProps, IconState> {
 		if (this.dragging) {
 			const newX = event.clientX - this.cursorPos.x;
 			const newY = event.clientY - this.cursorPos.y;
-			// if window is moving within bound
-			if (
-				this.ref.current && 
-				newX >= 0 &&
-				newY >= 0 &&
-				newX + this.ref.current.offsetWidth <= window.innerWidth &&
-				newY + this.ref.current.offsetHeight <= window.innerHeight - 40 // Taskbar height = 40px
-			) {
-				this.setState({ pos: { x: newX, y: newY } });
-			} else {
-				this.dragging = false;
-			}
+			this.setState({ pos: { x: newX, y: newY } });
 		}
 		// if window is not being dragged, only update cursorPos
 		else {
@@ -85,24 +70,7 @@ export default class Icon extends Component<IconProps, IconState> {
 	}
 
 	render() {
-		let image;
-		switch (this.props.appData.type) {
-			case "document":
-				image = browserIcon;
-				break;
-			case "folder":
-				image = folderIcon;
-				break;
-			case "link":
-				image = linkIcon;
-				break;
-			case "image":
-				image = imageIcon;
-				break;
-			default:
-				image = browserIcon;
-		}
-
+		const image = getIcon(this.props.appData.type);
 		return (
 			<div
 				className={"icon"}

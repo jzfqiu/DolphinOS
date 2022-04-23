@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
-import { applications } from "./AppData";
+import { applications, FolderAppData, LinkAppData } from "./AppData";
 import "../styles/System.sass";
 
 function getRandomInt(max: number) {
@@ -153,7 +153,7 @@ export default class System extends Component<SystemProps, SystemState> {
 		};
 		let doubleClickCallback: () => void;
 		if (appData.type === "link")
-			doubleClickCallback = () => {window.open(appData.url, "_blank")?.focus();}
+			doubleClickCallback = () => {window.open((appData as LinkAppData).url, "_blank")?.focus();}
 		else doubleClickCallback = this.mountWindow.bind(this, program);
 		return (
 			<Icon
@@ -179,7 +179,8 @@ export default class System extends Component<SystemProps, SystemState> {
 			tasks.push(this.buildTaskComponent(program));
 		}
 		// special apps like desktop is guaranteed to exist in applications
-		for (const program of applications.desktop.files!) {
+		// https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
+		for (const program of (applications.desktop as FolderAppData).files) {
 			desktopIcons.push(this.buildIconComponent(program));
 		}
 		return (

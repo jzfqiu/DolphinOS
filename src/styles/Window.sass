@@ -1,3 +1,5 @@
+$WindowTopBar-height: 35px
+	
 .Window
 	min-width: 200px
 	min-height: 100px
@@ -13,7 +15,7 @@
 	
 	&::-webkit-scrollbar-track-piece 
 		background: lightgray
-		margin-top: 28px
+		margin-top: $WindowTopBar-height
 		border-top: 2px solid black
 	
 	&::-webkit-scrollbar-thumb 
@@ -21,7 +23,7 @@
 	
 .WindowTopBar
 	top: 0
-	height: 28px
+	height: $WindowTopBar-height
 	width: 100%
 	position: sticky
 	display: flex
@@ -44,7 +46,7 @@
 	margin: auto 0 auto 4px
 
 .WindowContent
-	top: 28px
+	top: $WindowTopBar-height
 	width: 100%
-	height: calc(100% - 30px)
+	height: calc(100% - $WindowTopBar-height)
 	position: absolute

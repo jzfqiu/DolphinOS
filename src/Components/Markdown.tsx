@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import ReactMarkdown from "react-markdown";
-import { AppData } from "./AppData";
 import "../styles/Markdown.sass"
+import { MarkdownAppData } from "./AppData";
+
+type MarkdownProps = {
+	appData: MarkdownAppData,
+}
+
+type MarkdownState = {
+	content: string,
+}
 
 /**
  * Markdown contents inside of a window
  */
-type MarkdownState ={
-	content: string,
-}
-type MarkdownProps ={
-	appData: AppData,
-}
-
 export default class Markdown extends Component<MarkdownProps, MarkdownState> {
 	constructor(props: MarkdownProps) {
 		super(props);
@@ -23,7 +24,7 @@ export default class Markdown extends Component<MarkdownProps, MarkdownState> {
 
 	// https://reactjs.org/docs/faq-ajax.html
 	componentDidMount() {
-		fetch(this.props.appData.filepath!)
+		fetch(this.props.appData.filepath)
 			.then((res) => res.text())
 			.then(
 				(result) => {
