@@ -138,12 +138,14 @@ export default class System extends Component<SystemProps, SystemState> {
 
 	buildWindow(program: string, programState: ProcessState) {
 		const appData = applications[program];
+		const nProcesses = this.state.windowsOrder.length;
 		return (
 			<Window
 				key={program}
 				appData={appData}
 				display={!programState.minimized}
 				zIndex={this.state.windowsOrder.indexOf(program) + 100}
+				initialPos={{x: 100+nProcesses*20, y: 100+nProcesses*20}}
 				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers
 				unmountCallback={this.unmountWindow.bind(this, program)}
 				minimizeCallback={this.minimizeWindow.bind(this, program)}
