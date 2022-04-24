@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { AppData, FolderAppData, MarkdownAppData } from "./AppData";
+import { AppData } from "./AppData";
 import { Point } from "./Utils";
-import Markdown from "./Markdown";
 import "../styles/Window.sass";
-import Folder from "./Folder";
 
 // Default window position in px
 const DefaultPos = {
@@ -27,6 +25,7 @@ type WindowProps = {
 	sendToFrontCallback: () => void; // program parameter bound in System component
 	unmountCallback: () => void;
 	minimizeCallback: () => void;
+	children?: JSX.Element;
 };
 
 type WindowState = {
@@ -77,17 +76,17 @@ export default class Window extends Component<WindowProps, WindowState> {
 
 		// This binding is necessary to make `this` work in the callback
 		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
-		this.handleMouseDown = this.handleMouseDown.bind(this);
-		this.handleMouseMove = this.handleMouseMove.bind(this);
-		this.stopWindowAction = this.stopWindowAction.bind(this);
+		this.setDragging = this.setDragging.bind(this);
+		this.dragWindow = this.dragWindow.bind(this);
+		this.stopDragging = this.stopDragging.bind(this);
 		this.maximizeWindow = this.maximizeWindow.bind(this);
 		this.restoreWindow = this.restoreWindow.bind(this);
 
 		this.ref = React.createRef();
 	}
 
-	// handles window resizing and dragging
-	handleMouseMove(event: React.MouseEvent<HTMLElement>) {
+	// handles window dragging
+	dragWindow(event: React.MouseEvent<HTMLElement>) {
 		// if window is currently being dragged, update pos
 		if (this.dragging && this.cursorPos) {
 			const newX = event.clientX - this.cursorPos.x;
@@ -103,16 +102,17 @@ export default class Window extends Component<WindowProps, WindowState> {
 		}
 	}
 
-	// if clicked on button, dont drag or send to front
-	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
+	// Check if dragging
+	setDragging(event: React.MouseEvent<HTMLElement>) {
 		// event.target may not always be a dom
+		// if clicked on button, dont drag or send to front
 		if (event.target instanceof Element && event.target.tagName !== "BUTTON") {
 			this.props.sendToFrontCallback();
 			this.dragging = event.target.className.includes("WindowTopBar");
 		}
 	}
 
-	stopWindowAction() {
+	stopDragging() {
 		this.dragging = false;
 	}
 
@@ -158,20 +158,6 @@ export default class Window extends Component<WindowProps, WindowState> {
 		this.restore = null;
 	}
 
-	// Link type contents are handled in System component
-	renderWindowContents() {
-		switch (this.props.appData.type) {
-			case "markdown":
-				return <Markdown appData={this.props.appData as MarkdownAppData} />;
-			case "folder":
-				return <Folder appData={this.props.appData as FolderAppData}/>;
-			case "image":
-				return <div>TODO</div>;
-			default:
-				return <div>Unknown Contents</div>;
-		}
-	}
-
 	render() {
 		return (
 			<div
@@ -184,10 +170,10 @@ export default class Window extends Component<WindowProps, WindowState> {
 					zIndex: this.props.zIndex,
 					display: this.props.display ? "block" : "none",
 				}}
-				onMouseDown={this.handleMouseDown}
-				onMouseMove={this.handleMouseMove}
-				onMouseUp={this.stopWindowAction}
-				onMouseLeave={this.stopWindowAction}
+				onMouseDown={this.setDragging}
+				onMouseMove={this.dragWindow}
+				onMouseUp={this.stopDragging}
+				onMouseLeave={this.stopDragging}
 				ref={this.ref}
 			>
 				<div className="WindowTopBar">
@@ -219,7 +205,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 						{this.props.appData.title || "Untitled"}
 					</div>
 				</div>
-				<div className="WindowContent">{this.renderWindowContents()}</div>
+				<div className="WindowContent">{this.props.children}</div>
 			</div>
 		);
 	}

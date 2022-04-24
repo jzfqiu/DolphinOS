@@ -1,7 +1,15 @@
 import React, { Component } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
-import { applications, FolderAppData, LinkAppData } from "./AppData";
+import Markdown from "./Markdown";
+import Folder from "./Folder";
+import {
+	AppData,
+	applications,
+	FolderAppData,
+	LinkAppData,
+	MarkdownAppData,
+} from "./AppData";
 import "../styles/System.sass";
 
 function getRandomInt(max: number) {
@@ -113,7 +121,26 @@ export default class System extends Component<SystemProps, SystemState> {
 		});
 	}
 
-	buildWindowComponent(program: string, programState: ProcessState) {
+	// Link type contents are handled in System component
+	buildWindowContent(program: string, appData: AppData) {
+		switch (appData.type) {
+			case "markdown":
+				return <Markdown appData={appData as MarkdownAppData} />;
+			case "folder":
+				return (
+					<Folder
+						appData={appData as FolderAppData}
+						mountCallback={this.mountWindow.bind(this)}
+					/>
+				);
+			case "image":
+				return <div>TODO</div>;
+			default:
+				return <div>Unknown Contents</div>;
+		}
+	}
+
+	buildWindow(program: string, programState: ProcessState) {
 		const appData = applications[program];
 		return (
 			<Window
@@ -125,11 +152,13 @@ export default class System extends Component<SystemProps, SystemState> {
 				unmountCallback={this.unmountWindow.bind(this, program)}
 				minimizeCallback={this.minimizeWindow.bind(this, program)}
 				sendToFrontCallback={this.sendToFrontWindow.bind(this, program)}
-			/>
+			>
+				{this.buildWindowContent(program, appData)}
+			</Window>
 		);
 	}
 
-	buildTaskComponent(program: string) {
+	buildTask(program: string) {
 		return (
 			<button
 				className="Task"
@@ -145,7 +174,7 @@ export default class System extends Component<SystemProps, SystemState> {
 		);
 	}
 
-	buildIconComponent(program: string) {
+	buildIcon(program: string) {
 		const appData = applications[program];
 		const pos = {
 			x: getRandomInt(500),
@@ -153,7 +182,9 @@ export default class System extends Component<SystemProps, SystemState> {
 		};
 		let doubleClickCallback: () => void;
 		if (appData.type === "link")
-			doubleClickCallback = () => {window.open((appData as LinkAppData).url, "_blank")?.focus();}
+			doubleClickCallback = () => {
+				window.open((appData as LinkAppData).url, "_blank")?.focus();
+			};
 		else doubleClickCallback = this.mountWindow.bind(this, program);
 		return (
 			<Icon
@@ -173,15 +204,13 @@ export default class System extends Component<SystemProps, SystemState> {
 		let tasks = [];
 		let desktopIcons = [];
 		for (const program in this.state.processes) {
-			windows.push(
-				this.buildWindowComponent(program, this.state.processes[program])
-			);
-			tasks.push(this.buildTaskComponent(program));
+			windows.push(this.buildWindow(program, this.state.processes[program]));
+			tasks.push(this.buildTask(program));
 		}
 		// special apps like desktop is guaranteed to exist in applications
 		// https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
 		for (const program of (applications.desktop as FolderAppData).files) {
-			desktopIcons.push(this.buildIconComponent(program));
+			desktopIcons.push(this.buildIcon(program));
 		}
 		return (
 			<div className="System">
