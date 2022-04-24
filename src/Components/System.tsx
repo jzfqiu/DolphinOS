@@ -76,10 +76,14 @@ export default class System extends Component<SystemProps, SystemState> {
 	// Remove program from processes list, destroy its state (size, pos)
 	unmountWindow(program: string) {
 		let updatedProcesses = this.state.processes;
+		let updatedWindowsOrder = this.state.windowsOrder.filter(
+			(item) => item !== program
+		);
 		delete updatedProcesses[program];
 		this.setState({
 			processes: updatedProcesses,
 			windowInFocus: "",
+			windowsOrder: updatedWindowsOrder,
 		});
 	}
 
