@@ -176,7 +176,10 @@ export default class Window extends Component<WindowProps, WindowState> {
 						X
 					</button>
 					{this.maximized ? (
-						<button className="WindowTopBarButton" onClick={this.restoreWindow.bind(this)}>
+						<button
+							className="WindowTopBarButton"
+							onClick={this.restoreWindow.bind(this)}
+						>
 							r
 						</button>
 					) : (

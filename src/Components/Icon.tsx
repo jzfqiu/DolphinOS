@@ -3,18 +3,17 @@ import { AppData } from "./AppData";
 import { getIcon, Point } from "./Utils";
 import "../styles/Icon.sass";
 
-
 type IconProps = {
-	initialPos: Point,
-	appData: AppData,
-	zIndex: number,
-	active: boolean,
-	sendToFrontCallbacks: () => void, // program parameter bound in System component
-	doubleClickCallback: () => void,
+	initialPos: Point;
+	appData: AppData;
+	zIndex: number;
+	active: boolean;
+	sendToFrontCallbacks: () => void; // program parameter bound in System component
+	doubleClickCallback: () => void;
 };
 
 type IconState = {
-	pos: Point,
+	pos: Point;
 };
 
 export default class Icon extends Component<IconProps, IconState> {
@@ -34,11 +33,11 @@ export default class Icon extends Component<IconProps, IconState> {
 		this.dragging = false;
 
 		// cursor position when dragging starts, updated when cursor move within component
-		this.cursorPos = {x: 0, y: 0};
+		this.cursorPos = { x: 0, y: 0 };
 	}
 
 	// handles window resizing and dragging
-	handleMouseMove(event: React.MouseEvent<HTMLElement>){
+	handleMouseMove(event: React.MouseEvent<HTMLElement>) {
 		// if window is currently being dragged, update pos
 		if (this.dragging) {
 			const newX = event.clientX - this.cursorPos.x;

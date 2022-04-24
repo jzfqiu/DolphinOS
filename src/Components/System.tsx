@@ -40,7 +40,6 @@ export default class System extends Component<SystemProps, SystemState> {
 			iconsOrder: Object.keys(applications),
 			iconSelected: "",
 		};
-
 	}
 
 	// If click happens on an icon, propagation stops at the icon dom

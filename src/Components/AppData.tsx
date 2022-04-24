@@ -66,7 +66,7 @@ export const applications: { [pid: string]: AppData } = {
 	e: {
 		type: "image",
 		title: "Some Image",
-		filepath: ""
+		filepath: "",
 	},
 	f: {
 		type: "markdown",
