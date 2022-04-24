@@ -40,10 +40,7 @@ export default class System extends Component<SystemProps, SystemState> {
 			iconsOrder: Object.keys(applications),
 			iconSelected: "",
 		};
-		this.mountWindow = this.mountWindow.bind(this);
-		this.sendToFrontWindow = this.sendToFrontWindow.bind(this);
-		this.sendToFrontIcon = this.sendToFrontIcon.bind(this);
-		this.deselectIcon = this.deselectIcon.bind(this);
+
 	}
 
 	// If click happens on an icon, propagation stops at the icon dom
@@ -214,7 +211,7 @@ export default class System extends Component<SystemProps, SystemState> {
 		}
 		return (
 			<div className="System">
-				<div className="Desktop" onMouseDown={this.deselectIcon}>
+				<div className="Desktop" onMouseDown={this.deselectIcon.bind(this)}>
 					{desktopIcons}
 					{windows}
 				</div>

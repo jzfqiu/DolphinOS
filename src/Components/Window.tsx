@@ -74,14 +74,6 @@ export default class Window extends Component<WindowProps, WindowState> {
 			y: window.innerHeight - 44, // Taskbar height = 40px
 		};
 
-		// This binding is necessary to make `this` work in the callback
-		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
-		this.setDragging = this.setDragging.bind(this);
-		this.dragWindow = this.dragWindow.bind(this);
-		this.stopDragging = this.stopDragging.bind(this);
-		this.maximizeWindow = this.maximizeWindow.bind(this);
-		this.restoreWindow = this.restoreWindow.bind(this);
-
 		this.ref = React.createRef();
 	}
 
@@ -170,10 +162,10 @@ export default class Window extends Component<WindowProps, WindowState> {
 					zIndex: this.props.zIndex,
 					display: this.props.display ? "block" : "none",
 				}}
-				onMouseDown={this.setDragging}
-				onMouseMove={this.dragWindow}
-				onMouseUp={this.stopDragging}
-				onMouseLeave={this.stopDragging}
+				onMouseDown={this.setDragging.bind(this)}
+				onMouseMove={this.dragWindow.bind(this)}
+				onMouseUp={this.stopDragging.bind(this)}
+				onMouseLeave={this.stopDragging.bind(this)}
 				ref={this.ref}
 			>
 				<div className="WindowTopBar">
@@ -184,20 +176,20 @@ export default class Window extends Component<WindowProps, WindowState> {
 						X
 					</button>
 					{this.maximized ? (
-						<button className="WindowTopBarButton" onClick={this.restoreWindow}>
+						<button className="WindowTopBarButton" onClick={this.restoreWindow.bind(this)}>
 							r
 						</button>
 					) : (
 						<button
 							className="WindowTopBarButton"
-							onClick={this.maximizeWindow}
+							onClick={this.maximizeWindow.bind(this)}
 						>
 							M
 						</button>
 					)}
 					<button
 						className="WindowTopBarButton"
-						onClick={this.props.minimizeCallback}
+						onClick={this.props.minimizeCallback.bind(this)}
 					>
 						-
 					</button>

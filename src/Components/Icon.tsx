@@ -35,10 +35,6 @@ export default class Icon extends Component<IconProps, IconState> {
 
 		// cursor position when dragging starts, updated when cursor move within component
 		this.cursorPos = {x: 0, y: 0};
-
-		this.handleMouseDown = this.handleMouseDown.bind(this);
-		this.handleMouseMove = this.handleMouseMove.bind(this);
-		this.stopWindowAction = this.stopWindowAction.bind(this);
 	}
 
 	// handles window resizing and dragging
@@ -65,7 +61,7 @@ export default class Icon extends Component<IconProps, IconState> {
 		this.dragging = true;
 	}
 
-	stopWindowAction() {
+	stopDragging() {
 		this.dragging = false;
 	}
 
@@ -80,10 +76,10 @@ export default class Icon extends Component<IconProps, IconState> {
 					zIndex: this.props.zIndex,
 					background: this.props.active ? "lightblue" : "none",
 				}}
-				onMouseDown={this.handleMouseDown}
-				onMouseMove={this.handleMouseMove}
-				onMouseUp={this.stopWindowAction}
-				onMouseLeave={this.stopWindowAction}
+				onMouseDown={this.handleMouseDown.bind(this)}
+				onMouseMove={this.handleMouseMove.bind(this)}
+				onMouseUp={this.stopDragging.bind(this)}
+				onMouseLeave={this.stopDragging.bind(this)}
 				onDoubleClick={this.props.doubleClickCallback}
 				ref={this.ref}
 			>
