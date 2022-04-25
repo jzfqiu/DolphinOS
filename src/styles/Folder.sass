@@ -1,3 +1,5 @@
+@use "Common"
+	
 .Folder
 	height: 100%
 
@@ -10,16 +12,15 @@
 	margin: 5px
 	height: 35px
 	padding: 0 10px
-	display: flex
+	@include Common.flex-and-center
 	justify-content: space-between
-	align-items: center
 	list-style-type: none
 	user-select: none
 	border-radius: 5px
 	& div
 		min-width: 100px
-		display: flex
-		align-items: center
+		@include Common.flex-and-center
+		justify-content: flex-start
 		overflow: hidden
 		flex-shrink: 0
 	& img
