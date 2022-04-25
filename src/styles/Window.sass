@@ -1,37 +1,51 @@
 $WindowTopBar-height: 35px
-	
+$Window-border: 1px solid lightgrey
+
+// https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/
+$SystemGray: rgba(142,142,147)
+$SystemRed: rgba(255,59,48)
+$SystemGreen: rgba(52,199,89)
+$SystemYellow: rgba(255,204,0)
+
 .Window
 	min-width: 300px
 	min-height: 200px
-	border: 2px solid black
+	border: $Window-border
 	position: absolute
-	background-color: white
 	overflow: auto
 	resize: both
+	border-radius: 8px
+	filter: drop-shadow(8px 8px 8px darkgray)
+	background-color: white
+
 	&::-webkit-scrollbar 
-		width: 7px
+		width: 8px
 		height: 7px
 		display: block
 	
 	&::-webkit-scrollbar-track-piece 
 		background: lightgray
 		margin-top: $WindowTopBar-height
-		border-top: 2px solid black
+		border-top: $Window-border
 	
 	&::-webkit-scrollbar-thumb 
-		background: gray
+		background: darkgray
+		border-radius: 5px
 	
 .WindowTopBar
 	top: 0
 	height: $WindowTopBar-height
-	width: 100%
+	width: calc(100% - 20px)
 	position: sticky
 	display: flex
 	flex-direction: row
 	user-select: none
-	border-bottom: 2px solid black
-	background-color: white
+	border-bottom: $Window-border
 	z-index: 1
+	align-items: center
+	padding: 0 10px
+	background-color: white
+	filter: drop-shadow(2px 0 3px lightgray)
 
 .WindowTopBarTitle
 	width: 100%
@@ -41,9 +55,22 @@ $WindowTopBar-height: 35px
 	margin-right: 75px
 
 .WindowTopBarButton
-	height: 25px
-	width: 25px
-	margin: auto 0 auto 4px
+	height: 15px
+	width: 15px
+	margin: 0 4px
+	flex-shrink: 0
+	border-radius: 50%
+	border: 0
+	opacity: 0.6
+	&:hover
+		opacity: 1
+	&.WindowClose
+		background-color: $SystemRed
+	&.WindowMaximize
+		background-color: $SystemGreen
+	&.WindowMinimize
+		background-color: $SystemYellow
+	
 
 .WindowContent
 	top: $WindowTopBar-height

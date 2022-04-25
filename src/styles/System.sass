@@ -1,16 +1,19 @@
 .System
 	width: 100%
 	height: 100vh
-	font-family: sans-serif
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
 
 .Desktop
 	width: 100%
 	height: calc(100% - 42px)
+	background-color: beige
+
+$Taskbar-border: 1px solid lightgrey
 
 .Taskbar
 	height: 40px
 	width: 100%
-	border-top: 2px solid black
+	border-top: $Taskbar-border
 	background-color: white
 	position: absolute
 	z-index: 100
@@ -22,4 +25,4 @@
 	&:hover 
 		background-color: lightblue
 	border: 0
-	border-right: 2px solid black
+	border-right: $Taskbar-border

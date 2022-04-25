@@ -61,7 +61,7 @@ export const applications: { [pid: string]: AppData } = {
 	d: {
 		type: "folder",
 		title: "Another Folder",
-		files: [],
+		files: ["f", "g", "h"],
 	},
 	e: {
 		type: "image",
