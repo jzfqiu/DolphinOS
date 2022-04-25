@@ -168,13 +168,9 @@ export default class System extends Component<SystemProps, SystemState> {
   buildTask(program: string) {
     return (
       <button
-        className="Task"
+        className={program === this.state.windowInFocus ? "Task Selected" : "Task"}
         key={program}
         onClick={this.mountWindow.bind(this, program)}
-        style={{
-          background:
-            program === this.state.windowInFocus ? "steelblue" : "white",
-        }}
       >
         {applications[program].title}
       </button>

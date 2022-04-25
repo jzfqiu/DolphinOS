@@ -1,0 +1,20 @@
+@mixin flex-and-center
+    display: flex
+    justify-content: center
+    align-items: center
+
+@mixin drop-shadow-linear($depth, $color)
+    filter: drop-shadow($depth $depth $depth $color)
+
+// System.sass
+$Taskbar-border: 1px solid lightgrey
+$Taskbar-height: 45px
+// https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/
+$SystemGray: rgba(142,142,147)
+$SystemRed: rgba(255,59,48)
+$SystemGreen: rgba(52,199,89)
+$SystemYellow: rgba(255,204,0)
+
+// Window.sass
+$WindowTopBar-height: 35px
+$Window-border: 1px solid lightgrey

@@ -71,7 +71,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 		// Desktop size:
 		this.desktopSize = {
 			x: window.innerWidth - 4, // 2*2px border
-			y: window.innerHeight - 44, // Taskbar height = 40px
+			y: window.innerHeight - 50, // Taskbar height
 		};
 
 		this.ref = React.createRef();

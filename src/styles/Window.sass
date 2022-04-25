@@ -1,21 +1,14 @@
-$WindowTopBar-height: 35px
-$Window-border: 1px solid lightgrey
-
-// https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/color/
-$SystemGray: rgba(142,142,147)
-$SystemRed: rgba(255,59,48)
-$SystemGreen: rgba(52,199,89)
-$SystemYellow: rgba(255,204,0)
+@use "Common"
 
 .Window
 	min-width: 300px
 	min-height: 200px
-	border: $Window-border
+	border: Common.$Window-border
 	position: absolute
 	overflow: auto
 	resize: both
 	border-radius: 8px
-	filter: drop-shadow(8px 8px 8px darkgray)
+	@include Common.drop-shadow-linear($depth: 8px, $color: darkgray)
 	background-color: white
 
 	&::-webkit-scrollbar 
@@ -25,8 +18,8 @@ $SystemYellow: rgba(255,204,0)
 	
 	&::-webkit-scrollbar-track-piece 
 		background: lightgray
-		margin-top: $WindowTopBar-height
-		border-top: $Window-border
+		margin-top: Common.$WindowTopBar-height
+		border-top: Common.$Window-border
 	
 	&::-webkit-scrollbar-thumb 
 		background: darkgray
@@ -34,24 +27,21 @@ $SystemYellow: rgba(255,204,0)
 	
 .WindowTopBar
 	top: 0
-	height: $WindowTopBar-height
+	height: Common.$WindowTopBar-height
 	width: calc(100% - 20px)
 	position: sticky
-	display: flex
+	@include Common.flex-and-center
 	flex-direction: row
 	user-select: none
-	border-bottom: $Window-border
+	border-bottom: Common.$Window-border
 	z-index: 1
-	align-items: center
 	padding: 0 10px
 	background-color: white
 	filter: drop-shadow(2px 0 3px lightgray)
 
 .WindowTopBarTitle
 	width: 100%
-	display: flex
-	align-items: center
-	justify-content: center
+	@include Common.flex-and-center
 	margin-right: 75px
 
 .WindowTopBarButton
@@ -65,15 +55,15 @@ $SystemYellow: rgba(255,204,0)
 	&:hover
 		opacity: 1
 	&.WindowClose
-		background-color: $SystemRed
+		background-color: Common.$SystemRed
 	&.WindowMaximize
-		background-color: $SystemGreen
+		background-color: Common.$SystemGreen
 	&.WindowMinimize
-		background-color: $SystemYellow
+		background-color: Common.$SystemYellow
 	
 
 .WindowContent
-	top: $WindowTopBar-height
+	top: Common.$WindowTopBar-height
 	width: 100%
-	height: calc(100% - $WindowTopBar-height)
+	height: calc(100% - Common.$WindowTopBar-height)
 	position: absolute
