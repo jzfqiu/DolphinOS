@@ -21,14 +21,17 @@
 .Task
 	height: 40px
 	min-width: 70px
-	transition-duration: 0.2s
+	transition-duration: 0.1s
 	border: Common.$Taskbar-border
-	@include Common.drop-shadow-linear($depth: 2px, $color: gray)
+	@include Common.drop-shadow-linear($depth: 1px, $color: gray)
 	border-radius: 10px
 	background-color: white
 	margin: 0 5px
 	&:hover 
 		background-color: lightblue
 	&.Selected
+		position: relative
+		top: 1px
+		left: 1px
 		filter: none
-		box-shadow: inset 2px 2px 2px 2px gray
+		box-shadow: inset 1px 1px 1px 1px gray
