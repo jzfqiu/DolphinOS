@@ -13,8 +13,6 @@ import {
 } from "./AppData";
 import "../styles/System.sass";
 
-
-
 type SystemProps = {};
 
 type SystemState = {
@@ -30,7 +28,7 @@ type ProcessState = {
 };
 
 export default class System extends Component<SystemProps, SystemState> {
-  baseUrl: string;
+	baseUrl: string;
 	constructor(props: SystemProps) {
 		super(props);
 		this.state = {
@@ -40,13 +38,15 @@ export default class System extends Component<SystemProps, SystemState> {
 			iconsOrder: Object.keys(applications),
 			iconSelected: "",
 		};
-    this.baseUrl = "";
+		this.baseUrl = "";
 	}
 
 	componentDidMount() {
 		const paths = getPaths();
-    this.baseUrl = paths.baseUrl;
-		if (paths.program in applications) {
+		this.baseUrl = paths.baseUrl;
+		if (paths.program === "") {
+			// dont mount anything if there is no program
+		} else if (paths.program in applications) {
 			this.mountWindow(paths.program);
 		} else {
 			this.mountWindow("404");
@@ -93,7 +93,7 @@ export default class System extends Component<SystemProps, SystemState> {
 			windowInFocus: "",
 			windowsOrder: updatedWindowsOrder,
 		});
-    updateAddressBar(this.baseUrl);
+		updateAddressBar(this.baseUrl);
 	}
 
 	// Set program to be minimized
@@ -107,8 +107,8 @@ export default class System extends Component<SystemProps, SystemState> {
 	}
 
 	// if program is already rendered, remove the program from windowsOrder, then push to last (highest z-index)
-  // otherwise just add it to the end of the list
-  // Update browser address bar if needed
+	// otherwise just add it to the end of the list
+	// Update browser address bar if needed
 	focusWindow(program: string) {
 		let updatedWindowsOrder;
 		if (!this.state.windowsOrder.includes(program)) {
@@ -124,7 +124,7 @@ export default class System extends Component<SystemProps, SystemState> {
 			windowInFocus: program,
 			iconSelected: "",
 		});
-    updateAddressBar(this.baseUrl + '/' + program);
+		updateAddressBar(this.baseUrl + "/" + program);
 	}
 
 	sendToFrontIcon(program: string) {
