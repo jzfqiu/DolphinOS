@@ -9,8 +9,9 @@
 	resize: both
 	border-radius: 8px
 	@include Common.drop-shadow-linear($depth: 8px, $color: darkgray)
-	background-color: white
-
+	// background-color: white
+	background-color: rgba(255,255,255,0.85)
+	
 	&::-webkit-scrollbar 
 		width: 8px
 		height: 7px
@@ -36,6 +37,7 @@
 	border-bottom: Common.$Window-border
 	z-index: 1
 	padding: 0 10px
+	// background-color: white
 	background-color: white
 	filter: drop-shadow(2px 0 3px lightgray)
 

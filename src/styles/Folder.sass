@@ -1,7 +1,9 @@
 @use "Common"
 	
 .Folder
-	height: 100%
+	border-collapse: collapse
+	border-spacing: 0
+	width: 100%
 
 .FolderList
 	margin:0
@@ -9,24 +11,16 @@
 	text-indent: 0
 	
 .FolderItem
-	margin: 5px
+	text-align: left
 	height: 35px
-	padding: 0 10px
-	@include Common.flex-and-center
-	justify-content: space-between
-	list-style-type: none
 	user-select: none
-	border-radius: 5px
-	& div
-		min-width: 100px
-		@include Common.flex-and-center
-		justify-content: flex-start
-		overflow: hidden
-		flex-shrink: 0
 	& img
 		width: 20px
 		height: 20px
-		padding: 5px
+		display: block
+		margin-left: auto	
+		margin-right: auto
+		
 
 .FolderHeader
 	border-radius: 0
@@ -34,5 +28,3 @@
 	margin-bottom: 5px
 	height: 35px
 	border-bottom: 1px solid lightgray
-	& span
-		width: 30px
