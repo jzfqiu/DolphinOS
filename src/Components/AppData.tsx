@@ -43,6 +43,11 @@ export const applications: { [pid: string]: AppData } = {
 		title: "Some Folder",
 		files: ["a", "b"],
 	},
+	404: {
+		type: "markdown",
+		title: "404 Not Found",
+		filepath: contentPath + "404.md",
+	},
 	a: {
 		type: "markdown",
 		title: "test.md",

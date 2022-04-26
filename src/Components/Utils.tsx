@@ -23,3 +23,18 @@ export function getIcon (type: AppType) {
             return browserIcon;
     }
 }
+
+export function getRandomInt(max: number) {
+	return Math.floor(Math.random() * max);
+}
+
+export function getPaths () {
+    const tokens = window.location.href.split('/');
+    const program = tokens.slice(3).join('/');
+    const baseUrl = tokens.slice(0, 3).join('/');
+    return {program: program, baseUrl: baseUrl};
+}
+
+export function updateAddressBar(url: string) {
+    window.history.replaceState(null, "", url)
+}
