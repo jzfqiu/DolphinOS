@@ -18,7 +18,6 @@ type IconState = {
 
 export default class Icon extends Component<IconProps, IconState> {
 	ref: React.RefObject<HTMLInputElement>;
-	dragging: boolean;
 	cursorPos: Point;
 
 	constructor(props: IconProps) {
@@ -30,26 +29,26 @@ export default class Icon extends Component<IconProps, IconState> {
 			},
 		};
 		this.ref = React.createRef();
-		this.dragging = false;
 
 		// cursor position when dragging starts, updated when cursor move within component
 		this.cursorPos = { x: 0, y: 0 };
 	}
 
-	// handles window resizing and dragging
-	handleMouseMove(event: React.MouseEvent<HTMLElement>) {
-		// if window is currently being dragged, update pos
-		if (this.dragging) {
-			const newX = event.clientX - this.cursorPos.x;
-			const newY = event.clientY - this.cursorPos.y;
-			this.setState({ pos: { x: newX, y: newY } });
-		}
-		// if window is not being dragged, only update cursorPos
-		else {
-			this.cursorPos = {
-				x: event.clientX - this.state.pos.x,
-				y: event.clientY - this.state.pos.y,
-			};
+	handleDragStart(event: React.MouseEvent<HTMLElement>) {
+		this.cursorPos = {
+			x: event.clientX - this.state.pos.x,
+			y: event.clientY - this.state.pos.y,
+		};
+	}
+
+	handleDragOver(event: React.MouseEvent<HTMLElement>) {
+		event.preventDefault();
+		const newX = event.clientX - this.cursorPos.x;
+		const newY = event.clientY - this.cursorPos.y;
+		// console.log(event.pageX, event.pageY, newX, newY, this.cursorPos);
+		const newPos = { x: newX, y: newY };
+		if (newPos !== this.state.pos) {
+			this.setState({ pos: newPos });
 		}
 	}
 
@@ -57,11 +56,6 @@ export default class Icon extends Component<IconProps, IconState> {
 		// Stops mousedown even from propagating into desktop DOM
 		event.stopPropagation();
 		this.props.sendToFrontCallbacks();
-		this.dragging = true;
-	}
-
-	stopDragging() {
-		this.dragging = false;
 	}
 
 	render() {
@@ -75,14 +69,21 @@ export default class Icon extends Component<IconProps, IconState> {
 					zIndex: this.props.zIndex,
 					background: this.props.active ? "lightblue" : "none",
 				}}
+				draggable={"true"}
 				onMouseDown={this.handleMouseDown.bind(this)}
-				onMouseMove={this.handleMouseMove.bind(this)}
-				onMouseUp={this.stopDragging.bind(this)}
-				onMouseLeave={this.stopDragging.bind(this)}
+				onDragStart={this.handleDragStart.bind(this)}
+				onDragOver={this.handleDragOver.bind(this)}
 				onDoubleClick={this.props.doubleClickCallback}
 				ref={this.ref}
 			>
-				<img src={image} alt={this.props.appData.title} draggable={"false"} />
+				<img
+					src={image}
+					alt={this.props.appData.title}
+					draggable={"false"}
+					onDragStart={(e) => {
+						e.preventDefault();
+					}}
+				/>
 				{this.props.appData.title}
 			</div>
 		);
