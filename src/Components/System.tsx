@@ -191,42 +191,43 @@ export default class System extends Component<SystemProps, SystemState> {
 		);
 	}
 
-	buildIcon(program: string) {
-		const appData = applications[program];
-		const pos = {
-			x: getRandomInt(500),
-			y: getRandomInt(500),
-		};
-		return (
-			<Icon
-				key={program}
-				initialPos={pos}
-				appData={appData}
-				doubleClickCallback={this.mountWindow.bind(this, program)}
-				sendToFrontCallback={this.sendToFrontIcon.bind(this, program)}
-				active={this.state.iconSelected === program}
-				zIndex={this.state.iconsOrder.indexOf(program)}
-			/>
-		);
+	buildIcons() {
+		let desktopIcons = [];
+		// special apps like desktop is guaranteed to exist in applications
+		// https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
+		for (const [index, program] of (applications.desktop as FolderAppData).files.entries()) {
+			const appData = applications[program];
+			const pos = {
+				x: 50,
+				y: 110 * index + 50,
+			};
+			const icon = (
+				<Icon
+					key={program}
+					initialPos={pos}
+					appData={appData}
+					doubleClickCallback={this.mountWindow.bind(this, program)}
+					sendToFrontCallback={this.sendToFrontIcon.bind(this, program)}
+					active={this.state.iconSelected === program}
+					zIndex={this.state.iconsOrder.indexOf(program)}
+				/>
+			);
+			desktopIcons.push(icon);
+		}
+		return desktopIcons;
 	}
 
 	render() {
 		let windows = [];
 		let tasks = [];
-		let desktopIcons = [];
 		for (const program in this.state.processes) {
 			windows.push(this.buildWindow(program, this.state.processes[program]));
 			tasks.push(this.buildTask(program));
 		}
-		// special apps like desktop is guaranteed to exist in applications
-		// https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
-		for (const program of (applications.desktop as FolderAppData).files) {
-			desktopIcons.push(this.buildIcon(program));
-		}
 		return (
 			<div className="System">
 				<div className="Desktop" onMouseDown={this.deselectIcon.bind(this)}>
-					{desktopIcons}
+					{this.buildIcons()}
 					{windows}
 				</div>
 				<div className="Taskbar">
