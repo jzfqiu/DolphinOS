@@ -30,10 +30,7 @@ export default class Folder extends Component<FolderProps, FolderState> {
 		return (
 			<tr
 				key={program}
-				className="FolderItem"
-				style={{
-					background: program === this.state.selected ? "lightblue" : "none",
-				}}
+				className={`FolderItem ${program === this.state.selected ? "selected" : ""}`}
 				onDoubleClick={this.props.mountCallback.bind(this, program)}
 				onClick={this.selectFolderItem.bind(this, program)}
 			>

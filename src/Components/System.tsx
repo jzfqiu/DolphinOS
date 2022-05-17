@@ -230,8 +230,10 @@ export default class System extends Component<SystemProps, SystemState> {
 					{windows}
 				</div>
 				<div className="Taskbar">
-					<button className="Task">Start</button>
-					{tasks}
+					<div>
+						<button className="Task">Start</button>
+						{tasks}
+					</div>
 				</div>
 			</div>
 		);

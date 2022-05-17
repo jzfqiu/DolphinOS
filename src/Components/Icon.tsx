@@ -68,12 +68,11 @@ export default class Icon extends Component<IconProps, IconState> {
 		const image = getIcon(this.props.appData.type);
 		return (
 			<div
-				className={"icon"}
+				className={`icon ${this.props.active ? "active" : ""}`}
 				style={{
 					left: this.state.pos.x + "px",
 					top: this.state.pos.y + "px",
 					zIndex: this.props.zIndex,
-					background: this.props.active ? "lightblue" : "none",
 				}}
 				onMouseDown={this.handleMouseDown.bind(this)}
 				onDoubleClick={this.props.doubleClickCallback}
@@ -88,7 +87,7 @@ export default class Icon extends Component<IconProps, IconState> {
 						e.preventDefault();
 					}}
 				/>
-				{this.props.appData.title}
+				<p>{this.props.appData.title}</p>
 			</div>
 		);
 	}
