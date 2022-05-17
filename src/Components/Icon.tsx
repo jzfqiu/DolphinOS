@@ -32,30 +32,36 @@ export default class Icon extends Component<IconProps, IconState> {
 
 		// cursor position when dragging starts, updated when cursor move within component
 		this.cursorPos = { x: 0, y: 0 };
-	}
 
-	handleDragStart(event: React.MouseEvent<HTMLElement>) {
-		this.cursorPos = {
-			x: event.clientX - this.state.pos.x,
-			y: event.clientY - this.state.pos.y,
-		};
-	}
-
-	handleDragOver(event: React.MouseEvent<HTMLElement>) {
-		event.preventDefault();
-		const newX = event.clientX - this.cursorPos.x;
-		const newY = event.clientY - this.cursorPos.y;
-		// console.log(event.pageX, event.pageY, newX, newY, this.cursorPos);
-		const newPos = { x: newX, y: newY };
-		if (newPos !== this.state.pos) {
-			this.setState({ pos: newPos });
-		}
+		this.dragStart = this.dragStart.bind(this);
+		this.dragEnd = this.dragEnd.bind(this);
 	}
 
 	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
 		// Stops mousedown even from propagating into desktop DOM
 		event.stopPropagation();
 		this.props.sendToFrontCallbacks();
+		this.cursorPos = {
+			x: event.clientX - this.state.pos.x,
+			y: event.clientY - this.state.pos.y,
+		};
+		// https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
+		document.addEventListener("mousemove", this.dragStart);
+		document.addEventListener("mouseup", this.dragEnd);
+	}
+
+	dragStart(event: MouseEvent) {
+		const newX = event.clientX - this.cursorPos.x;
+		const newY = event.clientY - this.cursorPos.y;
+		const newPos = { x: newX, y: newY };
+		if (newPos !== this.state.pos) {
+			this.setState({ pos: newPos });
+		}
+	}
+
+	dragEnd(event: MouseEvent) {
+		document.removeEventListener("mousemove", this.dragStart);
+		document.removeEventListener("mouseup", this.dragEnd);
 	}
 
 	render() {
@@ -69,10 +75,7 @@ export default class Icon extends Component<IconProps, IconState> {
 					zIndex: this.props.zIndex,
 					background: this.props.active ? "lightblue" : "none",
 				}}
-				draggable={"true"}
 				onMouseDown={this.handleMouseDown.bind(this)}
-				onDragStart={this.handleDragStart.bind(this)}
-				onDragOver={this.handleDragOver.bind(this)}
 				onDoubleClick={this.props.doubleClickCallback}
 				ref={this.ref}
 			>
@@ -80,6 +83,7 @@ export default class Icon extends Component<IconProps, IconState> {
 					src={image}
 					alt={this.props.appData.title}
 					draggable={"false"}
+					// Firefox specific tweak on draggable img
 					onDragStart={(e) => {
 						e.preventDefault();
 					}}
