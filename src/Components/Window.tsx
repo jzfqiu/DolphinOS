@@ -11,7 +11,7 @@ const DefaultPos = {
 
 // Default window size in px
 const DefaultSize = {
-	x: 600,
+	x: 800,
 	y: 600,
 };
 
