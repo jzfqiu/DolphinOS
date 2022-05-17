@@ -40,7 +40,7 @@ type WindowState = {
 export default class Window extends Component<WindowProps, WindowState> {
 	dragging: boolean;
 	maximized: boolean;
-	cursorPos: Point | null;
+	cursorPos: Point;
 	restore: {
 		size: Point;
 		pos: Point;
@@ -65,7 +65,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 		this.maximized = false;
 
 		// cursor position when dragging starts, updated when cursor move within component
-		this.cursorPos = null;
+		this.cursorPos = { x: 0, y: 0 };
 		this.restore = null; // store previous size and pos when maximized
 
 		// Desktop size:
@@ -75,37 +75,38 @@ export default class Window extends Component<WindowProps, WindowState> {
 		};
 
 		this.ref = React.createRef();
+
+		this.dragStart = this.dragStart.bind(this);
+		this.dragEnd = this.dragEnd.bind(this);
 	}
 
-	// handles window dragging
-	dragWindow(event: React.MouseEvent<HTMLElement>) {
-		// if window is currently being dragged, update pos
-		if (this.dragging && this.cursorPos) {
-			const newX = event.clientX - this.cursorPos.x;
-			const newY = event.clientY - this.cursorPos.y;
-			this.setState({ pos: { x: newX, y: newY } });
-		}
-		// if window is not being dragged, only update cursorPos
-		else {
+	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
+		// Stops mousedown even from propagating into desktop DOM
+		if (event.target instanceof Element && event.target.className.includes("WindowTopBar")){
+			event.stopPropagation();
+			this.props.sendToFrontCallback();
 			this.cursorPos = {
 				x: event.clientX - this.state.pos.x,
 				y: event.clientY - this.state.pos.y,
 			};
+			// https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
+			document.addEventListener("mousemove", this.dragStart);
+			document.addEventListener("mouseup", this.dragEnd);	
 		}
 	}
 
-	// Check if dragging
-	setDragging(event: React.MouseEvent<HTMLElement>) {
-		// event.target may not always be a dom
-		// if clicked on button, dont drag or send to front
-		if (event.target instanceof Element && event.target.tagName !== "BUTTON") {
-			this.props.sendToFrontCallback();
-			this.dragging = event.target.className.includes("WindowTopBar");
+	dragStart(event: MouseEvent) {
+		const newX = event.clientX - this.cursorPos.x;
+		const newY = event.clientY - this.cursorPos.y;
+		const newPos = { x: newX, y: newY };
+		if (newPos !== this.state.pos) {
+			this.setState({ pos: newPos });
 		}
 	}
 
-	stopDragging() {
-		this.dragging = false;
+	dragEnd(event: MouseEvent) {
+		document.removeEventListener("mousemove", this.dragStart);
+		document.removeEventListener("mouseup", this.dragEnd);
 	}
 
 	// Make window fill the page
@@ -162,10 +163,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 					zIndex: this.props.zIndex,
 					display: this.props.display ? "block" : "none",
 				}}
-				onMouseDown={this.setDragging.bind(this)}
-				onMouseMove={this.dragWindow.bind(this)}
-				onMouseUp={this.stopDragging.bind(this)}
-				onMouseLeave={this.stopDragging.bind(this)}
+				onMouseDown={this.handleMouseDown.bind(this)}
 				ref={this.ref}
 			>
 				<div className="WindowTopBar">

@@ -203,7 +203,7 @@ export default class System extends Component<SystemProps, SystemState> {
 				initialPos={pos}
 				appData={appData}
 				doubleClickCallback={this.mountWindow.bind(this, program)}
-				sendToFrontCallbacks={this.sendToFrontIcon.bind(this, program)}
+				sendToFrontCallback={this.sendToFrontIcon.bind(this, program)}
 				active={this.state.iconSelected === program}
 				zIndex={this.state.iconsOrder.indexOf(program)}
 			/>

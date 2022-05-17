@@ -8,7 +8,7 @@ type IconProps = {
 	appData: AppData;
 	zIndex: number;
 	active: boolean;
-	sendToFrontCallbacks: () => void; // program parameter bound in System component
+	sendToFrontCallback: () => void; // program parameter bound in System component
 	doubleClickCallback: () => void;
 };
 
@@ -40,7 +40,7 @@ export default class Icon extends Component<IconProps, IconState> {
 	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
 		// Stops mousedown even from propagating into desktop DOM
 		event.stopPropagation();
-		this.props.sendToFrontCallbacks();
+		this.props.sendToFrontCallback();
 		this.cursorPos = {
 			x: event.clientX - this.state.pos.x,
 			y: event.clientY - this.state.pos.y,
