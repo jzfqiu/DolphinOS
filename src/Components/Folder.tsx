@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { applications, FolderAppData } from "./AppData";
 import "../styles/Folder.sass";
-import { getIcon } from "./Utils";
+import { getIcon, FolderAppData, Applications } from "./Utils";
+import applications_data from "../assets/appData.json";
+
+const applications = applications_data as Applications;
 
 type FolderProps = {
 	appData: FolderAppData;

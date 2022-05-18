@@ -3,15 +3,19 @@ import Window from "./Window";
 import Icon from "./Icon";
 import Markdown from "./Markdown";
 import Folder from "./Folder";
-import { getPaths, getRandomInt, updateAddressBar } from "./Utils";
 import {
+	Applications,
 	AppData,
-	applications,
 	FolderAppData,
 	LinkAppData,
 	MarkdownAppData,
-} from "./AppData";
+	getPaths,
+	updateAddressBar,
+} from "./Utils";
 import "../styles/System.sass";
+import applications_data from "../assets/appData.json";
+
+const applications = applications_data as Applications;
 
 type SystemProps = {};
 
@@ -63,9 +67,7 @@ export default class System extends Component<SystemProps, SystemState> {
 	mountWindow(program: string) {
 		// if program is a link, open it in a new tab in the browser
 		if (applications[program].type === "link") {
-			window
-				.open((applications[program] as LinkAppData).url, "_blank")
-				?.focus();
+			window.open((applications[program] as LinkAppData).url, "_blank")?.focus();
 			return;
 		}
 		// add variable key to state object: https://stackoverflow.com/a/58652613
@@ -195,7 +197,9 @@ export default class System extends Component<SystemProps, SystemState> {
 		let desktopIcons = [];
 		// special apps like desktop is guaranteed to exist in applications
 		// https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
-		for (const [index, program] of (applications.desktop as FolderAppData).files.entries()) {
+		for (const [index, program] of (
+			applications.desktop as FolderAppData
+		).files.entries()) {
 			const appData = applications[program];
 			const pos = {
 				x: 50,

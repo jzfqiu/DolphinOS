@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { AppData } from "./AppData";
-import { Point } from "./Utils";
+import { Point, AppData } from "./Utils";
 import "../styles/Window.sass";
 
 // Default window position in px

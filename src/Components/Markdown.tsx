@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import ReactMarkdown from "react-markdown";
 import "../styles/Markdown.sass"
-import { MarkdownAppData } from "./AppData";
+import { MarkdownAppData } from "./Utils";
 
 type MarkdownProps = {
 	appData: MarkdownAppData,

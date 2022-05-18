@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { AppData } from "./AppData";
-import { getIcon, Point } from "./Utils";
+import { AppData, getIcon, Point } from "./Utils";
 import "../styles/Icon.sass";
 
 type IconProps = {

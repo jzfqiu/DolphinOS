@@ -1,0 +1,52 @@
+{
+	"desktop": {
+		"type": "folder",
+		"title": "Some Folder",
+		"files": ["a", "b"]
+	},
+	"404": {
+		"type": "markdown",
+		"title": "404 Not Found",
+		"filepath": "/contents/404.md"
+	},
+	"a": {
+		"type": "markdown",
+		"title": "test.md",
+		"filepath": "/contents/test.md"
+	},
+	"b": {
+		"type": "folder",
+		"title": "Some Folder",
+		"files": ["c", "d", "e"]
+	},
+	"c": {
+		"type": "link",
+		"title": "Github",
+		"url": "https://github.com/jzfqiu"
+	},
+	"d": {
+		"type": "folder",
+		"title": "Another Folder",
+		"files": ["f", "g", "h"]
+	},
+	"e": {
+		"type": "image",
+		"title": "Some Image",
+		"filepath": ""
+	},
+	"f": {
+		"type": "markdown",
+		"title": "test2.md",
+		"filepath": "/contents/test.md"
+	},
+	"g": {
+		"type": "markdown",
+		"title": "test3.md",
+		"filepath": "/contents/test.md"
+	},
+	"h": {
+		"type": "markdown",
+		"title": "test4.md",
+		"filepath": "/contents/test.md"
+	}
+}
