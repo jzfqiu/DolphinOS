@@ -66,7 +66,7 @@ export default class System extends Component<SystemProps, SystemState> {
 	// Mount a new program or restore a minimized program
 	mountWindow(program: string) {
 		// if program is a link, open it in a new tab in the browser
-		if (applications[program].type === "link") {
+		if (applications[program].type === "Link") {
 			window.open((applications[program] as LinkAppData).url, "_blank")?.focus();
 			return;
 		}
@@ -143,7 +143,7 @@ export default class System extends Component<SystemProps, SystemState> {
 	// Link type contents are handled in System component
 	buildWindowContent(program: string, appData: AppData) {
 		switch (appData.type) {
-			case "markdown":
+			case "Document":
 				return <Markdown appData={appData as MarkdownAppData} />;
 			case "folder":
 				return (
@@ -203,7 +203,7 @@ export default class System extends Component<SystemProps, SystemState> {
 			const appData = applications[program];
 			const pos = {
 				x: 50,
-				y: 110 * index + 50,
+				y: 120 * index + 50,
 			};
 			const icon = (
 				<Icon

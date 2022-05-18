@@ -36,8 +36,8 @@ export default class Folder extends Component<FolderProps, FolderState> {
 				onDoubleClick={this.props.mountCallback.bind(this, program)}
 				onClick={this.selectFolderItem.bind(this, program)}
 			>
-				<td><img src={getIcon(appData.type)} alt={appData.type}></img></td>
-				<td>
+				<td className="FolderItemImg"><img src={getIcon(appData.type)} alt={appData.type}></img></td>
+				<td className="FolderItemTitle">
 					{applications[program].title}
 				</td>
 				<td>{applications[program].type}</td>

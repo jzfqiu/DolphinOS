@@ -2,51 +2,95 @@
 	"desktop": {
 		"type": "folder",
 		"title": "Some Folder",
-		"files": ["a", "b"]
+		"files": ["policy-writings", "technical-writings", "links", "README"]
 	},
 	"404": {
-		"type": "markdown",
+		"type": "Document",
 		"title": "404 Not Found",
 		"filepath": "/contents/404.md"
 	},
-	"a": {
-		"type": "markdown",
+	"test": {
+		"type": "Document",
 		"title": "test.md",
 		"filepath": "/contents/test.md"
 	},
-	"b": {
-		"type": "folder",
-		"title": "Some Folder",
-		"files": ["c", "d", "e"]
+	"README": {
+		"type": "Document",
+		"title": "README.md",
+		"filepath": "/contents/README.md"
 	},
-	"c": {
-		"type": "link",
+	"policy-writings": {
+		"type": "folder",
+		"title": "Policy Writings",
+		"files": [
+			"context-integrity-gdpr-ccpa",
+			"cyber-analogy",
+			"bidens-executive-order-on-cybersecurity",
+			"belgium-cybersecurity-profile",
+			"unitedrake",
+			"apple-csam"
+		]
+	},
+	"technical-writings":{
+		"type": "folder",
+		"title": "Technical Writings",
+		"files": [
+			"react-bind"
+		]
+	},
+	"links": {
+		"type": "folder",
+		"title": "Links",
+		"files": ["github", "linkedin", "instagram"]
+	},
+	"github": {
+		"type": "Link",
 		"title": "Github",
 		"url": "https://github.com/jzfqiu"
 	},
-	"d": {
-		"type": "folder",
-		"title": "Another Folder",
-		"files": ["f", "g", "h"]
+	"linkedin": {
+		"type": "Link",
+		"title": "Linkedin",
+		"url": "https://www.linkedin.com/in/jeff-zhenfengqiu/"
 	},
-	"e": {
-		"type": "image",
-		"title": "Some Image",
-		"filepath": ""
+	"instagram": {
+		"type": "Link",
+		"title": "Instagram",
+		"url": "https://www.instagram.com/jzfqiu/"
 	},
-	"f": {
-		"type": "markdown",
-		"title": "test2.md",
-		"filepath": "/contents/test.md"
-	},
-	"g": {
-		"type": "markdown",
-		"title": "test3.md",
-		"filepath": "/contents/test.md"
-	},
-	"h": {
-		"type": "markdown",
-		"title": "test4.md",
-		"filepath": "/contents/test.md"
-	}
+    "bidens-executive-order-on-cybersecurity":{
+        "type": "Document",
+        "title": "Biden's Executive Order on Cybersecurity: A Terrific Starting Point",
+        "filepath": "/contents/Policy Writings/bidens-executive-order-on-cybersecurity.md"
+    },
+    "belgium-cybersecurity-profile":{
+        "type": "Document",
+        "title": "Cybersecurity Profile: Belgium",
+        "filepath": "/contents/Policy Writings/belgium-cybersecurity-profile.md"
+    },
+    "unitedrake":{
+        "type": "Document",
+        "title": "Overview of NSA Spyware UNITEDRAKE",
+        "filepath": "/contents/Policy Writings/unitedrake.md"
+    },
+    "cyber-analogy":{
+        "type": "Document",
+        "title": "Cyber Analogies Revisited",
+        "filepath": "/contents/Policy Writings/cyber-analogy.md"
+    },
+    "apple-csam":{
+        "type": "Document",
+        "title": "Apple's CSAM Scanning Feature: Choices and Consequences",
+        "filepath": "/contents/Policy Writings/apple-csam.md"
+    },
+    "context-integrity-gdpr-ccpa":{
+        "type": "Document",
+        "title": "Implications of Context Integrity on Data Privacy Regulations",
+        "filepath": "/contents/Policy Writings/context-integrity-gdpr-ccpa.md"
+    },
+	"react-bind":{
+        "type": "Document",
+        "title": "Function Binding and React Eventlistener",
+        "filepath": "/contents/Technical Writings/react-bind.md"
+    }
 }

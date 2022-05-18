@@ -12,7 +12,7 @@ Ref: https://create-react-app.dev/docs/using-the-public-folder/
 
 */
 
-export type AppType = "special" | "markdown" | "link" | "folder" | "image";
+export type AppType = "special" | "Document" | "Link" | "folder" | "image";
 
 type BaseAppData = {
 	type: AppType;
@@ -51,11 +51,11 @@ export type Point = {
 
 export function getIcon (type: AppType) {
     switch (type) {
-        case "markdown":
+        case "Document":
             return browserIcon;
         case "folder":
             return folderIcon;
-        case "link":
+        case "Link":
             return linkIcon;
         case "image":
             return imageIcon;
