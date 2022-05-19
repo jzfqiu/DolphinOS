@@ -41,7 +41,7 @@ export default class Folder extends Component<FolderProps, FolderState> {
 				<img src={getIcon(appData.type)} alt={appData.type}></img>
 				<div>{applications[program].title}</div>
 				<div>{applications[program].type}</div>
-				<div>April 23, 2022</div>
+				<div>{applications[program].date}</div>
 			</div>
 		);
 	}

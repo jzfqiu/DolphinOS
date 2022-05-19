@@ -17,6 +17,7 @@ export type AppType = "special" | "Document" | "Link" | "folder" | "image";
 type BaseAppData = {
 	type: AppType;
 	title: string;
+    date: string;
 };
 
 export type FolderAppData = BaseAppData & {

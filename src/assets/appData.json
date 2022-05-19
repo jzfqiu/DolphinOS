@@ -1,95 +1,133 @@
 {
 	"desktop": {
 		"type": "folder",
+		"date": "-",
 		"title": "Some Folder",
 		"files": ["policy-writings", "technical-writings", "links", "README"]
 	},
 	"404": {
 		"type": "Document",
+		"date": "-",
 		"title": "404 Not Found",
 		"filepath": "/contents/404.md"
 	},
 	"test": {
 		"type": "Document",
+		"date": "-",
 		"title": "test.md",
 		"filepath": "/contents/test.md"
 	},
 	"README": {
 		"type": "Document",
+		"date": "-",
 		"title": "README.md",
 		"filepath": "/contents/README.md"
 	},
-	"policy-writings": {
-		"type": "folder",
-		"title": "Policy Writings",
-		"files": [
-			"context-integrity-gdpr-ccpa",
-			"cyber-analogy",
-			"bidens-executive-order-on-cybersecurity",
-			"belgium-cybersecurity-profile",
-			"unitedrake",
-			"apple-csam"
-		]
-	},
-	"technical-writings":{
-		"type": "folder",
-		"title": "Technical Writings",
-		"files": [
-			"react-bind"
-		]
-	},
 	"links": {
 		"type": "folder",
+		"date": "-",
 		"title": "Links",
-		"files": ["github", "linkedin", "instagram"]
+		"files": ["github", "linkedin", "instagram", "twitter"]
 	},
 	"github": {
 		"type": "Link",
+		"date": "-",
 		"title": "Github",
 		"url": "https://github.com/jzfqiu"
 	},
 	"linkedin": {
 		"type": "Link",
+		"date": "-",
 		"title": "Linkedin",
 		"url": "https://www.linkedin.com/in/jeff-zhenfengqiu/"
 	},
 	"instagram": {
 		"type": "Link",
+		"date": "-",
 		"title": "Instagram",
 		"url": "https://www.instagram.com/jzfqiu/"
 	},
-    "bidens-executive-order-on-cybersecurity":{
+	"twitter": {
+		"type": "Link",
+		"title": "Telegram Channel",
+		"date": "-",
+		"url": "https://t.me/Do1phinStack"
+	},
+	"telegram": {
+		"type": "Link",
+		"title": "Twitter",
+		"date": "-",
+		"url": "https://twitter.com/endo1phin"
+	},
+	
+	"policy-writings": {
+		"type": "folder",
+		"date": "-",
+		"title": "Policy Writings",
+		"files": [
+			"context-integrity-gdpr-ccpa",
+			"cyber-analogy",
+			"belgium-cybersecurity-profile",
+			"unitedrake",
+			"irresponsible-cyber-offense",
+			"apple-csam",
+			"bidens-executive-order-on-cybersecurity"
+		]
+	},
+	"context-integrity-gdpr-ccpa":{
         "type": "Document",
-        "title": "Biden's Executive Order on Cybersecurity: A Terrific Starting Point",
-        "filepath": "/contents/Policy Writings/bidens-executive-order-on-cybersecurity.md"
-    },
-    "belgium-cybersecurity-profile":{
-        "type": "Document",
-        "title": "Cybersecurity Profile: Belgium",
-        "filepath": "/contents/Policy Writings/belgium-cybersecurity-profile.md"
-    },
-    "unitedrake":{
-        "type": "Document",
-        "title": "Overview of NSA Spyware UNITEDRAKE",
-        "filepath": "/contents/Policy Writings/unitedrake.md"
-    },
-    "cyber-analogy":{
-        "type": "Document",
-        "title": "Cyber Analogies Revisited",
-        "filepath": "/contents/Policy Writings/cyber-analogy.md"
-    },
-    "apple-csam":{
-        "type": "Document",
-        "title": "Apple's CSAM Scanning Feature: Choices and Consequences",
-        "filepath": "/contents/Policy Writings/apple-csam.md"
-    },
-    "context-integrity-gdpr-ccpa":{
-        "type": "Document",
+		"date": "May 9, 2022",
         "title": "Implications of Context Integrity on Data Privacy Regulations",
         "filepath": "/contents/Policy Writings/context-integrity-gdpr-ccpa.md"
     },
+	"cyber-analogy":{
+        "type": "Document",
+		"date": "Apr 29, 2022",
+        "title": "Cyber Analogies Revisited",
+        "filepath": "/contents/Policy Writings/cyber-analogy.md"
+    },
+    "belgium-cybersecurity-profile":{
+        "type": "Document",
+		"date": "Apr 17, 2022",
+        "title": "Cybersecurity Profile: Belgium",
+        "filepath": "/contents/Policy Writings/belgium-cybersecurity-profile.md"
+    },
+	"unitedrake":{
+        "type": "Document",
+		"date": "Mar 14, 2022",
+        "title": "Overview of NSA Spyware UNITEDRAKE",
+        "filepath": "/contents/Policy Writings/unitedrake.md"
+    },
+	"irresponsible-cyber-offense":{
+        "type": "Document",
+		"date": "Mar 13, 2022",
+        "title": "A Case for Irresponsible Cyber Offense",
+        "filepath": "/contents/Policy Writings/irresponsible-cyber-offense.md"
+    },
+	"apple-csam":{
+        "type": "Document",
+		"date": "Feb 22, 2022",
+        "title": "Apple's CSAM Scanning Feature: Choices and Consequences",
+        "filepath": "/contents/Policy Writings/apple-csam.md"
+    },
+	"bidens-executive-order-on-cybersecurity":{
+        "type": "Document",
+        "date": "Feb 20, 2022",
+        "title": "Biden's Executive Order on Cybersecurity: A Terrific Starting Point",
+        "filepath": "/contents/Policy Writings/bidens-executive-order-on-cybersecurity.md"
+    },
+
+	"technical-writings":{
+		"type": "folder",
+		"date": "-",
+		"title": "Technical Writings",
+		"files": [
+			"react-bind"
+		]
+	},
 	"react-bind":{
         "type": "Document",
+		"date": "Mar 20, 2022",
         "title": "Function Binding and React Eventlistener",
         "filepath": "/contents/Technical Writings/react-bind.md"
     }
