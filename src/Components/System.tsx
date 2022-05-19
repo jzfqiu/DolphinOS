@@ -11,11 +11,12 @@ import {
 	MarkdownAppData,
 	getPaths,
 	updateAddressBar,
-	getIcon
+	getIcon,
 } from "./Utils";
 import "../styles/System.sass";
 import applications_data from "../assets/appData.json";
 import homeIcon from "../assets/icons/house.png";
+import cross from "../assets/icons/cross.svg";
 
 const applications = applications_data as Applications;
 
@@ -199,8 +200,22 @@ export default class System extends Component<SystemProps, SystemState> {
 				key={program}
 				onClick={this.mountWindow.bind(this, program)}
 			>
-				<img src={getIcon(appData.type)} alt={appData.type}></img>
+				<img
+					className="TaskIcon"
+					src={getIcon(appData.type)}
+					alt={appData.type}
+				></img>
 				<p>{appData.title}</p>
+				<img
+					className="TaskClose"
+					src={cross}
+					alt={"Close"}
+					onClick={(e) => {
+						// stop click event from propagating to mountWindow()
+						e.stopPropagation();
+						this.unmountWindow(program);
+					}}
+				></img>
 			</button>
 		);
 	}
@@ -248,8 +263,11 @@ export default class System extends Component<SystemProps, SystemState> {
 				</div>
 				<div className="Taskbar">
 					<div>
-						<button className="Task TaskDesktop" onClick={this.minimizeAll.bind(this)}>
-							<img src={homeIcon} alt={"Desktop"}></img>
+						<button
+							className="Task TaskDesktop"
+							onClick={this.minimizeAll.bind(this)}
+						>
+							<img className="TaskIcon" src={homeIcon} alt={"Desktop"}></img>
 							<p>Desktop</p>
 						</button>
 						{tasks}

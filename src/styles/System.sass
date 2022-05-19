@@ -40,9 +40,15 @@
 	padding: 5px 5px
 	@include Common.flex-and-center
 	justify-content: flex-start
-	& img
+	& .TaskIcon
 		width: 16px
 		margin: 5px
+	& .TaskClose
+		width: 10px
+		padding: 5px
+		border-radius: 5px
+		&:hover
+			background-color: darkgray
 	& p 
 		width: 150px
 		white-space: nowrap
@@ -57,6 +63,7 @@
 		left: 1px
 		filter: none
 		@include Common.drop-shadow-linear($depth: 1px, $color: gray)
+	
 	&:hover 
 		background-color: gray	
 		& img
