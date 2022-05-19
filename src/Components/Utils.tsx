@@ -1,6 +1,6 @@
 import browserIcon from "../assets/icons/browser.png";
 import folderIcon from "../assets/icons/folder.png";
-import linkIcon from "../assets/icons/export.png";
+import linkIcon from "../assets/icons/link.png";
 import imageIcon from "../assets/icons/picture.png";
 
 /*

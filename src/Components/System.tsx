@@ -15,7 +15,7 @@ import {
 } from "./Utils";
 import "../styles/System.sass";
 import applications_data from "../assets/appData.json";
-import dolphinIcon from "../assets/icons/dolphin.png";
+import homeIcon from "../assets/icons/house.png";
 
 const applications = applications_data as Applications;
 
@@ -249,7 +249,8 @@ export default class System extends Component<SystemProps, SystemState> {
 				<div className="Taskbar">
 					<div>
 						<button className="Task TaskDesktop" onClick={this.minimizeAll.bind(this)}>
-							Desktop
+							<img src={homeIcon} alt={"Desktop"}></img>
+							<p>Desktop</p>
 						</button>
 						{tasks}
 					</div>

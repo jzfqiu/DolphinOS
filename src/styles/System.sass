@@ -58,6 +58,9 @@
 		filter: none
 		@include Common.drop-shadow-linear($depth: 1px, $color: gray)
 	&:hover 
-		color: white
 		background-color: gray	
+		& img
+			filter: invert(100%)
+		& p
+			filter: invert(100%)
 	
