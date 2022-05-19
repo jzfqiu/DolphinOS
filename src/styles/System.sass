@@ -30,18 +30,25 @@
 
 .Task
 	height: 40px
-	min-width: 100px
-	max-width: 200px
+	width: 200px
 	transition-duration: 0.1s
 	border: Common.$Taskbar-border
 	border-radius: 5px
 	background-color: rgba(0,0,0, 0)
 	margin: 0 5px
 	font-size: 0.9em
-	padding: 5px 10px
-	white-space: nowrap
-	overflow: hidden
-	text-overflow: ellipsis
+	padding: 5px 5px
+	@include Common.flex-and-center
+	justify-content: flex-start
+	& img
+		width: 16px
+		margin: 5px
+	& p 
+		width: 150px
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+		text-align: left
 	&.Selected
 		position: relative
 		background-color: white
@@ -53,13 +60,4 @@
 	&:hover 
 		color: white
 		background-color: gray	
-	&.TaskDesktop
-		min-width: 40px
-		padding: 0
-		@include Common.flex-and-center
-		& svg
-			width: 38px
-			height: 38px
-		&:hover
-			background-color: gray
 	

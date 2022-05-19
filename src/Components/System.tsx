@@ -11,6 +11,7 @@ import {
 	MarkdownAppData,
 	getPaths,
 	updateAddressBar,
+	getIcon
 } from "./Utils";
 import "../styles/System.sass";
 import applications_data from "../assets/appData.json";
@@ -111,6 +112,12 @@ export default class System extends Component<SystemProps, SystemState> {
 		});
 	}
 
+	minimizeAll() {
+		for (const program in this.state.processes) {
+			this.minimizeWindow(program);
+		}
+	}
+
 	// if program is already rendered, remove the program from windowsOrder, then push to last (highest z-index)
 	// otherwise just add it to the end of the list
 	// Update browser address bar if needed
@@ -183,6 +190,7 @@ export default class System extends Component<SystemProps, SystemState> {
 	}
 
 	buildTask(program: string) {
+		const appData = applications[program];
 		return (
 			<button
 				className={
@@ -191,7 +199,8 @@ export default class System extends Component<SystemProps, SystemState> {
 				key={program}
 				onClick={this.mountWindow.bind(this, program)}
 			>
-				{applications[program].title}
+				<img src={getIcon(appData.type)} alt={appData.type}></img>
+				<p>{appData.title}</p>
 			</button>
 		);
 	}
@@ -239,10 +248,8 @@ export default class System extends Component<SystemProps, SystemState> {
 				</div>
 				<div className="Taskbar">
 					<div>
-						<button className="Task TaskDesktop">
-							<svg>
-								<circle cx="50%" cy="50%" r="8" stroke="grey" stroke-width="2" fillOpacity="0"/>
-							</svg>
+						<button className="Task TaskDesktop" onClick={this.minimizeAll.bind(this)}>
+							Desktop
 						</button>
 						{tasks}
 					</div>

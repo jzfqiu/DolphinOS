@@ -32,14 +32,14 @@ export default class Folder extends Component<FolderProps, FolderState> {
 		return (
 			<div
 				key={program}
-				className={`FolderItem ${program === this.state.selected ? "selected" : ""}`}
+				className={`FolderItem ${
+					program === this.state.selected ? "selected" : ""
+				}`}
 				onDoubleClick={this.props.mountCallback.bind(this, program)}
-				onClick={this.selectFolderItem.bind(this, program)}
+				onMouseDown={this.selectFolderItem.bind(this, program)}
 			>
 				<img src={getIcon(appData.type)} alt={appData.type}></img>
-				<div className="FolderItemName">
-					{applications[program].title}
-				</div>
+				<div>{applications[program].title}</div>
 				<div>{applications[program].type}</div>
 				<div>April 23, 2022</div>
 			</div>
@@ -52,10 +52,13 @@ export default class Folder extends Component<FolderProps, FolderState> {
 			items.push(this.buildFolderItems(program));
 		}
 		return (
-			<div className="Folder" onClick={this.selectFolderItem.bind(this, "")}>
+			<div
+				className="Folder"
+				onMouseDown={this.selectFolderItem.bind(this, "")}
+			>
 				<div className="FolderItem FolderHeader">
 					<div></div>
-					<div className="FolderItemName">Name</div>
+					<div>Name</div>
 					<div>Type</div>
 					<div>Date Modified</div>
 				</div>
