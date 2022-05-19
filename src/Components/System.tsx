@@ -14,6 +14,7 @@ import {
 } from "./Utils";
 import "../styles/System.sass";
 import applications_data from "../assets/appData.json";
+import dolphinIcon from "../assets/icons/dolphin.png";
 
 const applications = applications_data as Applications;
 
@@ -67,7 +68,9 @@ export default class System extends Component<SystemProps, SystemState> {
 	mountWindow(program: string) {
 		// if program is a link, open it in a new tab in the browser
 		if (applications[program].type === "Link") {
-			window.open((applications[program] as LinkAppData).url, "_blank")?.focus();
+			window
+				.open((applications[program] as LinkAppData).url, "_blank")
+				?.focus();
 			return;
 		}
 		// add variable key to state object: https://stackoverflow.com/a/58652613
@@ -236,7 +239,11 @@ export default class System extends Component<SystemProps, SystemState> {
 				</div>
 				<div className="Taskbar">
 					<div>
-						<button className="Task">Start</button>
+						<button className="Task TaskDesktop">
+							<svg>
+								<circle cx="50%" cy="50%" r="8" stroke="grey" stroke-width="2" fillOpacity="0"/>
+							</svg>
+						</button>
 						{tasks}
 					</div>
 				</div>
