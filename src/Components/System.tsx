@@ -155,7 +155,7 @@ export default class System extends Component<SystemProps, SystemState> {
 		switch (appData.type) {
 			case "Document":
 				return <Markdown appData={appData as MarkdownAppData} />;
-			case "folder":
+			case "Folder":
 				return (
 					<Folder
 						appData={appData as FolderAppData}

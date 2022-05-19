@@ -1,9 +1,9 @@
 {
 	"desktop": {
-		"type": "folder",
+		"type": "Folder",
 		"date": "-",
 		"title": "Some Folder",
-		"files": ["policy-writings", "technical-writings", "links", "README"]
+		"files": ["writings", "links", "README"]
 	},
 	"404": {
 		"type": "Document",
@@ -24,10 +24,10 @@
 		"filepath": "/contents/README.md"
 	},
 	"links": {
-		"type": "folder",
+		"type": "Folder",
 		"date": "-",
 		"title": "Links",
-		"files": ["github", "linkedin", "instagram", "twitter"]
+		"files": ["github", "linkedin", "instagram", "twitter", "telegram"]
 	},
 	"github": {
 		"type": "Link",
@@ -47,31 +47,34 @@
 		"title": "Instagram",
 		"url": "https://www.instagram.com/jzfqiu/"
 	},
-	"twitter": {
+	"telegram": {
 		"type": "Link",
 		"title": "Telegram Channel",
 		"date": "-",
 		"url": "https://t.me/Do1phinStack"
 	},
-	"telegram": {
+	"twitter": {
 		"type": "Link",
 		"title": "Twitter",
 		"date": "-",
 		"url": "https://twitter.com/endo1phin"
 	},
 	
-	"policy-writings": {
-		"type": "folder",
+	"writings": {
+		"type": "Folder",
 		"date": "-",
-		"title": "Policy Writings",
+		"title": "Writings",
 		"files": [
 			"context-integrity-gdpr-ccpa",
 			"cyber-analogy",
 			"belgium-cybersecurity-profile",
+			"react-bind",
 			"unitedrake",
 			"irresponsible-cyber-offense",
 			"apple-csam",
-			"bidens-executive-order-on-cybersecurity"
+			"bidens-executive-order-on-cybersecurity",
+			"china-us-cyberconflicts",
+			"election-disinformation-2016-2020"
 		]
 	},
 	"context-integrity-gdpr-ccpa":{
@@ -91,6 +94,12 @@
 		"date": "Apr 17, 2022",
         "title": "Cybersecurity Profile: Belgium",
         "filepath": "/contents/Policy Writings/belgium-cybersecurity-profile.md"
+    },
+	"react-bind":{
+        "type": "Document",
+		"date": "Mar 20, 2022",
+        "title": "Function Binding and React Eventlistener",
+        "filepath": "/contents/Technical Writings/react-bind.md"
     },
 	"unitedrake":{
         "type": "Document",
@@ -116,19 +125,16 @@
         "title": "Biden's Executive Order on Cybersecurity: A Terrific Starting Point",
         "filepath": "/contents/Policy Writings/bidens-executive-order-on-cybersecurity.md"
     },
-
-	"technical-writings":{
-		"type": "folder",
-		"date": "-",
-		"title": "Technical Writings",
-		"files": [
-			"react-bind"
-		]
-	},
-	"react-bind":{
+	"china-us-cyberconflicts":{
         "type": "Document",
-		"date": "Mar 20, 2022",
-        "title": "Function Binding and React Eventlistener",
-        "filepath": "/contents/Technical Writings/react-bind.md"
+		"date": "Dec 11, 2021",
+        "title": "A Brief Introduction to US-China Cyberconflict in 2021",
+        "filepath": "/contents/Policy Writings/china-us-cyberconflicts.md"
+    },
+	"election-disinformation-2016-2020":{
+        "type": "Document",
+		"date": "Nov 17, 2021",
+        "title": "A Brief Comparison of Election Disinformation in 2016 and 2020",
+        "filepath": "/contents/Policy Writings/election-disinformation-2016-2020.md"
     }
 }

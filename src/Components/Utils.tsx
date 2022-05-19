@@ -12,7 +12,7 @@ Ref: https://create-react-app.dev/docs/using-the-public-folder/
 
 */
 
-export type AppType = "special" | "Document" | "Link" | "folder" | "image";
+export type AppType = "special" | "Document" | "Link" | "Folder" | "image";
 
 type BaseAppData = {
 	type: AppType;
@@ -54,7 +54,7 @@ export function getIcon (type: AppType) {
     switch (type) {
         case "Document":
             return browserIcon;
-        case "folder":
+        case "Folder":
             return folderIcon;
         case "Link":
             return linkIcon;
