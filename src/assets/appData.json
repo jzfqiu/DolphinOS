@@ -3,7 +3,7 @@
 		"type": "Folder",
 		"date": "-",
 		"title": "Some Folder",
-		"files": ["writings", "links", "README"]
+		"files": ["writings", "links", "README", "about"]
 	},
 	"404": {
 		"type": "Document",

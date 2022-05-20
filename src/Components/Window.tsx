@@ -4,14 +4,14 @@ import "../styles/Window.sass";
 
 // Default window position in px
 const DefaultPos = {
-	x: 100,
-	y: 100,
+	x: 50,
+	y: 50,
 };
 
 // Default window size in px
 const DefaultSize = {
-	x: 800,
-	y: 600,
+	x: 1000,
+	y: 700,
 };
 
 type WindowProps = {
@@ -21,7 +21,8 @@ type WindowProps = {
 	display: boolean;
 	appData: AppData;
 	zIndex: number;
-	sendToFrontCallback: () => void; // program parameter bound in System component
+	// program parameter bound in System component
+	sendToFrontCallback: () => void;
 	unmountCallback: () => void;
 	minimizeCallback: () => void;
 	children?: JSX.Element;
@@ -33,8 +34,8 @@ type WindowState = {
 };
 
 /**
- * A draggable, resizable window that is able to minimize, maximize,
- * restore to previous size, and close itself.
+ * A draggable, resizable window that is able to minimize, maximize, restore to
+ * previous size, and close itself.
  */
 export default class Window extends Component<WindowProps, WindowState> {
 	dragging: boolean;
@@ -63,7 +64,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 		this.dragging = false;
 		this.maximized = false;
 
-		// cursor position when dragging starts, updated when cursor move within component
+		// cursor position when dragging starts
 		this.cursorPos = { x: 0, y: 0 };
 		this.restore = null; // store previous size and pos when maximized
 
@@ -81,7 +82,10 @@ export default class Window extends Component<WindowProps, WindowState> {
 
 	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
 		// Stops mousedown even from propagating into desktop DOM
-		if (event.target instanceof Element && event.target.className.includes("WindowTopBar")){
+		if (
+			event.target instanceof Element &&
+			event.target.className.includes("WindowTopBar")
+		) {
 			event.stopPropagation();
 			this.props.sendToFrontCallback();
 			this.cursorPos = {
@@ -90,7 +94,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 			};
 			// https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
 			document.addEventListener("mousemove", this.dragStart);
-			document.addEventListener("mouseup", this.dragEnd);	
+			document.addEventListener("mouseup", this.dragEnd);
 		}
 	}
 
@@ -103,7 +107,7 @@ export default class Window extends Component<WindowProps, WindowState> {
 		}
 	}
 
-	dragEnd(event: MouseEvent) {
+	dragEnd() {
 		document.removeEventListener("mousemove", this.dragStart);
 		document.removeEventListener("mouseup", this.dragEnd);
 	}

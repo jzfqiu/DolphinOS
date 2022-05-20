@@ -21,7 +21,10 @@ import cross from "../assets/icons/cross.svg";
 
 const applications = applications_data as Applications;
 
-type SystemProps = {};
+type SystemProps = {
+	initialProcesses?: { [pid: string]: ProcessState };
+	initialWindowsOrder?: string[];
+};
 
 type SystemState = {
 	processes: { [pid: string]: ProcessState };
@@ -40,10 +43,10 @@ export default class System extends Component<SystemProps, SystemState> {
 	constructor(props: SystemProps) {
 		super(props);
 		this.state = {
-			processes: {},
-			windowsOrder: [],
+			processes: props.initialProcesses ? props.initialProcesses : {},
+			windowsOrder: props.initialWindowsOrder ? props.initialWindowsOrder : [],
 			windowInFocus: "",
-			iconsOrder: Object.keys(applications),
+			iconsOrder: (applications.desktop as FolderAppData).files,
 			iconSelected: "",
 		};
 		this.baseUrl = "";
@@ -76,7 +79,7 @@ export default class System extends Component<SystemProps, SystemState> {
 				?.focus();
 			return;
 		}
-		// add variable key to state object: https://stackoverflow.com/a/58652613
+		// add variable key to state: https://stackoverflow.com/a/58652613
 		// add element to state array: https://stackoverflow.com/a/26254086
 		this.setState((prevState) => ({
 			processes: {
@@ -120,9 +123,9 @@ export default class System extends Component<SystemProps, SystemState> {
 		}
 	}
 
-	// if program is already rendered, remove the program from windowsOrder, then push to last (highest z-index)
-	// otherwise just add it to the end of the list
-	// Update browser address bar if needed
+	// if program is already rendered, remove the program from windowsOrder,
+	// then push to last (highest z-index) otherwise just add it to the end of
+	// the list. Update browser address bar if needed
 	focusWindow(program: string) {
 		let updatedWindowsOrder;
 		if (!this.state.windowsOrder.includes(program)) {
@@ -167,7 +170,7 @@ export default class System extends Component<SystemProps, SystemState> {
 			case "Image":
 				return <div>TODO</div>;
 			case "HTML":
-				return <Browser appData={appData as FileAppData}/>;
+				return <Browser appData={appData as FileAppData} />;
 			default:
 				return <div>Unknown Contents</div>;
 		}

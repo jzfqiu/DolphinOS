@@ -1,17 +1,17 @@
-import React, { Component, CSSProperties } from "react";
+import React, { Component } from "react";
 import ReactMarkdown from "react-markdown";
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
-import { duotoneLight as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import "../styles/Markdown.sass"
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { duotoneLight as codeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
+import "../styles/Markdown.sass";
 import { FileAppData } from "./Utils";
 
 type MarkdownProps = {
-	appData: FileAppData,
-}
+	appData: FileAppData;
+};
 
 type MarkdownState = {
-	content: string,
-}
+	content: string;
+};
 
 /**
  * Markdown contents inside of a window
@@ -41,30 +41,30 @@ export default class Markdown extends Component<MarkdownProps, MarkdownState> {
 	render() {
 		return (
 			<div className="Markdown">
-				{/* <ReactMarkdown>{this.state.content}</ReactMarkdown>*/}
+				{/* https://github.com/remarkjs/react-markdown#use-custom-components-syntax-highlight */}
 				<ReactMarkdown
-				children={this.state.content}
-				components={{
-				code({node, inline, className, children, ...props}) {
-					const match = /language-(\w+)/.exec(className || '')
-					return !inline && match ? (
-					<SyntaxHighlighter
-						children={String(children).replace(/\n$/, '')}
-						// Ongoing issue with typed react-syntax-highlighter
-						// https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/439
-						style={codeStyle as any}
-						language={match[1]}
-						PreTag="div"
-						{...props}
-					/>
-					) : (
-					<code className={className} {...props}>
-						{children}
-					</code>
-					)
-				}
-				}}
-			/>
+					children={this.state.content}
+					components={{
+						code({ node, inline, className, children, ...props }) {
+							const match = /language-(\w+)/.exec(className || "");
+							return !inline && match ? (
+								<SyntaxHighlighter
+									children={String(children).replace(/\n$/, "")}
+									// Ongoing issue with typed react-syntax-highlighter
+									// https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/439
+									style={codeStyle as any}
+									language={match[1]}
+									PreTag="div"
+									{...props}
+								/>
+							) : (
+								<code className={className} {...props}>
+									{children}
+								</code>
+							);
+						},
+					}}
+				/>
 			</div>
 		);
 	}
