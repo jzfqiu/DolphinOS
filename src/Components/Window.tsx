@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useRef } from "react";
 import { Point, AppData } from "./Utils";
 import "../styles/Window.sass";
 
@@ -28,174 +28,123 @@ type WindowProps = {
 	children?: JSX.Element;
 };
 
-type WindowState = {
-	pos: Point;
-	size: Point;
-};
+export default function Window(props: WindowProps) {
+	const [size, setSize] = useState(
+		props.initialSize ? props.initialSize : DefaultSize
+	);
+	const [pos, setPos] = useState(
+		props.initialPos ? props.initialPos : DefaultPos
+	);
+	const [maximized, setMaximized] = useState(false);
+	const [restore, setRestore] = useState({
+		size: { x: 0, y: 0 },
+		pos: { x: 0, y: 0 },
+	});
 
-/**
- * A draggable, resizable window that is able to minimize, maximize, restore to
- * previous size, and close itself.
- */
-export default class Window extends Component<WindowProps, WindowState> {
-	dragging: boolean;
-	maximized: boolean;
-	cursorPos: Point;
-	restore: {
-		size: Point;
-		pos: Point;
-	} | null;
-	desktopSize: Point;
-	ref: React.RefObject<HTMLInputElement>;
+	const desktopSize = {
+		x: window.innerWidth - 2, // 2*2px border
+		y: window.innerHeight - 2, // Taskbar height
+	};
+	const windowRef = useRef(null);
 
-	constructor(props: WindowProps) {
-		super(props);
-		this.state = {
-			pos: {
-				x: this.props.initialPos ? this.props.initialPos.x : DefaultPos.x,
-				y: this.props.initialPos ? this.props.initialPos.y : DefaultPos.y,
-			},
-			size: {
-				x: this.props.initialSize ? this.props.initialSize.x : DefaultSize.x,
-				y: this.props.initialSize ? this.props.initialSize.y : DefaultSize.y,
-			},
-		};
+	let cursorPos = { x: 0, y: 0 };
 
-		this.dragging = false;
-		this.maximized = false;
-
-		// cursor position when dragging starts
-		this.cursorPos = { x: 0, y: 0 };
-		this.restore = null; // store previous size and pos when maximized
-
-		// Desktop size:
-		this.desktopSize = {
-			x: window.innerWidth - 2, // 2*2px border
-			y: window.innerHeight - 2, // Taskbar height
-		};
-
-		this.ref = React.createRef();
-
-		this.dragStart = this.dragStart.bind(this);
-		this.dragEnd = this.dragEnd.bind(this);
-	}
-
-	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
+	function handleMouseDown(event: React.MouseEvent<HTMLElement>) {
 		// Stops mousedown even from propagating into desktop DOM
 		if (
 			event.target instanceof Element &&
 			event.target.className.includes("WindowTopBar")
 		) {
 			event.stopPropagation();
-			this.props.sendToFrontCallback();
-			this.cursorPos = {
-				x: event.clientX - this.state.pos.x,
-				y: event.clientY - this.state.pos.y,
+			props.sendToFrontCallback();
+			cursorPos = {
+				x: event.clientX - pos.x,
+				y: event.clientY - pos.y,
 			};
 			// https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
-			document.addEventListener("mousemove", this.dragStart);
-			document.addEventListener("mouseup", this.dragEnd);
+			document.addEventListener("mousemove", dragStart);
+			document.addEventListener("mouseup", dragEnd);
 		}
 	}
 
-	dragStart(event: MouseEvent) {
-		const newX = event.clientX - this.cursorPos.x;
-		const newY = event.clientY - this.cursorPos.y;
+	function dragStart(event: MouseEvent) {
+		const newX = event.clientX - cursorPos.x;
+		const newY = event.clientY - cursorPos.y;
 		const newPos = { x: newX, y: newY };
-		if (newPos !== this.state.pos) {
-			this.setState({ pos: newPos });
+		if (newPos !== pos) {
+			setPos(newPos);
 		}
 	}
 
-	dragEnd() {
-		document.removeEventListener("mousemove", this.dragStart);
-		document.removeEventListener("mouseup", this.dragEnd);
+	function dragEnd() {
+		document.removeEventListener("mousemove", dragStart);
+		document.removeEventListener("mouseup", dragEnd);
 	}
 
 	// Make window fill the page
-	maximizeWindow() {
-		this.restore = {
+	function maximizeWindow() {
+		// console.log(windowRef.current);
+		setRestore({
 			// ref.current will never be null because the target window
 			// is always mounted when this method is called.
 			size: {
-				x: this.ref.current!.offsetWidth - 4,
-				y: this.ref.current!.offsetHeight - 4,
+				x: (windowRef.current! as HTMLElement).offsetWidth - 4,
+				y: (windowRef.current! as HTMLElement).offsetHeight - 4,
 			},
-			pos: this.state.pos,
-		};
-		this.maximized = true;
-		this.setState({
-			pos: {
-				x: 0,
-				y: 0,
-			},
-			size: {
-				x: this.desktopSize.x,
-				y: this.desktopSize.y,
-			},
+			pos: pos,
 		});
+		setMaximized(true);
+		setPos({ x: 0, y: 0 });
+		setSize(desktopSize);
 	}
 
 	// Restore to size before maximizing
-	restoreWindow() {
-		this.maximized = false;
-		// this method is only called when maximized is set to true
-		// so this.restore will never be null when accessed here
-		this.setState({
-			pos: {
-				x: this.restore!.pos.x,
-				y: this.restore!.pos.y,
-			},
-			size: {
-				x: this.restore!.size.x,
-				y: this.restore!.size.y,
-			},
-		});
-		this.restore = null;
+	function restoreWindow() {
+		setMaximized(false);
+		setSize(restore.size);
+		setPos(restore.pos);
 	}
 
-	render() {
-		return (
-			<div
-				className="Window"
-				style={{
-					left: this.state.pos.x + "px",
-					top: this.state.pos.y + "px",
-					width: this.state.size.x + "px",
-					height: this.state.size.y + "px",
-					zIndex: this.props.zIndex,
-					display: this.props.display ? "block" : "none",
-				}}
-				onMouseDown={this.handleMouseDown.bind(this)}
-				ref={this.ref}
-			>
-				<div className="WindowTopBar">
+	return (
+		<div
+			className="Window"
+			style={{
+				left: pos.x + "px",
+				top: pos.y + "px",
+				width: size.x + "px",
+				height: size.y + "px",
+				zIndex: props.zIndex,
+				display: props.display ? "block" : "none",
+			}}
+			onMouseDown={handleMouseDown}
+			ref={windowRef}
+		>
+			<div className="WindowTopBar">
+				<button
+					className="WindowTopBarButton WindowClose"
+					onClick={props.unmountCallback}
+				/>
+				<button
+					className="WindowTopBarButton WindowMinimize"
+					onClick={props.minimizeCallback}
+				/>
+				{maximized ? (
 					<button
-						className="WindowTopBarButton WindowClose"
-						onClick={this.props.unmountCallback}
-					></button>
+						className="WindowTopBarButton WindowRestore"
+						onClick={restoreWindow}
+					/>
+				) : (
 					<button
-						className="WindowTopBarButton WindowMinimize"
-						onClick={this.props.minimizeCallback.bind(this)}
-					></button>
-					{this.maximized ? (
-						<button
-							className="WindowTopBarButton WindowRestore"
-							onClick={this.restoreWindow.bind(this)}
-						></button>
-					) : (
-						<button
-							className="WindowTopBarButton WindowMaximize"
-							onClick={this.maximizeWindow.bind(this)}
-						></button>
-					)}
+						className="WindowTopBarButton WindowMaximize"
+						onClick={maximizeWindow}
+					/>
+				)}
 
-					<div className={"WindowTopBarTitle"}>
-						{this.props.appData.title || "Untitled"}
-					</div>
+				<div className={"WindowTopBarTitle"}>
+					{props.appData.title || "Untitled"}
 				</div>
-				<div className="WindowContent">{this.props.children}</div>
 			</div>
-		);
-	}
+			<div className="WindowContent">{props.children}</div>
+		</div>
+	);
 }
