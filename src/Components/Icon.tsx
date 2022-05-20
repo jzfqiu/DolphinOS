@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { AppData, getIcon, Point } from "./Utils";
 import "../styles/Icon.sass";
 
@@ -11,83 +11,61 @@ type IconProps = {
 	doubleClickCallback: () => void;
 };
 
-type IconState = {
-	pos: Point;
-};
+export default function Icon(props: IconProps) {
+	const [pos, setPos] = useState(props.initialPos);
 
-export default class Icon extends Component<IconProps, IconState> {
-	ref: React.RefObject<HTMLInputElement>;
-	cursorPos: Point;
+	const image = getIcon(props.appData.type);
+	let cursorPos = { x: 0, y: 0 };
 
-	constructor(props: IconProps) {
-		super(props);
-		this.state = {
-			pos: {
-				x: this.props.initialPos ? this.props.initialPos.x : 100,
-				y: this.props.initialPos ? this.props.initialPos.y : 100,
-			},
-		};
-		this.ref = React.createRef();
-
-		// cursor position when dragging starts, updated when cursor move within component
-		this.cursorPos = { x: 0, y: 0 };
-
-		this.dragStart = this.dragStart.bind(this);
-		this.dragEnd = this.dragEnd.bind(this);
-	}
-
-	handleMouseDown(event: React.MouseEvent<HTMLElement>) {
+	function handleMouseDown(event: React.MouseEvent<HTMLElement>) {
 		// Stops mousedown even from propagating into desktop DOM
 		event.stopPropagation();
-		this.props.sendToFrontCallback();
-		this.cursorPos = {
-			x: event.clientX - this.state.pos.x,
-			y: event.clientY - this.state.pos.y,
+		props.sendToFrontCallback();
+		cursorPos = {
+			x: event.clientX - pos.x,
+			y: event.clientY - pos.y,
 		};
 		// https://stackoverflow.com/questions/10444077/javascript-removeeventlistener-not-working
-		document.addEventListener("mousemove", this.dragStart);
-		document.addEventListener("mouseup", this.dragEnd);
+		document.addEventListener("mousemove", dragStart);
+		document.addEventListener("mouseup", dragEnd);
 	}
 
-	dragStart(event: MouseEvent) {
-		const newX = event.clientX - this.cursorPos.x;
-		const newY = event.clientY - this.cursorPos.y;
+	function dragStart(event: MouseEvent) {
+		const newX = event.clientX - cursorPos.x;
+		const newY = event.clientY - cursorPos.y;
 		const newPos = { x: newX, y: newY };
-		if (newPos !== this.state.pos) {
-			this.setState({ pos: newPos });
+		if (newPos !== pos) {
+			setPos(newPos);
 		}
 	}
 
-	dragEnd(event: MouseEvent) {
-		document.removeEventListener("mousemove", this.dragStart);
-		document.removeEventListener("mouseup", this.dragEnd);
+	function dragEnd() {
+		document.removeEventListener("mousemove", dragStart);
+		document.removeEventListener("mouseup", dragEnd);
 	}
 
-	render() {
-		const image = getIcon(this.props.appData.type);
-		return (
-			<div
-				className={`icon ${this.props.active ? "active" : ""}`}
-				style={{
-					left: this.state.pos.x + "px",
-					top: this.state.pos.y + "px",
-					zIndex: this.props.zIndex,
+	return (
+		<div
+			className={`icon ${props.active ? "active" : ""}`}
+			style={{
+				left: pos.x + "px",
+				top: pos.y + "px",
+				zIndex: props.zIndex,
+			}}
+			onMouseDown={handleMouseDown}
+			onDoubleClick={props.doubleClickCallback}
+			// ref={this.ref}
+		>
+			<img
+				src={image}
+				alt={props.appData.title}
+				draggable={"false"}
+				// Firefox specific tweak on draggable img
+				onDragStart={(e) => {
+					e.preventDefault();
 				}}
-				onMouseDown={this.handleMouseDown.bind(this)}
-				onDoubleClick={this.props.doubleClickCallback}
-				ref={this.ref}
-			>
-				<img
-					src={image}
-					alt={this.props.appData.title}
-					draggable={"false"}
-					// Firefox specific tweak on draggable img
-					onDragStart={(e) => {
-						e.preventDefault();
-					}}
-				/>
-				<p>{this.props.appData.title}</p>
-			</div>
-		);
-	}
+			/>
+			<p>{props.appData.title}</p>
+		</div>
+	);
 }
