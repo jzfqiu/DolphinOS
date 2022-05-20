@@ -1,21 +1,16 @@
 import React, { Component } from "react";
-import ReactMarkdown from "react-markdown";
-import "../styles/Markdown.sass"
 import { FileAppData } from "./Utils";
 
-type MarkdownProps = {
-	appData: FileAppData,
-}
+type BrowserProps = {
+	appData: FileAppData;
+};
 
-type MarkdownState = {
-	content: string,
-}
+type BrowserState = {
+	content: string;
+};
 
-/**
- * Markdown contents inside of a window
- */
-export default class Markdown extends Component<MarkdownProps, MarkdownState> {
-	constructor(props: MarkdownProps) {
+export default class Image extends Component<BrowserProps, BrowserState> {
+	constructor(props: BrowserProps) {
 		super(props);
 		this.state = {
 			content: "",
@@ -38,9 +33,10 @@ export default class Markdown extends Component<MarkdownProps, MarkdownState> {
 
 	render() {
 		return (
-			<div className="Markdown">
-				<ReactMarkdown>{this.state.content}</ReactMarkdown>
-			</div>
+			<div
+				className="Browser"
+				dangerouslySetInnerHTML={{ __html: this.state.content }}
+			></div>
 		);
 	}
 }

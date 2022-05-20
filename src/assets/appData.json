@@ -23,6 +23,13 @@
 		"title": "README.md",
 		"filepath": "/contents/README.md"
 	},
+	"about": {
+		"type": "HTML",
+		"date": "-",
+		"title": "About me",
+		"filepath": "/contents/about.html"
+	},
+
 	"links": {
 		"type": "Folder",
 		"date": "-",

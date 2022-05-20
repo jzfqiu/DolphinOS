@@ -3,12 +3,13 @@ import Window from "./Window";
 import Icon from "./Icon";
 import Markdown from "./Markdown";
 import Folder from "./Folder";
+import Browser from "./Browser";
 import {
 	Applications,
 	AppData,
 	FolderAppData,
 	LinkAppData,
-	MarkdownAppData,
+	FileAppData,
 	getPaths,
 	updateAddressBar,
 	getIcon,
@@ -155,7 +156,7 @@ export default class System extends Component<SystemProps, SystemState> {
 	buildWindowContent(program: string, appData: AppData) {
 		switch (appData.type) {
 			case "Document":
-				return <Markdown appData={appData as MarkdownAppData} />;
+				return <Markdown appData={appData as FileAppData} />;
 			case "Folder":
 				return (
 					<Folder
@@ -163,8 +164,10 @@ export default class System extends Component<SystemProps, SystemState> {
 						mountCallback={this.mountWindow.bind(this)}
 					/>
 				);
-			case "image":
+			case "Image":
 				return <div>TODO</div>;
+			case "HTML":
+				return <Browser appData={appData as FileAppData}/>;
 			default:
 				return <div>Unknown Contents</div>;
 		}

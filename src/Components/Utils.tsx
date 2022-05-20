@@ -1,3 +1,4 @@
+import documentIcon from "../assets/icons/document.png";
 import browserIcon from "../assets/icons/browser.png";
 import folderIcon from "../assets/icons/folder.png";
 import linkIcon from "../assets/icons/link.png";
@@ -12,7 +13,7 @@ Ref: https://create-react-app.dev/docs/using-the-public-folder/
 
 */
 
-export type AppType = "special" | "Document" | "Link" | "Folder" | "image";
+export type AppType = "Document" | "Link" | "Folder" | "Image" | "HTML"
 
 type BaseAppData = {
 	type: AppType;
@@ -24,7 +25,7 @@ export type FolderAppData = BaseAppData & {
 	files: string[];
 };
 
-export type MarkdownAppData = BaseAppData & {
+export type FileAppData = BaseAppData & {
 	filepath: string;
 };
 
@@ -32,15 +33,11 @@ export type LinkAppData = BaseAppData & {
 	url: string;
 };
 
-export type ImageAppData = BaseAppData & {
-	filepath: string;
-};
 
 export type AppData =
 	| FolderAppData
-	| MarkdownAppData
+	| FileAppData
 	| LinkAppData
-	| ImageAppData;
 
 export type Applications = { [pid: string]: AppData };
 
@@ -53,15 +50,17 @@ export type Point = {
 export function getIcon (type: AppType) {
     switch (type) {
         case "Document":
-            return browserIcon;
+            return documentIcon;
         case "Folder":
             return folderIcon;
         case "Link":
             return linkIcon;
-        case "image":
+        case "Image":
             return imageIcon;
-        default:
+        case "HTML":
             return browserIcon;
+        default:
+            return documentIcon;
     }
 }
 
