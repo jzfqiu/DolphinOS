@@ -14,6 +14,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-markdown": "^8.0.2",
+    "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.50.1",
     "styled-components": "^5.3.5",
     "typescript": "^4.6.3",
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-syntax-highlighter": "^15.5.1",
     "react-scripts": "^5.0.1",
     "stylelint": "^14.6.1",
     "stylelint-config-recommended": "^7.0.0",

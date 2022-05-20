@@ -1,5 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, CSSProperties } from "react";
 import ReactMarkdown from "react-markdown";
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
+import { duotoneLight as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import "../styles/Markdown.sass"
 import { FileAppData } from "./Utils";
 
@@ -39,7 +41,30 @@ export default class Markdown extends Component<MarkdownProps, MarkdownState> {
 	render() {
 		return (
 			<div className="Markdown">
-				<ReactMarkdown>{this.state.content}</ReactMarkdown>
+				{/* <ReactMarkdown>{this.state.content}</ReactMarkdown>*/}
+				<ReactMarkdown
+				children={this.state.content}
+				components={{
+				code({node, inline, className, children, ...props}) {
+					const match = /language-(\w+)/.exec(className || '')
+					return !inline && match ? (
+					<SyntaxHighlighter
+						children={String(children).replace(/\n$/, '')}
+						// Ongoing issue with typed react-syntax-highlighter
+						// https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/439
+						style={codeStyle as any}
+						language={match[1]}
+						PreTag="div"
+						{...props}
+					/>
+					) : (
+					<code className={className} {...props}>
+						{children}
+					</code>
+					)
+				}
+				}}
+			/>
 			</div>
 		);
 	}

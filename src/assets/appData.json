@@ -81,7 +81,12 @@
 			"apple-csam",
 			"bidens-executive-order-on-cybersecurity",
 			"china-us-cyberconflicts",
-			"election-disinformation-2016-2020"
+			"election-disinformation-2016-2020",
+			"es6-scopes",
+			"es6-this",
+			"object-s",
+			"the-flow-of-time",
+			"heap"
 		]
 	},
 	"context-integrity-gdpr-ccpa":{
@@ -143,5 +148,35 @@
 		"date": "Nov 17, 2021",
         "title": "A Brief Comparison of Election Disinformation in 2016 and 2020",
         "filepath": "/contents/Policy Writings/election-disinformation-2016-2020.md"
+    },
+	"es6-scopes":{
+        "type": "Document",
+		"date": "Jun 25, 2020",
+        "title": "ES6 Scopes",
+        "filepath": "/contents/Technical Writings/es6-scopes.md"
+    },
+	"es6-this":{
+        "type": "Document",
+		"date": "Jun 17, 2020",
+        "title": "ES6 'This'",
+        "filepath": "/contents/Technical Writings/es6-this.md"
+    },
+	"object-s":{
+        "type": "Document",
+		"date": "Jun 2, 2020",
+        "title": "ES6 Object(s)",
+        "filepath": "/contents/Technical Writings/object-s.md"
+    },
+	"the-flow-of-time":{
+        "type": "Document",
+		"date": "May 17, 2020",
+        "title": "The Flow of Time: ES6 Event Loop",
+        "filepath": "/contents/Technical Writings/the-flow-of-time.md"
+    },
+	"heap":{
+        "type": "Document",
+		"date": "May 10, 2020",
+        "title": "Heap in Python",
+        "filepath": "/contents/Technical Writings/heap.md"
     }
 }
