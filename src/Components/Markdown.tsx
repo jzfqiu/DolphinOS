@@ -1,71 +1,56 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { duotoneLight as codeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "../styles/Markdown.sass";
 import { FileAppData } from "./Utils";
 
-type MarkdownProps = {
-	appData: FileAppData;
-};
-
-type MarkdownState = {
-	content: string;
-};
-
 /**
  * Markdown contents inside of a window
  */
-export default class Markdown extends Component<MarkdownProps, MarkdownState> {
-	constructor(props: MarkdownProps) {
-		super(props);
-		this.state = {
-			content: "",
-		};
-	}
+export default function Markdown(props: { appData: FileAppData }) {
+	const [content, setContent] = useState("");
 
-	// https://reactjs.org/docs/faq-ajax.html
-	componentDidMount() {
-		fetch(this.props.appData.filepath)
+	useEffect(() => {
+		fetch(props.appData.filepath)
 			.then((res) => res.text())
 			.then(
 				(result) => {
-					this.setState({ content: result });
+					setContent(result);
 				},
 				(error) => {
-					this.setState({ content: error });
+					console.log(error);
+					setContent("<p>Error fetching content</p>");
 				}
 			);
-	}
+	});
 
-	render() {
-		return (
-			<div className="Markdown">
-				{/* https://github.com/remarkjs/react-markdown#use-custom-components-syntax-highlight */}
-				<ReactMarkdown
-					children={this.state.content}
-					components={{
-						code({ node, inline, className, children, ...props }) {
-							const match = /language-(\w+)/.exec(className || "");
-							return !inline && match ? (
-								<SyntaxHighlighter
-									children={String(children).replace(/\n$/, "")}
-									// Ongoing issue with typed react-syntax-highlighter
-									// https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/439
-									style={codeStyle as any}
-									language={match[1]}
-									PreTag="div"
-									{...props}
-								/>
-							) : (
-								<code className={className} {...props}>
-									{children}
-								</code>
-							);
-						},
-					}}
-				/>
-			</div>
-		);
-	}
+	return (
+		<div className="Markdown">
+			{/* https://github.com/remarkjs/react-markdown#use-custom-components-syntax-highlight */}
+			<ReactMarkdown
+				children={content}
+				components={{
+					code({ node, inline, className, children, ...props }) {
+						const match = /language-(\w+)/.exec(className || "");
+						return !inline && match ? (
+							<SyntaxHighlighter
+								children={String(children).replace(/\n$/, "")}
+								// Ongoing issue with typed react-syntax-highlighter
+								// https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/439
+								style={codeStyle as any}
+								language={match[1]}
+								PreTag="div"
+								{...props}
+							/>
+						) : (
+							<code className={className} {...props}>
+								{children}
+							</code>
+						);
+					},
+				}}
+			/>
+		</div>
+	);
 }
