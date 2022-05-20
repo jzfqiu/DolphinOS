@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
 import Markdown from "./Markdown";
@@ -26,52 +26,30 @@ type SystemProps = {
 	initialWindowsOrder?: string[];
 };
 
-type SystemState = {
-	processes: { [pid: string]: ProcessState };
-	windowsOrder: string[];
-	windowInFocus: string;
-	iconsOrder: string[];
-	iconSelected: string;
-};
-
 type ProcessState = {
 	minimized: boolean;
 };
 
-export default class System extends Component<SystemProps, SystemState> {
-	baseUrl: string;
-	constructor(props: SystemProps) {
-		super(props);
-		this.state = {
-			processes: props.initialProcesses ? props.initialProcesses : {},
-			windowsOrder: props.initialWindowsOrder ? props.initialWindowsOrder : [],
-			windowInFocus: "",
-			iconsOrder: (applications.desktop as FolderAppData).files,
-			iconSelected: "",
-		};
-		this.baseUrl = "";
-	}
+export default function System(props: SystemProps) {
 
-	componentDidMount() {
-		const paths = getPaths();
-		this.baseUrl = paths.baseUrl;
-		if (paths.program === "") {
-			// dont mount anything if there is no program
-		} else if (paths.program in applications) {
-			this.mountWindow(paths.program);
-		} else {
-			this.mountWindow("404");
-		}
-	}
+	const [processes, setProcesses] = useState(props.initialProcesses ? props.initialProcesses : {})
+	const [windowsOrder, setWindowsOrder] = useState(props.initialWindowsOrder ? props.initialWindowsOrder : [])
+	const [windowInFocus, setWindowInFocus] = useState("")
+	const [iconsOrder, setIconsOrder] = useState((applications.desktop as FolderAppData).files)
+	const [iconSelected, setIconSelected] = useState("")
 
-	// If click happens on an icon, propagation stops at the icon dom
-	// and this function is not called.
-	deselectIcon() {
-		this.setState({ iconSelected: "" });
-	}
+	// const paths = getPaths();
+	// if (paths.program === "") {
+	// 	// dont mount anything if there is no program
+	// } else if (paths.program in applications) {
+	// 	// mountWindow(paths.program);
+	// } else {
+	// 	// mountWindow("404");
+	// }
+	
 
 	// Mount a new program or restore a minimized program
-	mountWindow(program: string) {
+	function mountWindow(program: string) {
 		// if program is a link, open it in a new tab in the browser
 		if (applications[program].type === "Link") {
 			window
@@ -81,82 +59,73 @@ export default class System extends Component<SystemProps, SystemState> {
 		}
 		// add variable key to state: https://stackoverflow.com/a/58652613
 		// add element to state array: https://stackoverflow.com/a/26254086
-		this.setState((prevState) => ({
-			processes: {
-				...prevState.processes,
-				[program]: {
-					minimized: false,
-				},
-			},
-		}));
-		this.focusWindow(program);
+		setProcesses(prevState => {
+			return {
+				...prevState,
+				[program]: {minimized: false}
+			}
+		});
+		focusWindow(program);
 	}
 
 	// Remove program from processes list, destroy its state (size, pos)
-	unmountWindow(program: string) {
-		let updatedProcesses = this.state.processes;
-		let updatedWindowsOrder = this.state.windowsOrder.filter(
+	function unmountWindow(program: string) {
+		let updatedProcesses = processes;
+		let updatedWindowsOrder = windowsOrder.filter(
 			(item) => item !== program
 		);
 		delete updatedProcesses[program];
-		this.setState({
-			processes: updatedProcesses,
-			windowInFocus: "",
-			windowsOrder: updatedWindowsOrder,
-		});
-		updateAddressBar(this.baseUrl);
+		setProcesses(updatedProcesses);
+		setWindowInFocus("");
+		setWindowsOrder(updatedWindowsOrder)
+		updateAddressBar(getPaths().baseUrl);
 	}
 
 	// Set program to be minimized
-	minimizeWindow(program: string) {
-		let updatedProcesses = this.state.processes;
+	function minimizeWindow(program: string) {
+		let updatedProcesses = processes;
 		updatedProcesses[program].minimized = true;
-		this.setState({
-			processes: updatedProcesses,
-			windowInFocus: "",
-		});
+		setProcesses(updatedProcesses);
+		setWindowInFocus("");
 	}
 
-	minimizeAll() {
-		for (const program in this.state.processes) {
-			this.minimizeWindow(program);
+	function minimizeAll() {
+		for (const program in processes) {
+			minimizeWindow(program);
 		}
 	}
 
 	// if program is already rendered, remove the program from windowsOrder,
 	// then push to last (highest z-index) otherwise just add it to the end of
 	// the list. Update browser address bar if needed
-	focusWindow(program: string) {
+	function focusWindow(program: string) {
 		let updatedWindowsOrder;
-		if (!this.state.windowsOrder.includes(program)) {
-			updatedWindowsOrder = [...this.state.windowsOrder, program];
+		if (!windowsOrder.includes(program)) {
+			updatedWindowsOrder = [...windowsOrder, program];
 		} else {
-			updatedWindowsOrder = this.state.windowsOrder.filter(
+			updatedWindowsOrder = windowsOrder.filter(
 				(item) => item !== program
 			);
 			updatedWindowsOrder.push(program);
 		}
-		this.setState({
-			windowsOrder: updatedWindowsOrder,
-			windowInFocus: program,
-			iconSelected: "",
-		});
-		updateAddressBar(this.baseUrl + "/" + program);
+		setWindowsOrder(updatedWindowsOrder)
+		setWindowInFocus(program);
+		setIconSelected("");
+		updateAddressBar(getPaths().baseUrl + "/" + program);
 	}
 
-	sendToFrontIcon(program: string) {
-		let updatedIconsOrder = this.state.iconsOrder.filter(
+	// pop selected icon from order list, then push to end
+	function sendToFrontIcon(program: string) {
+		let updatedIconsOrder = iconsOrder.filter(
 			(item) => item !== program
 		);
 		updatedIconsOrder.push(program);
-		this.setState({
-			iconsOrder: updatedIconsOrder,
-			iconSelected: program,
-		});
+		setIconsOrder(updatedIconsOrder)
+		setIconSelected("");
 	}
 
 	// Link type contents are handled in System component
-	buildWindowContent(program: string, appData: AppData) {
+	function buildWindowContent(program: string, appData: AppData) {
 		switch (appData.type) {
 			case "Document":
 				return <Markdown appData={appData as FileAppData} />;
@@ -164,7 +133,7 @@ export default class System extends Component<SystemProps, SystemState> {
 				return (
 					<Folder
 						appData={appData as FolderAppData}
-						mountCallback={this.mountWindow.bind(this)}
+						mountCallback={mountWindow}
 					/>
 				);
 			case "Image":
@@ -176,35 +145,35 @@ export default class System extends Component<SystemProps, SystemState> {
 		}
 	}
 
-	buildWindow(program: string, programState: ProcessState) {
+	function buildWindow(program: string, programState: ProcessState) {
 		const appData = applications[program];
-		const nProcesses = this.state.windowsOrder.length;
+		const nProcesses = windowsOrder.length;
 		return (
 			<Window
 				key={program}
 				appData={appData}
 				display={!programState.minimized}
-				zIndex={this.state.windowsOrder.indexOf(program) + 100}
+				zIndex={windowsOrder.indexOf(program) + 100}
 				initialPos={{ x: 100 + nProcesses * 20, y: 100 + nProcesses * 20 }}
 				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers
-				unmountCallback={this.unmountWindow.bind(this, program)}
-				minimizeCallback={this.minimizeWindow.bind(this, program)}
-				sendToFrontCallback={this.focusWindow.bind(this, program)}
+				unmountCallback={() => unmountWindow(program)}
+				minimizeCallback={() => minimizeWindow(program)}
+				sendToFrontCallback={() => focusWindow(program)}
 			>
-				{this.buildWindowContent(program, appData)}
+				{buildWindowContent(program, appData)}
 			</Window>
 		);
 	}
 
-	buildTask(program: string) {
+	function buildTask(program: string) {
 		const appData = applications[program];
 		return (
 			<button
 				className={
-					program === this.state.windowInFocus ? "Task Selected" : "Task"
+					program === windowInFocus ? "Task Selected" : "Task"
 				}
 				key={program}
-				onClick={this.mountWindow.bind(this, program)}
+				onClick={() => mountWindow(program)}
 			>
 				<img
 					className="TaskIcon"
@@ -219,14 +188,14 @@ export default class System extends Component<SystemProps, SystemState> {
 					onClick={(e) => {
 						// stop click event from propagating to mountWindow()
 						e.stopPropagation();
-						this.unmountWindow(program);
+						unmountWindow(program);
 					}}
 				></img>
 			</button>
 		);
 	}
 
-	buildIcons() {
+	function buildIcons() {
 		let desktopIcons = [];
 		// special apps like desktop is guaranteed to exist in applications
 		// https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
@@ -243,10 +212,10 @@ export default class System extends Component<SystemProps, SystemState> {
 					key={program}
 					initialPos={pos}
 					appData={appData}
-					doubleClickCallback={this.mountWindow.bind(this, program)}
-					sendToFrontCallback={this.sendToFrontIcon.bind(this, program)}
-					active={this.state.iconSelected === program}
-					zIndex={this.state.iconsOrder.indexOf(program)}
+					doubleClickCallback={() => mountWindow(program)}
+					sendToFrontCallback={() => sendToFrontIcon(program)}
+					active={iconSelected === program}
+					zIndex={iconsOrder.indexOf(program)}
 				/>
 			);
 			desktopIcons.push(icon);
@@ -254,32 +223,30 @@ export default class System extends Component<SystemProps, SystemState> {
 		return desktopIcons;
 	}
 
-	render() {
-		let windows = [];
-		let tasks = [];
-		for (const program in this.state.processes) {
-			windows.push(this.buildWindow(program, this.state.processes[program]));
-			tasks.push(this.buildTask(program));
-		}
-		return (
-			<div className="System">
-				<div className="Desktop" onMouseDown={this.deselectIcon.bind(this)}>
-					{this.buildIcons()}
-					{windows}
-				</div>
-				<div className="Taskbar">
-					<div>
-						<button
-							className="Task TaskDesktop"
-							onClick={this.minimizeAll.bind(this)}
-						>
-							<img className="TaskIcon" src={homeIcon} alt={"Desktop"}></img>
-							<p>Desktop</p>
-						</button>
-						{tasks}
-					</div>
+	let windows = [];
+	let tasks = [];
+	for (const program in processes) {
+		windows.push(buildWindow(program, processes[program]));
+		tasks.push(buildTask(program));
+	}
+	return (
+		<div className="System">
+			<div className="Desktop" onMouseDown={() => setIconSelected("")}>
+				{buildIcons()}
+				{windows}
+			</div>
+			<div className="Taskbar">
+				<div>
+					<button
+						className="Task TaskDesktop"
+						onClick={() => minimizeAll()}
+					>
+						<img className="TaskIcon" src={homeIcon} alt={"Desktop"}></img>
+						<p>Desktop</p>
+					</button>
+					{tasks}
 				</div>
 			</div>
-		);
-	}
+		</div>
+	);
 }
