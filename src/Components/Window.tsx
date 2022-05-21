@@ -1,13 +1,9 @@
 import React, { useState, useRef } from "react";
-import { Point, AppData } from "./Utils";
+import { applications } from "./Utils";
 import "../styles/Window.sass";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
 
-// Default window position in px
-const DefaultPos = {
-	x: 50,
-	y: 50,
-};
 
 // Default window size in px
 const DefaultSize = {
@@ -16,37 +12,45 @@ const DefaultSize = {
 };
 
 type WindowProps = {
-	initialPos?: Point;
-	initialSize?: Point;
 	key: string;
 	program: string;
-	display: boolean;
-	appData: AppData;
-	zIndex: number;
 	children?: JSX.Element;
 };
 
 export default function Window(props: WindowProps) {
-	const [size, setSize] = useState(
-		props.initialSize ? props.initialSize : DefaultSize
+	const program = props.program;
+	const appData = applications[program];
+
+	// Global States
+	const dispatch = useDispatch();
+	const programState = useSelector(
+		(state: RootState) => state.system.processes[program]
 	);
-	const [pos, setPos] = useState(
-		props.initialPos ? props.initialPos : DefaultPos
+	const windowsOrder = useSelector(
+		(state: RootState) => state.system.windowsOrder
 	);
+
+	// Local States: window size, position, maximized, restored size
+	const windowRef = useRef(null);
+	const nProcesses = windowsOrder.length;
 	const [maximized, setMaximized] = useState(false);
+	const [pos, setPos] = useState(
+		appData.initialPos
+			? appData.initialPos
+			: { x: 100 + nProcesses * 20, y: 100 + nProcesses * 20 }
+	);
+	const [size, setSize] = useState(
+		appData.initialSize ? appData.initialSize : DefaultSize
+	);
 	const [restore, setRestore] = useState({
 		size: { x: 0, y: 0 },
 		pos: { x: 0, y: 0 },
 	});
 
-	const dispatch = useDispatch();
-
 	const desktopSize = {
 		x: window.innerWidth - 2, // 2*2px border
 		y: window.innerHeight - 2, // Taskbar height
 	};
-	const windowRef = useRef(null);
-
 	let cursorPos = { x: 0, y: 0 };
 
 	function handleMouseDown(event: React.MouseEvent<HTMLElement>) {
@@ -56,7 +60,7 @@ export default function Window(props: WindowProps) {
 			event.target.className.includes("WindowTopBar")
 		) {
 			event.stopPropagation();
-			dispatch({ type: "window/focus", payload: props.program });
+			dispatch({ type: "window/focus", payload: program });
 			cursorPos = {
 				x: event.clientX - pos.x,
 				y: event.clientY - pos.y,
@@ -112,8 +116,8 @@ export default function Window(props: WindowProps) {
 				top: pos.y + "px",
 				width: size.x + "px",
 				height: size.y + "px",
-				zIndex: props.zIndex,
-				display: props.display ? "block" : "none",
+				zIndex: windowsOrder.indexOf(program) + 100,
+				display: programState.minimized ? "none" : "block",
 			}}
 			onMouseDown={handleMouseDown}
 			ref={windowRef}
@@ -121,14 +125,12 @@ export default function Window(props: WindowProps) {
 			<div className="WindowTopBar">
 				<button
 					className="WindowTopBarButton WindowClose"
-					onClick={() =>
-						dispatch({ type: "window/unmount", payload: props.program })
-					}
+					onClick={() => dispatch({ type: "window/unmount", payload: program })}
 				/>
 				<button
 					className="WindowTopBarButton WindowMinimize"
 					onClick={() =>
-						dispatch({ type: "window/minimize", payload: props.program })
+						dispatch({ type: "window/minimize", payload: program })
 					}
 				/>
 				{maximized ? (
@@ -143,9 +145,7 @@ export default function Window(props: WindowProps) {
 					/>
 				)}
 
-				<div className={"WindowTopBarTitle"}>
-					{props.appData.title || "Untitled"}
-				</div>
+				<div className={"WindowTopBarTitle"}>{appData.title || "Untitled"}</div>
 			</div>
 			<div className="WindowContent">{props.children}</div>
 		</div>

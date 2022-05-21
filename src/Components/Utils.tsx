@@ -22,6 +22,8 @@ type BaseAppData = {
 	type: AppType;
 	title: string;
 	date: string;
+    initialSize?: Point;
+    initialPos?: Point;
 };
 
 export type FolderAppData = BaseAppData & {

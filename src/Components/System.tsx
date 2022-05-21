@@ -27,22 +27,18 @@ type ProcessState = {
 };
 
 export default function System(props: SystemProps) {
+	// Global States
+	const dispatch = useDispatch();
+	const processes = useSelector((state: RootState) => state.system.processes);
+	const windowInFocus = useSelector(
+		(state: RootState) => state.system.windowInFocus
+	);
 
-	// Component states
+	// Local states
 	const [iconsOrder, setIconsOrder] = useState(
 		(applications.desktop as FolderAppData).files
 	);
 	const [iconSelected, setIconSelected] = useState("");
-
-	// Redux
-	const dispatch = useDispatch();
-	const processes = useSelector((state: RootState) => state.system.processes);
-	const windowsOrder = useSelector(
-		(state: RootState) => state.system.windowsOrder
-	);
-	const windowInFocus = useSelector(
-		(state: RootState) => state.system.windowInFocus
-	);
 
 	// Pop selected icon from order list, then push to end
 	function sendToFrontIcon(program: string) {
@@ -53,7 +49,7 @@ export default function System(props: SystemProps) {
 	}
 
 	// Link type contents are handled in System component
-	function buildWindowContent(program: string, appData: AppData) {
+	function buildWindowContent(appData: AppData) {
 		switch (appData.type) {
 			case "Document":
 				return <Markdown appData={appData as FileAppData} />;
@@ -68,19 +64,10 @@ export default function System(props: SystemProps) {
 		}
 	}
 
-	function buildWindow(program: string, programState: ProcessState) {
-		const appData = applications[program];
-		const nProcesses = windowsOrder.length;
+	function buildWindow(program: string) {
 		return (
-			<Window
-				key={program}
-				program={program}
-				appData={appData}
-				display={!programState.minimized}
-				zIndex={windowsOrder.indexOf(program) + 100}
-				initialPos={{ x: 100 + nProcesses * 20, y: 100 + nProcesses * 20 }}
-			>
-				{buildWindowContent(program, appData)}
+			<Window key={program} program={program}>
+				{buildWindowContent(applications[program])}
 			</Window>
 		);
 	}
@@ -144,7 +131,7 @@ export default function System(props: SystemProps) {
 	let windows = [];
 	let tasks = [];
 	for (const program in processes) {
-		windows.push(buildWindow(program, processes[program]));
+		windows.push(buildWindow(program));
 		tasks.push(buildTask(program));
 	}
 	return (
@@ -155,8 +142,10 @@ export default function System(props: SystemProps) {
 			</div>
 			<div className="Taskbar">
 				<div>
-					<button className="Task TaskDesktop" 
-						onClick={() => dispatch({ type: "window/minimizeAll"})}>
+					<button
+						className="Task TaskDesktop"
+						onClick={() => dispatch({ type: "window/minimizeAll" })}
+					>
 						<img className="TaskIcon" src={homeIcon} alt={"Desktop"}></img>
 						<p>Desktop</p>
 					</button>
