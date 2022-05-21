@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
 import Markdown from "./Markdown";
@@ -13,13 +13,13 @@ import {
 	getPaths,
 	updateAddressBar,
 	getIcon,
+	applications
 } from "./Utils";
 import "../styles/System.sass";
-import applications_data from "../assets/appData.json";
 import homeIcon from "../assets/icons/house.png";
 import cross from "../assets/icons/cross.svg";
 
-const applications = applications_data as Applications;
+
 
 type SystemProps = {
 	initialProcesses?: { [pid: string]: ProcessState };

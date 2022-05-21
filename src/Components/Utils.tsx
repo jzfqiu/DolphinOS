@@ -4,6 +4,9 @@ import folderIcon from "../assets/icons/folder.png";
 import linkIcon from "../assets/icons/link.png";
 import imageIcon from "../assets/icons/picture.png";
 
+import applications_data from "../assets/appData.json";
+export const applications = applications_data as Applications;
+
 /*
 
 Assets are placed in the public folder for expandability, since I don't want to 
