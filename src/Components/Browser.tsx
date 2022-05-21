@@ -1,42 +1,34 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { FileAppData } from "./Utils";
 
 type BrowserProps = {
 	appData: FileAppData;
 };
 
-type BrowserState = {
-	content: string;
-};
 
-export default class Image extends Component<BrowserProps, BrowserState> {
-	constructor(props: BrowserProps) {
-		super(props);
-		this.state = {
-			content: "",
-		};
-	}
+export default function Browser(props: BrowserProps) {
+	const [content, setContent] = useState("");
 
-	// https://reactjs.org/docs/faq-ajax.html
-	componentDidMount() {
-		fetch(this.props.appData.filepath)
+	useEffect(() => {
+		fetch(props.appData.filepath)
 			.then((res) => res.text())
 			.then(
 				(result) => {
-					this.setState({ content: result });
+					setContent(result);
 				},
 				(error) => {
-					this.setState({ content: error });
+					console.log(error);
+					setContent("<p>Error fetching content</p>");
 				}
 			);
-	}
-
-	render() {
-		return (
-			<div
-				className="Browser"
-				dangerouslySetInnerHTML={{ __html: this.state.content }}
-			></div>
-		);
-	}
+            
+	}, [props.appData.filepath]);
+    // https://reactjs.org/docs/hooks-effect.html#tip-optimizing-performance-by-skipping-effects
+	
+    return (
+        <div
+            className="Browser"
+            dangerouslySetInnerHTML={{ __html: content }}
+        ></div>
+    );
 }

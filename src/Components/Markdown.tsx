@@ -23,7 +23,7 @@ export default function Markdown(props: { appData: FileAppData }) {
 					setContent("<p>Error fetching content</p>");
 				}
 			);
-	});
+	}, [props.appData.filepath]);
 
 	return (
 		<div className="Markdown">
