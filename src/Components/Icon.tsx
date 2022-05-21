@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { AppData, getIcon, Point } from "./Utils";
 import "../styles/Icon.sass";
+import { useDispatch } from "react-redux";
 
 type IconProps = {
+	program: string;
 	initialPos: Point;
 	appData: AppData;
 	zIndex: number;
 	active: boolean;
 	sendToFrontCallback: () => void; // program parameter bound in System component
-	doubleClickCallback: () => void;
 };
 
 export default function Icon(props: IconProps) {
 	const [pos, setPos] = useState(props.initialPos);
+	const dispatch = useDispatch();
 
 	const image = getIcon(props.appData.type);
 	let cursorPos = { x: 0, y: 0 };
@@ -53,8 +55,9 @@ export default function Icon(props: IconProps) {
 				zIndex: props.zIndex,
 			}}
 			onMouseDown={handleMouseDown}
-			onDoubleClick={props.doubleClickCallback}
-			// ref={this.ref}
+			onDoubleClick={() =>
+				dispatch({ type: "window/mount", payload: props.program })
+			}
 		>
 			<img
 				src={image}

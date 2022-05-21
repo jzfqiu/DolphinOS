@@ -5,21 +5,17 @@ import Markdown from "./Markdown";
 import Folder from "./Folder";
 import Browser from "./Browser";
 import {
-	Applications,
 	AppData,
 	FolderAppData,
-	LinkAppData,
 	FileAppData,
-	getPaths,
-	updateAddressBar,
 	getIcon,
-	applications
+	applications,
 } from "./Utils";
+import { RootState } from "../store";
+import { useSelector, useDispatch } from "react-redux";
 import "../styles/System.sass";
 import homeIcon from "../assets/icons/house.png";
 import cross from "../assets/icons/cross.svg";
-
-
 
 type SystemProps = {
 	initialProcesses?: { [pid: string]: ProcessState };
@@ -32,95 +28,27 @@ type ProcessState = {
 
 export default function System(props: SystemProps) {
 
-	const [processes, setProcesses] = useState(props.initialProcesses ? props.initialProcesses : {})
-	const [windowsOrder, setWindowsOrder] = useState(props.initialWindowsOrder ? props.initialWindowsOrder : [])
-	const [windowInFocus, setWindowInFocus] = useState("")
-	const [iconsOrder, setIconsOrder] = useState((applications.desktop as FolderAppData).files)
-	const [iconSelected, setIconSelected] = useState("")
+	// Component states
+	const [iconsOrder, setIconsOrder] = useState(
+		(applications.desktop as FolderAppData).files
+	);
+	const [iconSelected, setIconSelected] = useState("");
 
-	// const paths = getPaths();
-	// if (paths.program === "") {
-	// 	// dont mount anything if there is no program
-	// } else if (paths.program in applications) {
-	// 	// mountWindow(paths.program);
-	// } else {
-	// 	// mountWindow("404");
-	// }
-	
+	// Redux
+	const dispatch = useDispatch();
+	const processes = useSelector((state: RootState) => state.system.processes);
+	const windowsOrder = useSelector(
+		(state: RootState) => state.system.windowsOrder
+	);
+	const windowInFocus = useSelector(
+		(state: RootState) => state.system.windowInFocus
+	);
 
-	// Mount a new program or restore a minimized program
-	function mountWindow(program: string) {
-		// if program is a link, open it in a new tab in the browser
-		if (applications[program].type === "Link") {
-			window
-				.open((applications[program] as LinkAppData).url, "_blank")
-				?.focus();
-			return;
-		}
-		// add variable key to state: https://stackoverflow.com/a/58652613
-		// add element to state array: https://stackoverflow.com/a/26254086
-		setProcesses(prevState => {
-			return {
-				...prevState,
-				[program]: {minimized: false}
-			}
-		});
-		focusWindow(program);
-	}
-
-	// Remove program from processes list, destroy its state (size, pos)
-	function unmountWindow(program: string) {
-		let updatedProcesses = processes;
-		let updatedWindowsOrder = windowsOrder.filter(
-			(item) => item !== program
-		);
-		delete updatedProcesses[program];
-		setProcesses(updatedProcesses);
-		setWindowInFocus("");
-		setWindowsOrder(updatedWindowsOrder)
-		updateAddressBar(getPaths().baseUrl);
-	}
-
-	// Set program to be minimized
-	function minimizeWindow(program: string) {
-		let updatedProcesses = processes;
-		updatedProcesses[program].minimized = true;
-		setProcesses(updatedProcesses);
-		setWindowInFocus("");
-	}
-
-	function minimizeAll() {
-		for (const program in processes) {
-			minimizeWindow(program);
-		}
-	}
-
-	// if program is already rendered, remove the program from windowsOrder,
-	// then push to last (highest z-index) otherwise just add it to the end of
-	// the list. Update browser address bar if needed
-	function focusWindow(program: string) {
-		let updatedWindowsOrder;
-		if (!windowsOrder.includes(program)) {
-			updatedWindowsOrder = [...windowsOrder, program];
-		} else {
-			updatedWindowsOrder = windowsOrder.filter(
-				(item) => item !== program
-			);
-			updatedWindowsOrder.push(program);
-		}
-		setWindowsOrder(updatedWindowsOrder)
-		setWindowInFocus(program);
-		setIconSelected("");
-		updateAddressBar(getPaths().baseUrl + "/" + program);
-	}
-
-	// pop selected icon from order list, then push to end
+	// Pop selected icon from order list, then push to end
 	function sendToFrontIcon(program: string) {
-		let updatedIconsOrder = iconsOrder.filter(
-			(item) => item !== program
-		);
+		let updatedIconsOrder = iconsOrder.filter((item) => item !== program);
 		updatedIconsOrder.push(program);
-		setIconsOrder(updatedIconsOrder)
+		setIconsOrder(updatedIconsOrder);
 		setIconSelected("");
 	}
 
@@ -130,12 +58,7 @@ export default function System(props: SystemProps) {
 			case "Document":
 				return <Markdown appData={appData as FileAppData} />;
 			case "Folder":
-				return (
-					<Folder
-						appData={appData as FolderAppData}
-						mountCallback={mountWindow}
-					/>
-				);
+				return <Folder appData={appData as FolderAppData} />;
 			case "Image":
 				return <div>TODO</div>;
 			case "HTML":
@@ -151,14 +74,11 @@ export default function System(props: SystemProps) {
 		return (
 			<Window
 				key={program}
+				program={program}
 				appData={appData}
 				display={!programState.minimized}
 				zIndex={windowsOrder.indexOf(program) + 100}
 				initialPos={{ x: 100 + nProcesses * 20, y: 100 + nProcesses * 20 }}
-				// https://reactjs.org/docs/handling-events.html#passing-arguments-to-event-handlers
-				unmountCallback={() => unmountWindow(program)}
-				minimizeCallback={() => minimizeWindow(program)}
-				sendToFrontCallback={() => focusWindow(program)}
 			>
 				{buildWindowContent(program, appData)}
 			</Window>
@@ -169,11 +89,9 @@ export default function System(props: SystemProps) {
 		const appData = applications[program];
 		return (
 			<button
-				className={
-					program === windowInFocus ? "Task Selected" : "Task"
-				}
+				className={program === windowInFocus ? "Task Selected" : "Task"}
 				key={program}
-				onClick={() => mountWindow(program)}
+				onClick={() => dispatch({ type: "window/mount", payload: program })}
 			>
 				<img
 					className="TaskIcon"
@@ -188,7 +106,7 @@ export default function System(props: SystemProps) {
 					onClick={(e) => {
 						// stop click event from propagating to mountWindow()
 						e.stopPropagation();
-						unmountWindow(program);
+						dispatch({ type: "window/unmount", payload: program });
 					}}
 				></img>
 			</button>
@@ -210,9 +128,9 @@ export default function System(props: SystemProps) {
 			const icon = (
 				<Icon
 					key={program}
+					program={program}
 					initialPos={pos}
 					appData={appData}
-					doubleClickCallback={() => mountWindow(program)}
 					sendToFrontCallback={() => sendToFrontIcon(program)}
 					active={iconSelected === program}
 					zIndex={iconsOrder.indexOf(program)}
@@ -237,10 +155,8 @@ export default function System(props: SystemProps) {
 			</div>
 			<div className="Taskbar">
 				<div>
-					<button
-						className="Task TaskDesktop"
-						onClick={() => minimizeAll()}
-					>
+					<button className="Task TaskDesktop" 
+						onClick={() => dispatch({ type: "window/minimizeAll"})}>
 						<img className="TaskIcon" src={homeIcon} alt={"Desktop"}></img>
 						<p>Desktop</p>
 					</button>

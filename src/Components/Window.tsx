@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { Point, AppData } from "./Utils";
 import "../styles/Window.sass";
+import { useDispatch } from "react-redux";
 
 // Default window position in px
 const DefaultPos = {
@@ -18,13 +19,10 @@ type WindowProps = {
 	initialPos?: Point;
 	initialSize?: Point;
 	key: string;
+	program: string;
 	display: boolean;
 	appData: AppData;
 	zIndex: number;
-	// program parameter bound in System component
-	sendToFrontCallback: () => void;
-	unmountCallback: () => void;
-	minimizeCallback: () => void;
 	children?: JSX.Element;
 };
 
@@ -41,6 +39,8 @@ export default function Window(props: WindowProps) {
 		pos: { x: 0, y: 0 },
 	});
 
+	const dispatch = useDispatch();
+
 	const desktopSize = {
 		x: window.innerWidth - 2, // 2*2px border
 		y: window.innerHeight - 2, // Taskbar height
@@ -56,7 +56,7 @@ export default function Window(props: WindowProps) {
 			event.target.className.includes("WindowTopBar")
 		) {
 			event.stopPropagation();
-			props.sendToFrontCallback();
+			dispatch({ type: "window/focus", payload: props.program });
 			cursorPos = {
 				x: event.clientX - pos.x,
 				y: event.clientY - pos.y,
@@ -83,7 +83,6 @@ export default function Window(props: WindowProps) {
 
 	// Make window fill the page
 	function maximizeWindow() {
-		// console.log(windowRef.current);
 		setRestore({
 			// ref.current will never be null because the target window
 			// is always mounted when this method is called.
@@ -122,11 +121,15 @@ export default function Window(props: WindowProps) {
 			<div className="WindowTopBar">
 				<button
 					className="WindowTopBarButton WindowClose"
-					onClick={props.unmountCallback}
+					onClick={() =>
+						dispatch({ type: "window/unmount", payload: props.program })
+					}
 				/>
 				<button
 					className="WindowTopBarButton WindowMinimize"
-					onClick={props.minimizeCallback}
+					onClick={() =>
+						dispatch({ type: "window/minimize", payload: props.program })
+					}
 				/>
 				{maximized ? (
 					<button

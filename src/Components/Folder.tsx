@@ -1,42 +1,37 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import "../styles/Folder.sass";
 import { getIcon, FolderAppData, Applications } from "./Utils";
 import applications_data from "../assets/appData.json";
+import { useDispatch } from "react-redux";
 
 const applications = applications_data as Applications;
 
 type FolderProps = {
 	appData: FolderAppData;
-	mountCallback: (program: string) => void;
 };
 
-type FolderState = {
-	selected: string;
-};
+export default function Folder(props: FolderProps) {
+	const [selected, setSelected] = useState("");
 
-export default class Folder extends Component<FolderProps, FolderState> {
-	constructor(props: FolderProps) {
-		super(props);
-		this.state = {
-			selected: "",
-		};
-	}
-
-	selectFolderItem(program: string, event: React.MouseEvent<HTMLElement>) {
+	function selectFolderItem(
+		program: string,
+		event: React.MouseEvent<HTMLElement>
+	) {
 		event.stopPropagation();
-		this.setState({ selected: program });
+		setSelected(program);
 	}
+	const dispatch = useDispatch();
 
-	buildFolderItems(program: string) {
+	function buildFolderItems(program: string) {
 		const appData = applications[program];
 		return (
 			<div
 				key={program}
-				className={`FolderItem ${
-					program === this.state.selected ? "selected" : ""
-				}`}
-				onDoubleClick={this.props.mountCallback.bind(this, program)}
-				onMouseDown={this.selectFolderItem.bind(this, program)}
+				className={`FolderItem ${program === selected ? "selected" : ""}`}
+				onDoubleClick={() =>
+					dispatch({ type: "window/mount", payload: program })
+				}
+				onMouseDown={(e) => selectFolderItem(program, e)}
 			>
 				<img src={getIcon(appData.type)} alt={appData.type}></img>
 				<div>{applications[program].title}</div>
@@ -46,24 +41,19 @@ export default class Folder extends Component<FolderProps, FolderState> {
 		);
 	}
 
-	render() {
-		let items = [];
-		for (const program of this.props.appData.files) {
-			items.push(this.buildFolderItems(program));
-		}
-		return (
-			<div
-				className="Folder"
-				onMouseDown={this.selectFolderItem.bind(this, "")}
-			>
-				<div className="FolderItem FolderHeader">
-					<div></div>
-					<div>Name</div>
-					<div>Type</div>
-					<div>Date Modified</div>
-				</div>
-				{items}
-			</div>
-		);
+	let items = [];
+	for (const program of props.appData.files) {
+		items.push(buildFolderItems(program));
 	}
+	return (
+		<div className="Folder" onMouseDown={(e) => selectFolderItem("", e)}>
+			<div className="FolderItem FolderHeader">
+				<div></div>
+				<div>Name</div>
+				<div>Type</div>
+				<div>Date Modified</div>
+			</div>
+			{items}
+		</div>
+	);
 }
