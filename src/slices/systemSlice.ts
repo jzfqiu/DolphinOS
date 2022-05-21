@@ -3,7 +3,7 @@ import {
 	applications,
 	updateAddressBar,
 	getPaths,
-} from "./Utils";
+} from "../components/Utils";
 
 type ProcessState = {
 	minimized: boolean;
