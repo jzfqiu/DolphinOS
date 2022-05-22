@@ -1,9 +1,5 @@
 # DolphinOS
 
 Icon source: https://www.flaticon.com/packs/technology-icon-collection/
+Jest configuration issue: https://github.com/facebook/create-react-app/issues/11946 
 
-## To-do
-
-1. React Router integration
-2. Adjust project layout base on open source examples
-3. Write tests

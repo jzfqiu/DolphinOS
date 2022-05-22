@@ -1,4 +1,4 @@
-import { render, ReactMarkdown, screen } from './test-utils'
+import { render, screen } from './test-utils'
 import System from "../components/System"
 import React from 'react';
 

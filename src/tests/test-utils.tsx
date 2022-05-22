@@ -17,11 +17,7 @@ function render(
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions })
 }
 
-function ReactMarkdown({ children }: any){
-    return <>{children}</>;
-  }
-
 // re-export everything
 export * from '@testing-library/react'
 // override render method
-export { render, ReactMarkdown}
+export { render }
