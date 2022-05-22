@@ -1,16 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-	applications,
-	updateAddressBar,
-	getPaths,
-} from "../components/Utils";
+import { applications, updateAddressBar, getPaths } from "../components/Utils";
 
 type ProcessState = {
 	minimized: boolean;
 };
 
-
-const systemSlice = createSlice({
+const windowSlice = createSlice({
 	name: "window",
 	initialState: {
 		processes: {} as { [pid: string]: ProcessState },
@@ -20,8 +15,7 @@ const systemSlice = createSlice({
 		// iconSelected: ""
 	},
 	reducers: {
-		
-    // Mount a new program or restore a minimized program
+		// Mount a new program or restore a minimized program
 		mount: (state, action) => {
 			const program = action.payload;
 			// if program is a link, open it in a new tab in the browser
@@ -29,11 +23,11 @@ const systemSlice = createSlice({
 				// window
 				// 	.open((applications[program] as LinkAppData).url, "_blank")
 				// 	?.focus();
-        return;
-      }
-      state.processes[program] = { minimized: false };
-      state.windowInFocus = program;
-      if (!state.windowsOrder.includes(program)) {
+				return;
+			}
+			state.processes[program] = { minimized: false };
+			state.windowInFocus = program;
+			if (!state.windowsOrder.includes(program)) {
 				// if program was not rendered, just add it to the end of list
 				state.windowsOrder.push(program);
 			} else {
@@ -41,8 +35,8 @@ const systemSlice = createSlice({
 				// then push to last (highest z-index)
 				state.windowsOrder = state.windowsOrder.filter(
 					(item) => item !== program
-			  );
-      }
+				);
+			}
 		},
 
 		// Remove program from processes list, destroy its state (size, pos)
@@ -79,16 +73,16 @@ const systemSlice = createSlice({
 			state.processes[program].minimized = true;
 			state.windowInFocus = "";
 		},
-		
-    minimizeAll: (state) => {
-			for (const program in state.processes){
-        state.processes[program].minimized = true;
-      }
+
+		minimizeAll: (state) => {
+			for (const program in state.processes) {
+				state.processes[program].minimized = true;
+			}
 			state.windowInFocus = "";
 		},
 	},
 });
 
-export const { mount, unmount, focus, minimize, minimizeAll } = systemSlice.actions
-export default systemSlice.reducer;
-
+export const { mount, unmount, focus, minimize, minimizeAll } =
+	windowSlice.actions;
+export default windowSlice.reducer;

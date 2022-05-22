@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import systemSlice from "./slices/systemSlice";
+import windowSlice from "./slices/windowSlice";
+import iconSlice from "./slices/iconSlice";
 
 const store = configureStore({
 	reducer: {
-		system: systemSlice,
+		window: windowSlice,
+		icon: iconSlice,
 	},
 });
 

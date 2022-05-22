@@ -4,7 +4,6 @@ import "../styles/Window.sass";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 
-
 // Default window size in px
 const DefaultSize = {
 	x: 1000,
@@ -24,10 +23,10 @@ export default function Window(props: WindowProps) {
 	// Global States
 	const dispatch = useDispatch();
 	const programState = useSelector(
-		(state: RootState) => state.system.processes[program]
+		(state: RootState) => state.window.processes[program]
 	);
 	const windowsOrder = useSelector(
-		(state: RootState) => state.system.windowsOrder
+		(state: RootState) => state.window.windowsOrder
 	);
 
 	// Local States: window size, position, maximized, restored size

@@ -27,26 +27,11 @@ type ProcessState = {
 };
 
 export default function System(props: SystemProps) {
-	// Global States
 	const dispatch = useDispatch();
-	const processes = useSelector((state: RootState) => state.system.processes);
+	const processes = useSelector((state: RootState) => state.window.processes);
 	const windowInFocus = useSelector(
-		(state: RootState) => state.system.windowInFocus
+		(state: RootState) => state.window.windowInFocus
 	);
-
-	// Local states
-	const [iconsOrder, setIconsOrder] = useState(
-		(applications.desktop as FolderAppData).files
-	);
-	const [iconSelected, setIconSelected] = useState("");
-
-	// Pop selected icon from order list, then push to end
-	function sendToFrontIcon(program: string) {
-		let updatedIconsOrder = iconsOrder.filter((item) => item !== program);
-		updatedIconsOrder.push(program);
-		setIconsOrder(updatedIconsOrder);
-		setIconSelected("");
-	}
 
 	// Link type contents are handled in System component
 	function buildWindowContent(appData: AppData) {
@@ -118,9 +103,8 @@ export default function System(props: SystemProps) {
 					program={program}
 					initialPos={pos}
 					appData={appData}
-					sendToFrontCallback={() => sendToFrontIcon(program)}
-					active={iconSelected === program}
-					zIndex={iconsOrder.indexOf(program)}
+					// active={iconSelected === program}
+					// zIndex={iconsOrder.indexOf(program)}
 				/>
 			);
 			desktopIcons.push(icon);
@@ -136,7 +120,10 @@ export default function System(props: SystemProps) {
 	}
 	return (
 		<div className="System">
-			<div className="Desktop" onMouseDown={() => setIconSelected("")}>
+			<div
+				className="Desktop"
+				onMouseDown={() => dispatch({ type: "icon/deselect" })}
+			>
 				{buildIcons()}
 				{windows}
 			</div>
