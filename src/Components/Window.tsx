@@ -6,9 +6,14 @@ import { RootState } from "../store";
 
 // Default window size in px
 const DefaultSize = {
-    x: 1000,
-    y: 700,
+    x: window.innerWidth * 0.8,
+    y: window.innerHeight * 0.7,
 };
+
+const DefaultPos = {
+    x: window.innerWidth * 0.1,
+    y: window.innerHeight * 0.1,
+}
 
 type WindowProps = {
     key: string;
@@ -36,7 +41,7 @@ export default function Window(props: WindowProps) {
     const [pos, setPos] = useState(
         appData.initialPos
             ? appData.initialPos
-            : { x: 100 + nProcesses * 20, y: 100 + nProcesses * 20 }
+            : { x: DefaultPos.x + nProcesses * 20, y: DefaultPos.x + nProcesses * 20 }
     );
     const [size, setSize] = useState(
         appData.initialSize ? appData.initialSize : DefaultSize

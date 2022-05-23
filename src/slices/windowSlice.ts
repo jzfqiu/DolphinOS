@@ -17,8 +17,6 @@ const windowSlice = createSlice({
         mount: (state, action) => {
             const program = action.payload;
             state.processes[program] = { minimized: false };
-            state.windowInFocus = program;
-            // focus window (same logic as the focus reducer)
             if (!state.windowsOrder.includes(program)) {
                 // if program was not rendered, just add it to the end of list
                 state.windowsOrder.push(program);
@@ -28,7 +26,9 @@ const windowSlice = createSlice({
                 state.windowsOrder = state.windowsOrder.filter(
                     (item) => item !== program
                 );
+                state.windowsOrder.push(program);
             }
+            state.windowInFocus = program;
             setAddressBar(program);
         },
 

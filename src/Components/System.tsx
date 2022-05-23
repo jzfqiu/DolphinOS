@@ -66,7 +66,7 @@ export default function System(props: SystemProps) {
             <button
                 className={program === windowInFocus ? "Task Selected" : "Task"}
                 key={program}
-                onClick={() => dispatch({ type: "window/focus", payload: program })}
+                onClick={() => dispatch({ type: "window/mount", payload: program })}
             >
                 <img
                     className="TaskIcon"
