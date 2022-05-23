@@ -1,0 +1,58 @@
+@use "Common"
+
+.Taskbar
+	height: Common.$Taskbar-height
+	width: 100%
+	position: absolute
+	z-index: 200
+	@include Common.flex-and-center
+	align-items: flex-start
+	& div
+		padding: 5px 2px
+		background-color: rgba(200, 200, 200, 0.5)
+		backdrop-filter: blur(4px)
+		border-radius: 5px
+		display: flex
+
+.Task
+	height: 40px
+	width: 200px
+	transition-duration: 0.1s
+	border: Common.$Taskbar-border
+	border-radius: 5px
+	background-color: rgba(0,0,0, 0)
+	margin: 0 5px
+	font-size: 0.8em
+	padding: 5px 5px
+	@include Common.flex-and-center
+	justify-content: flex-start
+	& .TaskIcon
+		width: 16px
+		margin: 5px
+	& .TaskClose
+		width: 10px
+		padding: 5px
+		border-radius: 5px
+		&:hover
+			background-color: darkgray
+	& p 
+		width: 150px
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+		text-align: left
+	&.Selected
+		position: relative
+		background-color: white
+		border: none
+		top: 1px
+		left: 1px
+		filter: none
+		@include Common.drop-shadow-linear($depth: 1px, $color: gray)
+	
+	&:hover 
+		background-color: gray	
+		& img
+			filter: invert(100%)
+		& p
+			filter: invert(100%)

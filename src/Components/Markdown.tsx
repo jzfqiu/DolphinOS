@@ -19,7 +19,6 @@ export default function Markdown(props: { appData: FileAppData }) {
                     setContent(result);
                 },
                 (error) => {
-                    console.log(error);
                     setContent("<p>Error fetching content</p>");
                 }
             );
