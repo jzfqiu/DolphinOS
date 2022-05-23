@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
 import Markdown from "./Markdown";
@@ -18,12 +18,7 @@ import homeIcon from "../assets/icons/house.png";
 import cross from "../assets/icons/cross.svg";
 
 type SystemProps = {
-	initialProcesses?: { [pid: string]: ProcessState };
-	initialWindowsOrder?: string[];
-};
-
-type ProcessState = {
-	minimized: boolean;
+	openedPrograms?: string[]
 };
 
 export default function System(props: SystemProps) {
@@ -32,6 +27,15 @@ export default function System(props: SystemProps) {
 	const windowInFocus = useSelector(
 		(state: RootState) => state.window.windowInFocus
 	);
+
+	useEffect(() => {
+		if (props.openedPrograms) {
+			props.openedPrograms.forEach(program => {
+				dispatch({ type: "window/mount", payload: program })
+			});
+		}
+	}, [props, dispatch])
+	
 
 	// Link type contents are handled in System component
 	function buildWindowContent(appData: AppData) {

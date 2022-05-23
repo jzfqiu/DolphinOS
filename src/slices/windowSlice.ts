@@ -18,13 +18,6 @@ const windowSlice = createSlice({
 		// Mount a new program or restore a minimized program
 		mount: (state, action) => {
 			const program = action.payload;
-			// if program is a link, open it in a new tab in the browser
-			if (applications[program].type === "Link") {
-				// window
-				// 	.open((applications[program] as LinkAppData).url, "_blank")
-				// 	?.focus();
-				return;
-			}
 			state.processes[program] = { minimized: false };
 			state.windowInFocus = program;
 			if (!state.windowsOrder.includes(program)) {
@@ -37,6 +30,7 @@ const windowSlice = createSlice({
 					(item) => item !== program
 				);
 			}
+			updateAddressBar(getPaths().baseUrl + "/" + program);
 		},
 
 		// Remove program from processes list, destroy its state (size, pos)
