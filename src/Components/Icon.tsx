@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AppData, getIcon, Point } from "./Utils";
+import { applications, getIcon, Point } from "./Utils";
 import "../styles/Icon.sass";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -7,19 +7,23 @@ import { RootState } from "../store";
 type IconProps = {
 	program: string;
 	initialPos: Point;
-	appData: AppData;
 };
 
 export default function Icon(props: IconProps) {
-	const [pos, setPos] = useState(props.initialPos);
+	
+	// Global states
 	const dispatch = useDispatch();
 	const iconsOrder = useSelector((state: RootState) => state.icon.iconsOrder);
 	const iconSelected = useSelector(
 		(state: RootState) => state.icon.iconSelected
 	);
 
+	// Local states
+	const [pos, setPos] = useState(props.initialPos);
+
 	const program = props.program;
-	const image = getIcon(props.appData.type);
+	const appData = applications[program];
+	const image = getIcon(appData.type);
 	let cursorPos = { x: 0, y: 0 };
 
 	function handleMouseDown(event: React.MouseEvent<HTMLElement>) {
@@ -51,7 +55,7 @@ export default function Icon(props: IconProps) {
 
 	return (
 		<div
-			className={`icon ${iconSelected === program ? "active" : ""}`}
+			className={`icon ${iconSelected === program ? "selected" : ""}`}
 			style={{
 				left: pos.x + "px",
 				top: pos.y + "px",
@@ -61,17 +65,18 @@ export default function Icon(props: IconProps) {
 			onDoubleClick={() =>
 				dispatch({ type: "window/mount", payload: props.program })
 			}
+			data-testid={`icon-${program}`}
 		>
 			<img
 				src={image}
-				alt={props.appData.title}
+				alt={appData.title}
 				draggable={"false"}
 				// Firefox specific tweak on draggable img
 				onDragStart={(e) => {
 					e.preventDefault();
 				}}
 			/>
-			<p>{props.appData.title}</p>
+			<p>{appData.title}</p>
 		</div>
 	);
 }

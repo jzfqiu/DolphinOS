@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Window from "./Window";
 import Icon from "./Icon";
 import Markdown from "./Markdown";
@@ -92,7 +92,6 @@ export default function System(props: SystemProps) {
 		for (const [index, program] of (
 			applications.desktop as FolderAppData
 		).files.entries()) {
-			const appData = applications[program];
 			const pos = {
 				x: 50,
 				y: 120 * index + 50,
@@ -102,9 +101,6 @@ export default function System(props: SystemProps) {
 					key={program}
 					program={program}
 					initialPos={pos}
-					appData={appData}
-					// active={iconSelected === program}
-					// zIndex={iconsOrder.indexOf(program)}
 				/>
 			);
 			desktopIcons.push(icon);

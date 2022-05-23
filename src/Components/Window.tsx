@@ -120,6 +120,7 @@ export default function Window(props: WindowProps) {
 			}}
 			onMouseDown={handleMouseDown}
 			ref={windowRef}
+			data-testid={`window-${program}`}
 		>
 			<div className="WindowTopBar">
 				<button

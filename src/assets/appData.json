@@ -3,7 +3,7 @@
 		"type": "Folder",
 		"date": "-",
 		"title": "Some Folder",
-		"files": ["writings", "links", "README", "about"]
+		"files": ["writings", "links", "readme", "about"]
 	},
 	"404": {
 		"type": "Document",
@@ -17,7 +17,7 @@
 		"title": "test.md",
 		"filepath": "/contents/test.md"
 	},
-	"README": {
+	"readme": {
 		"type": "Document",
 		"date": "-",
 		"title": "README.md",
