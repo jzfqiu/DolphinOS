@@ -19,23 +19,23 @@ Ref: https://create-react-app.dev/docs/using-the-public-folder/
 export type AppType = "Document" | "Link" | "Folder" | "Image" | "HTML";
 
 type BaseAppData = {
-	type: AppType;
-	title: string;
-	date: string;
+    type: AppType;
+    title: string;
+    date: string;
     initialSize?: Point;
     initialPos?: Point;
 };
 
 export type FolderAppData = BaseAppData & {
-	files: string[];
+    files: string[];
 };
 
 export type FileAppData = BaseAppData & {
-	filepath: string;
+    filepath: string;
 };
 
 export type LinkAppData = BaseAppData & {
-	url: string;
+    url: string;
 };
 
 export type AppData = FolderAppData | FileAppData | LinkAppData;
@@ -43,34 +43,34 @@ export type AppData = FolderAppData | FileAppData | LinkAppData;
 export type Applications = { [pid: string]: AppData };
 
 export type Point = {
-	x: number;
-	y: number;
+    x: number;
+    y: number;
 };
 
 export function getIcon(type: AppType) {
-	switch (type) {
-		case "Document":
-			return documentIcon;
-		case "Folder":
-			return folderIcon;
-		case "Link":
-			return linkIcon;
-		case "Image":
-			return imageIcon;
-		case "HTML":
-			return browserIcon;
-		default:
-			return documentIcon;
-	}
+    switch (type) {
+        case "Document":
+            return documentIcon;
+        case "Folder":
+            return folderIcon;
+        case "Link":
+            return linkIcon;
+        case "Image":
+            return imageIcon;
+        case "HTML":
+            return browserIcon;
+        default:
+            return documentIcon;
+    }
 }
 
 export function getPaths() {
-	const tokens = window.location.href.split("/");
-	const program = tokens.slice(3).join("/");
-	const baseUrl = tokens.slice(0, 3).join("/");
-	return { program: program, baseUrl: baseUrl };
+    const tokens = window.location.href.split("/");
+    const program = tokens.slice(3).join("/");
+    const baseUrl = tokens.slice(0, 3).join("/");
+    return { program: program, baseUrl: baseUrl };
 }
 
 export function updateAddressBar(url: string) {
-	window.history.replaceState(null, "", url);
+    window.history.replaceState(null, "", url);
 }

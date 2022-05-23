@@ -3,10 +3,10 @@ import windowSlice from "./slices/windowSlice";
 import iconSlice from "./slices/iconSlice";
 
 const store = configureStore({
-	reducer: {
-		window: windowSlice,
-		icon: iconSlice,
-	},
+    reducer: {
+        window: windowSlice,
+        icon: iconSlice,
+    },
 });
 
 export default store;

@@ -6,12 +6,12 @@ import "@testing-library/jest-dom";
 // import { applications, FolderAppData } from "../components/Utils";
 
 test("Window tests", async () => {
-	// const user = userEvent.setup();
+    // const user = userEvent.setup();
 
-	render(<System openedPrograms={["test"]}/>);
+    render(<System openedPrograms={["test"]}/>);
 
-	// Check if icons are rendered
-	const window = screen.getByTestId(`window-test`);
-	expect(window).toBeInTheDocument();
+    // Check if icons are rendered
+    const window = screen.getByTestId(`window-test`);
+    expect(window).toBeInTheDocument();
 
 });
