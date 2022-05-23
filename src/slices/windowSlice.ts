@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { applications, updateAddressBar, getPaths } from "../components/Utils";
+import { updateAddressBar, getPaths } from "../components/Utils";
 
 type ProcessState = {
 	minimized: boolean;
@@ -11,8 +11,6 @@ const windowSlice = createSlice({
 		processes: {} as { [pid: string]: ProcessState },
 		windowsOrder: [] as string[],
 		windowInFocus: "",
-		// iconsOrder: (applications.desktop as FolderAppData).files,
-		// iconSelected: ""
 	},
 	reducers: {
 		// Mount a new program or restore a minimized program
@@ -20,6 +18,7 @@ const windowSlice = createSlice({
 			const program = action.payload;
 			state.processes[program] = { minimized: false };
 			state.windowInFocus = program;
+			// focus window (same logic as the focus reducer)
 			if (!state.windowsOrder.includes(program)) {
 				// if program was not rendered, just add it to the end of list
 				state.windowsOrder.push(program);

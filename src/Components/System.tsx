@@ -18,7 +18,7 @@ import homeIcon from "../assets/icons/house.png";
 import cross from "../assets/icons/cross.svg";
 
 type SystemProps = {
-	openedPrograms?: string[]
+	openedPrograms?: string[];
 };
 
 export default function System(props: SystemProps) {
@@ -30,12 +30,11 @@ export default function System(props: SystemProps) {
 
 	useEffect(() => {
 		if (props.openedPrograms) {
-			props.openedPrograms.forEach(program => {
-				dispatch({ type: "window/mount", payload: program })
+			props.openedPrograms.forEach((program) => {
+				dispatch({ type: "window/mount", payload: program });
 			});
 		}
-	}, [props, dispatch])
-	
+	}, [props, dispatch]);
 
 	// Link type contents are handled in System component
 	function buildWindowContent(appData: AppData) {
@@ -67,7 +66,7 @@ export default function System(props: SystemProps) {
 			<button
 				className={program === windowInFocus ? "Task Selected" : "Task"}
 				key={program}
-				onClick={() => dispatch({ type: "window/mount", payload: program })}
+				onClick={() => dispatch({ type: "window/focus", payload: program })}
 			>
 				<img
 					className="TaskIcon"
@@ -80,7 +79,7 @@ export default function System(props: SystemProps) {
 					src={cross}
 					alt={"Close"}
 					onClick={(e) => {
-						// stop click event from propagating to mountWindow()
+						// stop click event from propagating to mount action
 						e.stopPropagation();
 						dispatch({ type: "window/unmount", payload: program });
 					}}
@@ -100,13 +99,7 @@ export default function System(props: SystemProps) {
 				x: 50,
 				y: 120 * index + 50,
 			};
-			const icon = (
-				<Icon
-					key={program}
-					program={program}
-					initialPos={pos}
-				/>
-			);
+			const icon = <Icon key={program} program={program} initialPos={pos} />;
 			desktopIcons.push(icon);
 		}
 		return desktopIcons;
