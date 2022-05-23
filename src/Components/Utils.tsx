@@ -71,6 +71,6 @@ export function getPaths() {
     return { program: program, baseUrl: baseUrl };
 }
 
-export function updateAddressBar(url: string) {
-    window.history.replaceState(null, "", url);
+export function setAddressBar(path: string) {
+    window.history.replaceState(null, "", getPaths().baseUrl + '/' + path);
 }

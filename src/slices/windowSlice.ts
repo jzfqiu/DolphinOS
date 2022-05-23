@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { updateAddressBar, getPaths } from "../components/Utils";
+import { setAddressBar } from "../components/Utils";
 
 type ProcessState = {
     minimized: boolean;
@@ -29,7 +29,7 @@ const windowSlice = createSlice({
                     (item) => item !== program
                 );
             }
-            updateAddressBar(getPaths().baseUrl + "/" + program);
+            setAddressBar(program);
         },
 
         // Remove program from processes list, destroy its state (size, pos)
@@ -40,7 +40,7 @@ const windowSlice = createSlice({
                 (item) => item !== program
             );
             state.windowInFocus = "";
-            updateAddressBar(getPaths().baseUrl);
+            setAddressBar("");
         },
 
         // Focus in on a program by updating windowsOrder
@@ -58,13 +58,14 @@ const windowSlice = createSlice({
                 state.windowsOrder.push(program);
             }
             state.windowInFocus = program;
-            updateAddressBar(getPaths().baseUrl + "/" + program);
+            setAddressBar(program);
         },
 
         minimize: (state, action) => {
             const program: string = action.payload;
             state.processes[program].minimized = true;
             state.windowInFocus = "";
+            setAddressBar("");
         },
 
         minimizeAll: (state) => {
@@ -72,6 +73,7 @@ const windowSlice = createSlice({
                 state.processes[program].minimized = true;
             }
             state.windowInFocus = "";
+            setAddressBar("");
         },
     },
 });
