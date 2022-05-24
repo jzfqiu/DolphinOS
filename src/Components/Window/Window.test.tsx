@@ -5,34 +5,40 @@ import userEvent from "@testing-library/user-event";
 import App from "../../App";
 // import { applications, FolderAppData } from "../components/Utils";
 
-test("Window tests", async () => {
+describe('Window', ()=>{
     const user = userEvent.setup();
+    
+    it("renders", () => {
+        render(<App openedPrograms={["test", "desktop"]}/>);
+        const test = screen.getByTestId(`window-test`);
+        const desktop = screen.getByTestId(`window-desktop`);
+        expect(test).toBeInTheDocument();
+        expect(desktop).toBeInTheDocument();
+    })
+    
+    it("can be maximized", async () => {
+        render(<App openedPrograms={["test"]}/>);
+        await user.click(screen.getByTestId("window-maximize-test"));
+        expect(screen.getByTestId(`window-test`)).toHaveStyle(`width: ${window.innerWidth-2}px`);
+    })
+    
+    it("can be minimized", async () => {
+        render(<App openedPrograms={["test"]}/>);
+        const test = screen.getByTestId(`window-test`);
+        await user.click(screen.getByTestId("window-minimize-test"));
+        expect(test).not.toBeVisible();
+        await user.click(screen.getByTestId("task-test"));
+        expect(test).toBeVisible();
+        // TODO: configure test to allow ref
+        // https://stackoverflow.com/questions/53721999/react-jest-enzyme-how-to-mock-ref-properties/53739669#53739669
+        // expect(desktop).toHaveStyle(`width: ${window.innerWidth-2}px`);
+    })
 
-    render(<App openedPrograms={["test", "desktop"]}/>);
-
-    // Check if the windows are rendered
-    const test = screen.getByTestId(`window-test`);
-    const desktop = screen.getByTestId(`window-desktop`);
-    expect(test).toBeInTheDocument();
-    expect(desktop).toBeInTheDocument();
-
-    // Check maximize and restore
-    // const restoreWidth = test.style.width;
-    await user.click(screen.getByTestId("window-maximize-desktop"));
-    expect(desktop).toHaveStyle(`width: ${window.innerWidth-2}px`);
-    // TODO: configure test to allow ref
-    // https://stackoverflow.com/questions/53721999/react-jest-enzyme-how-to-mock-ref-properties/53739669#53739669
-    // await user.click(screen.getByTestId("window-restore-test")); 
-    // expect(test).toHaveStyle(`width: ${restoreWidth}`);
-
-    // Check minimize and restore
-    await user.click(screen.getByTestId("window-minimize-desktop"));
-    expect(desktop).not.toBeVisible();
-    await user.click(screen.getByTestId("task-desktop"));
-    expect(desktop).toBeVisible();
-    expect(desktop).toHaveStyle(`width: ${window.innerWidth-2}px`);
-
-    // Close window
-    await user.click(screen.getByTestId("window-close-desktop"));
-    expect(screen.queryByTestId("window-desktop")).not.toBeInTheDocument();
-});
+    it("can be closed", async () => {
+        render(<App openedPrograms={["test"]}/>);
+        const test = screen.getByTestId(`window-test`);
+        expect(test).toBeVisible();
+        await user.click(screen.getByTestId("window-close-test"));
+        expect(screen.queryByTestId("window-test")).not.toBeInTheDocument();
+    })
+})

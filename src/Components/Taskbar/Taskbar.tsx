@@ -46,11 +46,12 @@ export function Taskbar() {
 	}
 
 	return (
-		<div className="Taskbar">
+		<div className="Taskbar" data-testid="taskbar">
 			<div>
 				<button
 					className="Task TaskDesktop"
 					onClick={() => dispatch({ type: "window/minimizeAll" })}
+					data-testid="task-desktop"
 				>
 					<img className="TaskIcon" src={homeIcon} alt={"Desktop"}></img>
 					<p>Desktop</p>
