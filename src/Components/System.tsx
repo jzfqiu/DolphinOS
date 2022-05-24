@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 import Window from "./Window";
 import Icon from "./Icon";
-import Markdown from "./Markdown";
-import Folder from "./Folder";
-import Browser from "./Browser";
 import {
-    AppData,
     FolderAppData,
-    FileAppData,
     applications,
+    buildContent,
 } from "./Utils";
 import { RootState } from "../store";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,26 +12,10 @@ import "../styles/System.sass";
 import Taskbar from "./Taskbar";
 
 
-// Link type contents are handled in System component
-function buildWindowContent(appData: AppData) {
-    switch (appData.type) {
-        case "Document":
-            return <Markdown appData={appData as FileAppData} />;
-        case "Folder":
-            return <Folder appData={appData as FolderAppData} />;
-        case "Image":
-            return <div>TODO</div>;
-        case "HTML":
-            return <Browser appData={appData as FileAppData} />;
-        default:
-            return <div>Unknown Contents</div>;
-    }
-}
-
 function buildWindow(program: string) {
     return (
         <Window key={program} program={program}>
-            {buildWindowContent(applications[program])}
+            {buildContent(applications[program])}
         </Window>
     );
 }

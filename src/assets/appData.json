@@ -2,7 +2,7 @@
 	"desktop": {
 		"type": "Folder",
 		"date": "-",
-		"title": "Some Folder",
+		"title": "Desktop",
 		"files": ["writings", "links", "readme", "about"]
 	},
 	"404": {

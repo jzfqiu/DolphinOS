@@ -1,0 +1,32 @@
+@use "Common"
+    
+.Mobile
+    width: 100%
+    height: 100%
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
+
+    .MobileHeader
+        @include Common.flex-and-center
+        background-color: Common.$SystemBackground
+        width: 100%
+        filter: drop-shadow(1px 0 2px lightgray)
+
+        & img
+            width: 30px
+            margin: 5px
+        & p
+            width: calc( 100% - 40px )
+            text-align: center
+        & span
+            width: 40px
+        & .MobileHeaderClose
+            width: 20px
+            margin: 10px
+    
+    .FolderItem
+        margin-bottom: 5px
+        grid-template-columns: 40px minmax(200px, auto) 0 110px
+        gap: 5px 0
+        & div
+            white-space: normal
+        

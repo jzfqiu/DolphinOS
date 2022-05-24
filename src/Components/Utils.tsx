@@ -5,6 +5,10 @@ import linkIcon from "../assets/icons/link.png";
 import imageIcon from "../assets/icons/picture.png";
 
 import applications_data from "../assets/appData.json";
+import React from "react";
+import Markdown from "./Markdown";
+import Folder from "./Folder";
+import Browser from "./Browser";
 export const applications = applications_data as Applications;
 
 /*
@@ -73,4 +77,20 @@ export function getPaths() {
 
 export function setAddressBar(path: string) {
     window.history.replaceState(null, "", getPaths().baseUrl + '/' + path);
+}
+
+// Link type contents are handled in Folder component
+export function buildContent(appData: AppData, mobile=false) {
+    switch (appData.type) {
+        case "Document":
+            return <Markdown appData={appData as FileAppData} />;
+        case "Folder":
+            return <Folder appData={appData as FolderAppData} mobile={mobile} />;
+        case "Image":
+            return <div>TODO</div>;
+        case "HTML":
+            return <Browser appData={appData as FileAppData} />;
+        default:
+            return <div>Unknown Contents</div>;
+    }
 }
