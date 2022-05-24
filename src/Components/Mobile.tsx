@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { applications, buildContent } from "./Utils";
-import cross from "../assets/icons/cross.svg";
+import previous from "../assets/icons/previous.png";
 import dolphin from "../assets/icons/dolphin.png";
 import "../styles/Mobile.sass";
 
@@ -21,18 +21,23 @@ export default function Mobile(props: {}) {
 		<div className="Mobile">
 			<div className="MobileHeader">
 				{program === "desktop" ? (
-					<img src={dolphin} alt={"Dolphin"}></img>
+					// <span className="MobileHeaderClose"></span>
+                    <img
+                    className="MobileHeaderClose"
+						src={dolphin}
+						alt={"Logo"}
+					/>
 				) : (
 					<img
                     className="MobileHeaderClose"
-						src={cross}
-						alt={"Close"}
+						src={previous}
+						alt={"Back"}
 						onClick={() => {
 							dispatch({ type: "window/unmount", payload: program });
 						}}
 					/>
 				)}
-				<p>{appData.title}</p>
+				<p>{appData.type === "Folder" ? appData.title : ""}</p>
                 <span></span>
 			</div>
             <div className="MobileContent">

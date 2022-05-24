@@ -14,23 +14,23 @@ a
 
     .MobileHeader
         @include Common.flex-and-center
-        min-height: 30px
+        height: 30px
         padding: 10px 0
-        background-color: Common.$SystemBackground
+        // background-color: Common.$SystemBackground
         width: 100%
-        filter: drop-shadow(1px 0 2px lightgray)
+        // filter: drop-shadow(1px 0 2px lightgray)
 
         & img
-            width: 30px
-            margin: 5px
+            width: 20px
+            margin: 10px 20px
         & p
             width: calc( 100% - 80px )
-            text-align: center
+            // text-align: center
+            white-space: nowrap
+            overflow: hidden
+            font-size: 1.4em
         & span
-            width: 40px
-        & .MobileHeaderClose
-            width: 15px
-            margin: 10px
+            width: 40px        
     
     .FolderItem
         margin: 10px
