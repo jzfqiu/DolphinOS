@@ -1,5 +1,5 @@
 import { render, screen } from "./test-utils";
-import System from "../components/System";
+import Desktop from "../components/Desktop";
 import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
@@ -8,7 +8,7 @@ import userEvent from "@testing-library/user-event";
 test("Window tests", async () => {
     const user = userEvent.setup();
 
-    render(<System openedPrograms={["test", "desktop"]}/>);
+    render(<Desktop openedPrograms={["test", "desktop"]}/>);
 
     // Check if the windows are rendered
     const test = screen.getByTestId(`window-test`);

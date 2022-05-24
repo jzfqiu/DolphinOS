@@ -1,5 +1,5 @@
 import { render, screen } from "./test-utils";
-import System from "../components/System";
+import Desktop from "../components/Desktop";
 import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
@@ -15,7 +15,7 @@ test("Icon integration tests", async () => {
     const p1 = desktopFiles[0];
     const p2 = desktopFiles[1];
 
-    render(<System />);
+    render(<Desktop />);
 
     // Check if icons are rendered
     const icon1 = screen.getByTestId(`icon-${p1}`);

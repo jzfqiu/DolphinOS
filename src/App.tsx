@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Mobile from "./components/Mobile";
-import System from "./components/System";
+import Desktop from "./components/Desktop";
 import { getPaths } from "./components/Utils";
 
 
@@ -33,5 +33,5 @@ export default function App() {
     if (isMobile)
         return <Mobile/>;
     else
-        return <System/>;
+        return <Desktop/>;
 }

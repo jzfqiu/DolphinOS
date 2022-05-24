@@ -8,12 +8,23 @@ import "../styles/Mobile.sass";
 
 export default function Mobile(props: {}) {
 	const dispatch = useDispatch();
-	const windowInFocus = useSelector(
-		(state: RootState) => state.window.windowInFocus
+	const program = useSelector(
+		(state: RootState) => {
+            if (state.window.windowInFocus !== "")
+                return state.window.windowInFocus
+            else
+                return "desktop"
+        }
 	);
-
-	let program = windowInFocus;
-	if (program === "") program = "desktop";
+    const prevProgram = useSelector(
+        (state: RootState) => {
+            const windowOrder = state.window.windowsOrder;
+            if (windowOrder.length >= 2)
+                return windowOrder[windowOrder.length-2]
+            else
+                return "desktop"
+        }
+    )
 
 	const appData = applications[program];
 
@@ -34,6 +45,7 @@ export default function Mobile(props: {}) {
 						alt={"Back"}
 						onClick={() => {
 							dispatch({ type: "window/unmount", payload: program });
+							dispatch({ type: "window/focus", payload: prevProgram });
 						}}
 					/>
 				)}

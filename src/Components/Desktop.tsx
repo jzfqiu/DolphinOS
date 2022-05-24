@@ -20,7 +20,7 @@ function buildWindow(program: string) {
     );
 }
 
-export default function System(props: {openedPrograms?: string[]}) {
+export default function Desktop(props: {openedPrograms?: string[]}) {
     const dispatch = useDispatch();
     const processes = useSelector((state: RootState) => state.window.processes);
 
