@@ -23,4 +23,4 @@ const iconSlice = createSlice({
 });
 
 export const { select } = iconSlice.actions;
-export default iconSlice.reducer;
+export default iconSlice.reducer ;

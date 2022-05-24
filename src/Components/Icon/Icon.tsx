@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { applications, getIcon, Point } from "./Utils";
-import "../styles/Icon.sass";
+import { applications, getIcon, Point } from "../Utils";
+import "./Icon.sass";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "../../store";
 
 type IconProps = {
     program: string;
     initialPos: Point;
 };
 
-export default function Icon(props: IconProps) {
+export function Icon(props: IconProps) {
     
     // Global states
     const dispatch = useDispatch();

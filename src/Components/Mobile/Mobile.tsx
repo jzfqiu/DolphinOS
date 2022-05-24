@@ -1,12 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { applications, buildContent } from "./Utils";
-import previous from "../assets/icons/previous.png";
-import dolphin from "../assets/icons/dolphin.png";
-import "../styles/Mobile.sass";
+import { RootState } from "../../store";
+import { applications, buildContent, previous, dolphin } from "../Utils";
+import "./Mobile.sass";
 
-export default function Mobile(props: {}) {
+export function Mobile() {
 	const dispatch = useDispatch();
 	const program = useSelector(
 		(state: RootState) => {

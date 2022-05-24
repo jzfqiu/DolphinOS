@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { duotoneLight as codeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
-import "../styles/Markdown.sass";
-import { FileAppData } from "./Utils";
+import "./Markdown.sass";
+import { FileAppData } from "../Utils";
 
 /**
  * Markdown contents inside of a window
  */
-export default function Markdown(props: { appData: FileAppData }) {
+export function Markdown(props: { appData: FileAppData }) {
     const [content, setContent] = useState("");
 
     useEffect(() => {

@@ -1,4 +1,4 @@
-@use "Common"
+@use "../../styles/Common"
 
 body
     overflow-y: scroll
@@ -14,7 +14,7 @@ a
 
     .MobileHeader
         @include Common.flex-and-center
-        height: 30px
+        height: 80px
         padding: 10px 0
         // background-color: Common.$SystemBackground
         width: 100%
@@ -25,7 +25,6 @@ a
             margin: 10px 20px
         & p
             width: calc( 100% - 80px )
-            // text-align: center
             white-space: nowrap
             overflow: hidden
             font-size: 1.4em
@@ -33,17 +32,16 @@ a
             width: 40px        
     
     .FolderItem
-        margin: 10px
+        margin: 20px 10px
         padding: 10px
         grid-template-columns: 40px 100px auto
         gap: 5px
-        & div
-            // enable line wrap
-            white-space: normal
         & .FolderItemIcon
             grid-row: 1 / 3
             width: 25px
         & .FolderItemTitle
+            // enable line wrap
+            white-space: normal
             grid-column: 2 / 4
         & .FolderItemType, & .FolderItemDate
             color: Common.$SystemGray
@@ -51,4 +49,10 @@ a
 
     .FolderHeader
         padding: 0 10px
+
+    .Markdown
+        // no top padding since title bar is blank
+        // reduced side padding for mobile experience
+        padding: 0 20px
+        
         

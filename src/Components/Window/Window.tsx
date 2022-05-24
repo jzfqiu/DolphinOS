@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import { applications } from "./Utils";
-import "../styles/Window.sass";
+import { applications } from "../Utils";
+import "./Window.sass";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "../../store";
 
 // Default window size in px
 const DefaultSize = {
@@ -15,13 +15,18 @@ const DefaultPos = {
 	y: 40,
 };
 
+const DesktopSize = {
+	x: window.innerWidth - 2, // 2*2px border
+	y: window.innerHeight - 2, 
+};
+
 type WindowProps = {
 	key: string;
 	program: string;
 	children?: JSX.Element;
 };
 
-export default function Window(props: WindowProps) {
+export function Window(props: WindowProps) {
 	const program = props.program;
 	const appData = applications[program];
 
@@ -51,10 +56,6 @@ export default function Window(props: WindowProps) {
 		pos: { x: 0, y: 0 },
 	});
 
-	const desktopSize = {
-		x: window.innerWidth - 2, // 2*2px border
-		y: window.innerHeight - 2, // Taskbar height
-	};
 	let cursorPos = { x: 0, y: 0 };
 
 	function handleMouseDown(event: React.MouseEvent<HTMLElement>) {
@@ -103,7 +104,7 @@ export default function Window(props: WindowProps) {
 		});
 		setMaximized(true);
 		setPos({ x: 0, y: 0 });
-		setSize(desktopSize);
+		setSize(DesktopSize);
 	}
 
 	// Restore to size before maximizing

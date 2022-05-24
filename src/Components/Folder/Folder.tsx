@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../styles/Folder.sass";
-import { getIcon, FolderAppData, Applications, LinkAppData } from "./Utils";
-import applications_data from "../assets/appData.json";
+import "./Folder.sass";
+import { getIcon, FolderAppData, Applications, LinkAppData } from "../Utils";
+import applications_data from "../../assets/appData.json";
 import { useDispatch } from "react-redux";
 
 const applications = applications_data as Applications;
@@ -11,7 +11,7 @@ type FolderProps = {
 	mobile?: boolean;
 };
 
-export default function Folder(props: FolderProps) {
+export function Folder(props: FolderProps) {
 	const [selected, setSelected] = useState("");
 
 	function selectFolderItem(

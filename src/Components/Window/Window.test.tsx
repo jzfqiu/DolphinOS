@@ -1,14 +1,14 @@
-import { render, screen } from "./test-utils";
-import Desktop from "../components/Desktop";
+import { render, screen } from "../../tests/test-utils";
 import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
+import App from "../../App";
 // import { applications, FolderAppData } from "../components/Utils";
 
 test("Window tests", async () => {
     const user = userEvent.setup();
 
-    render(<Desktop openedPrograms={["test", "desktop"]}/>);
+    render(<App openedPrograms={["test", "desktop"]}/>);
 
     // Check if the windows are rendered
     const test = screen.getByTestId(`window-test`);
@@ -20,6 +20,7 @@ test("Window tests", async () => {
     // const restoreWidth = test.style.width;
     await user.click(screen.getByTestId("window-maximize-desktop"));
     expect(desktop).toHaveStyle(`width: ${window.innerWidth-2}px`);
+    // TODO: configure test to allow ref
     // https://stackoverflow.com/questions/53721999/react-jest-enzyme-how-to-mock-ref-properties/53739669#53739669
     // await user.click(screen.getByTestId("window-restore-test")); 
     // expect(test).toHaveStyle(`width: ${restoreWidth}`);

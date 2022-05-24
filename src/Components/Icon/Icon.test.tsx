@@ -1,9 +1,9 @@
-import { render, screen } from "./test-utils";
-import Desktop from "../components/Desktop";
+import { render, screen } from "../../tests/test-utils";
+import { Desktop } from "../Desktop";
 import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { applications, FolderAppData } from "../components/Utils";
+import { applications, FolderAppData } from "../Utils";
 
 
 test("Icon integration tests", async () => {

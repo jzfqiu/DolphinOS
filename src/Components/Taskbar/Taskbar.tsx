@@ -1,12 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { getIcon, applications } from "./Utils";
-import cross from "../assets/icons/cross.svg";
-import homeIcon from "../assets/icons/house.png";
-import "../styles/Taskbar.sass";
+import { RootState } from "../../store";
+import { getIcon, applications, homeIcon, cross } from "../Utils";
+import "./Taskbar.sass";
 
-export default function Taskbar() {
+export function Taskbar() {
 	const dispatch = useDispatch();
 	const windowInFocus = useSelector(
 		(state: RootState) => state.window.windowInFocus

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { FileAppData } from "./Utils";
+import { FileAppData } from "../Utils";
 
 type BrowserProps = {
     appData: FileAppData;
 };
 
 
-export default function Browser(props: BrowserProps) {
+export function Browser(props: BrowserProps) {
     const [content, setContent] = useState("");
 
     useEffect(() => {
