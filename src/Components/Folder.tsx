@@ -8,7 +8,7 @@ const applications = applications_data as Applications;
 
 type FolderProps = {
 	appData: FolderAppData;
-    mobile?: boolean;
+	mobile?: boolean;
 };
 
 export default function Folder(props: FolderProps) {
@@ -40,14 +40,18 @@ export default function Folder(props: FolderProps) {
 			<div
 				key={program}
 				className={`FolderItem ${program === selected ? "selected" : ""}`}
-				onDoubleClick={() => props.mobile ? undefined : mount(program)}
-				onClick={() => props.mobile ?  mount(program) : undefined}
+				onDoubleClick={() => (props.mobile ? undefined : mount(program))}
+				onClick={() => (props.mobile ? mount(program) : undefined)}
 				onMouseDown={(e) => selectFolderItem(program, e)}
 			>
-				<img src={getIcon(appData.type)} alt={appData.type}></img>
-				<div>{applications[program].title}</div>
-				<div>{applications[program].type}</div>
-				<div>{applications[program].date}</div>
+				<img
+					className="FolderItemIcon"
+					src={getIcon(appData.type)}
+					alt={appData.type}
+				></img>
+				<div className="FolderItemTitle">{applications[program].title}</div>
+				<div className="FolderItemType">{applications[program].type}</div>
+				<div className="FolderItemDate">{applications[program].date}</div>
 			</div>
 		);
 	}
@@ -56,14 +60,18 @@ export default function Folder(props: FolderProps) {
 	for (const program of props.appData.files) {
 		items.push(buildFolderItems(program));
 	}
+
+	const folderHeader = (
+		<div className="FolderItem FolderHeader">
+			<div className="FolderItemIcon"></div>
+			<div className="FolderItemTitle">Name</div>
+			<div className="FolderItemType">Type</div>
+			<div className="FolderItemDate">Date Modified</div>
+		</div>
+	);
 	return (
 		<div className="Folder" onMouseDown={(e) => selectFolderItem("", e)}>
-			<div className="FolderItem FolderHeader">
-				<div></div>
-				<div>Name</div>
-				<div>Type</div>
-				<div>Date Modified</div>
-			</div>
+			{props.mobile ? undefined : folderHeader}
 			{items}
 		</div>
 	);
