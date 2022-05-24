@@ -6,7 +6,7 @@ import { RootState } from "../../store";
 
 // Default window size in px
 const DefaultSize = {
-	x: window.innerWidth * 0.8,
+	x: Math.min(window.innerWidth * 0.8, 1200),
 	y: window.innerHeight * 0.8,
 };
 

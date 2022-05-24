@@ -1,3 +1,8 @@
+
+<div align="center">
+<img width="400" src="https://github.com/jzfqiu/DolphinOS/raw/main/src/assets/geometric-dolphin-clear.png" alt="Geometric Dolphin" />
+</div>
+
 # DolphinOS
 
 ## About
@@ -18,8 +23,10 @@ More importantly, I want to use this project as a learning experience for how pr
 
 ## Todos
 
-- Mobile support
-- Unit tests for individual components
+- CI
+- Improve Mobile support
+- More tests for individual components
+- Add more fun stuff
 
 ## Resources
 
