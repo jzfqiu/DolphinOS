@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Folder.sass";
 import { getIcon, FolderAppData, Applications, LinkAppData } from "../Utils";
-import applications_data from "../../assets/appData.json";
+import applications_data from "../../appData.json";
 import { useDispatch } from "react-redux";
 
 const applications = applications_data as Applications;
