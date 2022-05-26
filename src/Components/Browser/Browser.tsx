@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FileAppData } from "../Utils";
+import { FileData } from "../Utils";
 
 type BrowserProps = {
-    appData: FileAppData;
+    appData: FileData;
 };
 
 

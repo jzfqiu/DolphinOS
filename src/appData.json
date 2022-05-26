@@ -6,19 +6,19 @@
 		"files": ["writings", "links", "readme"]
 	},
 	"404": {
-		"type": "Document",
+		"type": "Markdown",
 		"date": "-",
 		"title": "404 Not Found",
 		"filepath": "/contents/404.md"
 	},
 	"test": {
-		"type": "Document",
+		"type": "Markdown",
 		"date": "-",
 		"title": "test.md",
 		"filepath": "/contents/test.md"
 	},
 	"readme": {
-		"type": "Document",
+		"type": "Markdown",
 		"date": "-",
 		"title": "README.md",
 		"filepath": "/contents/README.md"
@@ -90,91 +90,91 @@
 		]
 	},
 	"context-integrity-gdpr-ccpa":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "May 9, 2022",
         "title": "Implications of Context Integrity on Data Privacy Regulations",
         "filepath": "/contents/Policy Writings/context-integrity-gdpr-ccpa.md"
     },
 	"cyber-analogy":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Apr 29, 2022",
         "title": "Cyber Analogies Revisited",
         "filepath": "/contents/Policy Writings/cyber-analogy.md"
     },
     "belgium-cybersecurity-profile":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Apr 17, 2022",
         "title": "Cybersecurity Profile: Belgium",
         "filepath": "/contents/Policy Writings/belgium-cybersecurity-profile.md"
     },
 	"react-bind":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Mar 20, 2022",
         "title": "Function Binding and React Eventlistener",
         "filepath": "/contents/Technical Writings/react-bind.md"
     },
 	"unitedrake":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Mar 14, 2022",
         "title": "Overview of NSA Spyware UNITEDRAKE",
         "filepath": "/contents/Policy Writings/unitedrake.md"
     },
 	"irresponsible-cyber-offense":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Mar 13, 2022",
         "title": "A Case for Irresponsible Cyber Offense",
         "filepath": "/contents/Policy Writings/irresponsible-cyber-offense.md"
     },
 	"apple-csam":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Feb 22, 2022",
         "title": "Apple's CSAM Scanning Feature: Choices and Consequences",
         "filepath": "/contents/Policy Writings/apple-csam.md"
     },
 	"bidens-executive-order-on-cybersecurity":{
-        "type": "Document",
+        "type": "Markdown",
         "date": "Feb 20, 2022",
         "title": "Biden's Executive Order on Cybersecurity: A Terrific Starting Point",
         "filepath": "/contents/Policy Writings/bidens-executive-order-on-cybersecurity.md"
     },
 	"china-us-cyberconflicts":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Dec 11, 2021",
         "title": "A Brief Introduction to US-China Cyberconflict in 2021",
         "filepath": "/contents/Policy Writings/china-us-cyberconflicts.md"
     },
 	"election-disinformation-2016-2020":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Nov 17, 2021",
         "title": "A Brief Comparison of Election Disinformation in 2016 and 2020",
         "filepath": "/contents/Policy Writings/election-disinformation-2016-2020.md"
     },
 	"es6-scopes":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Jun 25, 2020",
         "title": "ES6 Scopes",
         "filepath": "/contents/Technical Writings/es6-scopes.md"
     },
 	"es6-this":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Jun 17, 2020",
         "title": "ES6 'This'",
         "filepath": "/contents/Technical Writings/es6-this.md"
     },
 	"object-s":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "Jun 2, 2020",
         "title": "ES6 Object(s)",
         "filepath": "/contents/Technical Writings/object-s.md"
     },
 	"the-flow-of-time":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "May 17, 2020",
         "title": "The Flow of Time: ES6 Event Loop",
         "filepath": "/contents/Technical Writings/the-flow-of-time.md"
     },
 	"heap":{
-        "type": "Document",
+        "type": "Markdown",
 		"date": "May 10, 2020",
         "title": "Heap in Python",
         "filepath": "/contents/Technical Writings/heap.md"

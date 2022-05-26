@@ -1,8 +1,8 @@
-# DolphinOS
-
 <div align="center">
 <img width="400" src="https://github.com/jzfqiu/DolphinOS/raw/main/src/assets/geometric-dolphin-clear.png" alt="Geometric Dolphin" />
 </div>
+
+# DolphinOS
 
 ## About
 

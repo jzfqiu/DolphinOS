@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Folder.sass";
-import { getIcon, FolderAppData, Applications, LinkAppData } from "../Utils";
+import { getIcon, FolderAppData, Applications, LinkData } from "../Utils";
 import applications_data from "../../appData.json";
 import { useDispatch } from "react-redux";
 
@@ -27,7 +27,7 @@ export function Folder(props: FolderProps) {
 		// if program is a link, open it in a new tab in the browser
 		if (applications[program].type === "Link") {
 			window
-				.open((applications[program] as LinkAppData).url, "_blank")
+				.open((applications[program] as LinkData).url, "_blank")
 				?.focus();
 		} else {
 			dispatch({ type: "window/mount", payload: program });

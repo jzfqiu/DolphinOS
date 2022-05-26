@@ -4,6 +4,7 @@ import folderIcon from "../assets/icons/folder.png";
 import linkIcon from "../assets/icons/link.png";
 import imageIcon from "../assets/icons/picture.png";
 import homeIcon from "../assets/icons/house.png";
+import appIcon from "../assets/icons/script.png";
 
 import previous from "../assets/icons/previous.png";
 import dolphin from "../assets/icons/dolphin.png";
@@ -27,10 +28,8 @@ Ref: https://create-react-app.dev/docs/using-the-public-folder/
 
 */
 
-export type AppType = "Document" | "Link" | "Folder" | "Image" | "HTML";
-
 type BaseAppData = {
-	type: AppType;
+	type: string;
 	title: string;
 	date: string;
 	initialSize?: Point;
@@ -41,15 +40,15 @@ export type FolderAppData = BaseAppData & {
 	files: string[];
 };
 
-export type FileAppData = BaseAppData & {
+export type FileData = BaseAppData & {
 	filepath: string;
 };
 
-export type LinkAppData = BaseAppData & {
+export type LinkData = BaseAppData & {
 	url: string;
 };
 
-export type AppData = FolderAppData | FileAppData | LinkAppData;
+export type AppData = FolderAppData | FileData | LinkData | BaseAppData;
 
 export type Applications = { [pid: string]: AppData };
 
@@ -58,9 +57,9 @@ export type Point = {
 	y: number;
 };
 
-export function getIcon(type: AppType) {
+export function getIcon(type: string) {
 	switch (type) {
-		case "Document":
+		case "Markdown":
 			return documentIcon;
 		case "Folder":
 			return folderIcon;
@@ -71,7 +70,7 @@ export function getIcon(type: AppType) {
 		case "HTML":
 			return browserIcon;
 		default:
-			return documentIcon;
+			return appIcon;
 	}
 }
 
@@ -89,14 +88,14 @@ export function setAddressBar(path: string) {
 // Link type contents are handled in Folder component
 export function buildContent(appData: AppData, mobile = false) {
 	switch (appData.type) {
-		case "Document":
-			return <Markdown appData={appData as FileAppData} />;
+		case "Markdown":
+			return <Markdown appData={appData as FileData} />;
 		case "Folder":
 			return <Folder appData={appData as FolderAppData} mobile={mobile} />;
 		case "Image":
 			return <div>TODO</div>;
 		case "HTML":
-			return <Browser appData={appData as FileAppData} />;
+			return <Browser appData={appData as FileData} />;
 		default:
 			return <div>Unknown Contents</div>;
 	}
