@@ -4,6 +4,10 @@
 
 # DolphinOS
 
+![main](https://github.com/jzfqiu/DolphinOS/actions/workflows/node.js.yml/badge.svg)
+
+Frontend mock operating system built with React and TypeScript.
+
 ## About
 
 ### What is this?
