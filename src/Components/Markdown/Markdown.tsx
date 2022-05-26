@@ -3,12 +3,13 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { duotoneLight as codeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
 import "./Markdown.sass";
-import { FileAppData } from "../Utils";
+import { FileData } from "../Utils";
+import rehypeRaw from "rehype-raw";
 
 /**
  * Markdown contents inside of a window
  */
-export function Markdown(props: { appData: FileAppData }) {
+export function Markdown(props: { appData: FileData }) {
     const [content, setContent] = useState("");
 
     useEffect(() => {
@@ -28,6 +29,7 @@ export function Markdown(props: { appData: FileAppData }) {
         <div className="Markdown">
             {/* https://github.com/remarkjs/react-markdown#use-custom-components-syntax-highlight */}
             <ReactMarkdown
+                rehypePlugins={[rehypeRaw]}
                 children={content}
                 components={{
                     code({ node, inline, className, children, ...props }) {
