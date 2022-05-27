@@ -8,20 +8,23 @@ export function Mobile() {
 	const dispatch = useDispatch();
 	const program = useSelector(
 		(state: RootState) => {
-            if (state.window.windowInFocus !== "")
-                return state.window.windowInFocus
-            else
-                return "desktop"
+            if (state.window.windowInFocus !== ""){
+				return state.window.windowInFocus
+			}
+            else {
+				return "desktop"
+			}
         }
 	);
     const prevProgram = useSelector(
         (state: RootState) => {
             const windowOrder = state.window.windowsOrder;
-            if (windowOrder.length >= 2)
+            if (windowOrder.length >= 2) {
                 return windowOrder[windowOrder.length-2]
-            else
+            } else {
                 return "desktop"
-        }
+        	}
+		}
     )
 
 	const appData = applications[program];
@@ -30,7 +33,6 @@ export function Mobile() {
 		<div className="Mobile">
 			<div className="MobileHeader">
 				{program === "desktop" ? (
-					// <span className="MobileHeaderClose"></span>
                     <img
                     className="MobileHeaderClose"
 						src={dolphin}

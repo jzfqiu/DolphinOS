@@ -26,7 +26,8 @@ export function Desktop() {
 	}
 
 	let windows = [];
-	for (const program in processes) {
+	// https://google.github.io/styleguide/tsguide.html#iterating-objects
+	for (const program of Object.keys(processes)) {
 		windows.push(
 			<Window key={program} program={program}>
 				{buildContent(applications[program])}

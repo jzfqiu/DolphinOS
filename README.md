@@ -20,6 +20,22 @@ DolphinOS is my attempt to learn React, then TypeScript, then Redux, then Jest. 
 
 More importantly, I want to use this project as a learning experience for how professional software engineers approach their work. I try to pay attention to the clarity and maintainability of my code, as if someone else (me) has to work on this project five years from now. Thinking about issues that affect a large codebase maintained by hundreds of professional with such as small personal project may sound a bit ridiculous, but in lieu of a collaborative software development experience one would typically find in an internship, this is the best I can do.
 
+### What exactly did you do?
+
+Avoiding surprising construct: Sometimes doing things dynamically can be confusing. For example, fetching a list of programs from `FolderData` type data in `appData.json` could lead to runtime error in weird places, if the program is listed in the folder but does not exist in the data:
+
+```typescript
+    TypeError: Cannot read properties of undefined (reading 'type')
+
+      88 | // Link type contents are handled in Folder component
+      89 | export function buildContent(appData: AppData, mobile = false) {
+    > 90 |      switch (appData.type) {
+         |                      ^
+      91 |              case "Markdown":
+      92 |                      return <Markdown appData={appData as FileData} />;
+      93 |              case "Folder":
+```
+
 ## Deployment
 
 The project is build with Create React App.

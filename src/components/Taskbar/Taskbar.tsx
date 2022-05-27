@@ -41,7 +41,7 @@ export function Taskbar() {
 	}
 
 	let tasks = [];
-	for (const program in processes) {
+	for (const program of Object.keys(processes)) {
 		tasks.push(buildTask(program));
 	}
 
