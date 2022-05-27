@@ -36,6 +36,9 @@ Avoiding surprising construct: Sometimes doing things dynamically can be confusi
       93 |              case "Folder":
 ```
 
+
+TODO...
+
 ## Deployment
 
 The project is build with Create React App.
@@ -59,3 +62,5 @@ The project is build with Create React App.
 - [Test principles](https://kentcdodds.com/blog/write-tests)
 - [Test query selector with `data-testid`](https://kentcdodds.com/blog/making-your-ui-tests-resilient-to-change): "The core issue is that the relationship between the test and the source code is too implicit. We can overcome this issue if we make that relationship more explicit." 
 - [CI/CD for frontend developers](https://blog.maximeheckel.com/posts/guide-to-cicd-for-frontend-developers/)
+- [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
+- [Project Example: Shopify/polaris-react](https://github.com/Shopify/polaris/tree/main/polaris-react)
