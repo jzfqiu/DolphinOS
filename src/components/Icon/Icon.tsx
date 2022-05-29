@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { applications, getIcon, Point } from "../Utils";
+import { getAppData, getIcon, Point } from "../Utils";
 import "./Icon.sass";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -20,16 +20,15 @@ export function Icon(props: IconProps) {
 
     // Local states
     const [pos, setPos] = useState(props.initialPos);
-
-    const program = props.program;
-    const appData = applications[program];
+ 
+    const appData = getAppData(props.program);
     const image = getIcon(appData.type);
     let cursorPos = { x: 0, y: 0 };
 
     function handleMouseDown(event: React.MouseEvent<HTMLElement>) {
         // Stops mousedown even from propagating into desktop DOM
         event.stopPropagation();
-        dispatch({ type: "icon/select", payload: program });
+        dispatch({ type: "icon/select", payload: props.program });
         cursorPos = {
             x: event.clientX - pos.x,
             y: event.clientY - pos.y,
@@ -55,17 +54,17 @@ export function Icon(props: IconProps) {
 
     return (
         <div
-            className={`icon ${iconSelected === program ? "selected" : ""}`}
+            className={`icon ${iconSelected === props.program ? "selected" : ""}`}
             style={{
                 left: pos.x + "px",
                 top: pos.y + "px",
-                zIndex: iconsOrder.indexOf(program),
+                zIndex: iconsOrder.indexOf(props.program),
             }}
             onMouseDown={handleMouseDown}
             onDoubleClick={() =>
                 dispatch({ type: "window/mount", payload: props.program })
             }
-            data-testid={`icon-${program}`}
+            data-testid={`icon-${props.program}`}
         >
             <img
                 src={image}

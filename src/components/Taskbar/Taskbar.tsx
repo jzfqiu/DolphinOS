@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { getIcon, applications, homeIcon, cross } from "../Utils";
+import { getIcon, homeIcon, cross, getAppData } from "../Utils";
 import "./Taskbar.sass";
 
 export function Taskbar() {
@@ -12,20 +12,20 @@ export function Taskbar() {
 	const processes = useSelector((state: RootState) => state.window.processes);
 
 	function buildTask(program: string) {
-		const appData = applications[program];
+		const appData = getAppData(program);
 		return (
 			<button
 				className={program === windowInFocus ? "Task Selected" : "Task"}
 				key={program}
 				onClick={() => dispatch({ type: "window/mount", payload: program })}
-                data-testid={`task-${program}`}
+				data-testid={`task-${program}`}
 			>
 				<img
 					className="TaskIcon"
 					src={getIcon(appData.type)}
 					alt={appData.type}
 				></img>
-				<p>{appData.title}</p>
+				<p>{appData.title}</p>``
 				<img
 					className="TaskClose"
 					src={cross}

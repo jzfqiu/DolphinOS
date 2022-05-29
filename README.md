@@ -20,9 +20,13 @@ DolphinOS is my attempt to learn React, then TypeScript, then Redux, then Jest. 
 
 More importantly, I want to use this project as a learning experience for how professional software engineers approach their work. I try to pay attention to the clarity and maintainability of my code, as if someone else (me) has to work on this project five years from now. Thinking about issues that affect a large codebase maintained by hundreds of professional with such as small personal project may sound a bit ridiculous, but in lieu of a collaborative software development experience one would typically find in an internship, this is the best I can do.
 
-### What exactly did you do?
+<!-- ### What exactly did you do?
 
-Avoiding surprising construct: Sometimes doing things dynamically can be confusing. For example, fetching a list of programs from `FolderData` type data in `appData.json` could lead to runtime error in weird places, if the program is listed in the folder but does not exist in the data:
+- **Follow style guides and best practices**
+- **Reflect on design choices**
+- **Learn from real-world examples**
+
+Sometimes doing things dynamically can be confusing. For example, fetching a list of programs from `FolderData` type data in `appData.json` could lead to runtime error in weird places, if the program is listed in the folder but does not exist in the data:
 
 ```typescript
     TypeError: Cannot read properties of undefined (reading 'type')
@@ -35,11 +39,10 @@ Avoiding surprising construct: Sometimes doing things dynamically can be confusi
       92 |                      return <Markdown appData={appData as FileData} />;
       93 |              case "Folder":
 ```
+ -->
 
 
-TODO...
-
-## Deployment
+## Build
 
 The project is build with Create React App.
 
@@ -50,17 +53,26 @@ The project is build with Create React App.
 
 ## Todos
 
-- CI
 - Improve Mobile support
+- Dark mode
 - More tests for individual components
 - Add more fun stuff
 
 ## Resources
 
-- [Icon source](https://www.flaticon.com/packs/technology-icon-collection/)
-- [Jest cannot transform ESM in React-Markdown](https://github.com/facebook/create-react-app/issues/11946)
+### Design and Style
+
+- [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
+- [Project Example: Shopify/polaris-react](https://github.com/Shopify/polaris/tree/main/polaris-react)
+- [React component design priciples](https://overreacted.io/writing-resilient-components/)
 - [Test principles](https://kentcdodds.com/blog/write-tests)
 - [Test query selector with `data-testid`](https://kentcdodds.com/blog/making-your-ui-tests-resilient-to-change): "The core issue is that the relationship between the test and the source code is too implicit. We can overcome this issue if we make that relationship more explicit." 
 - [CI/CD for frontend developers](https://blog.maximeheckel.com/posts/guide-to-cicd-for-frontend-developers/)
-- [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
-- [Project Example: Shopify/polaris-react](https://github.com/Shopify/polaris/tree/main/polaris-react)
+
+### Issues
+
+- [Jest cannot transform ESM in React-Markdown](https://github.com/facebook/create-react-app/issues/11946)
+
+### Assets Credit
+
+- [Icon source](https://www.flaticon.com/packs/technology-icon-collection/)

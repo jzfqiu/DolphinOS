@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import "./Folder.sass";
-import { getIcon, FolderAppData, Applications, LinkData } from "../Utils";
-import applications_data from "../../appData.json";
+import { getIcon, FolderData, LinkData, getAppData } from "../Utils";
 import { useDispatch } from "react-redux";
 
-const applications = applications_data as Applications;
 
 type FolderProps = {
-	appData: FolderAppData;
+	appData: FolderData;
 	mobile?: boolean;
 };
 
@@ -25,9 +23,10 @@ export function Folder(props: FolderProps) {
 
 	function mount(program: string) {
 		// if program is a link, open it in a new tab in the browser
-		if (applications[program].type === "Link") {
+		const appData = getAppData(program);
+		if (appData.type === "Link") {
 			window
-				.open((applications[program] as LinkData).url, "_blank")
+				.open((appData as LinkData).url, "_blank")
 				?.focus();
 		} else {
 			dispatch({ type: "window/mount", payload: program });
@@ -35,7 +34,7 @@ export function Folder(props: FolderProps) {
 	}
 
 	function buildFolderItems(program: string) {
-		const appData = applications[program];
+		const appData = getAppData(program);
 		return (
 			<div
 				key={program}
@@ -49,9 +48,9 @@ export function Folder(props: FolderProps) {
 					src={getIcon(appData.type)}
 					alt={appData.type}
 				></img>
-				<div className="FolderItemTitle">{applications[program].title}</div>
-				<div className="FolderItemType">{applications[program].type}</div>
-				<div className="FolderItemDate">{applications[program].date}</div>
+				<div className="FolderItemTitle">{appData.title}</div>
+				<div className="FolderItemType">{appData.type}</div>
+				<div className="FolderItemDate">{appData.date}</div>
 			</div>
 		);
 	}

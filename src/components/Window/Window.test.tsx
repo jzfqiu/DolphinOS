@@ -3,7 +3,7 @@ import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import App from "../../App";
-// import { applications, FolderAppData } from "../components/Utils";
+// import { applications, FolderData } from "../components/Utils";
 
 describe('Window', ()=>{
     const user = userEvent.setup();

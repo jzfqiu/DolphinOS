@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { applications, FolderAppData } from "../components/Utils";
+import { appDesktop,  FolderData } from "../components/Utils";
 
 const iconSlice = createSlice({
     name: "icon",
     initialState: {
-        iconsOrder: (applications.desktop as FolderAppData).files,
+        iconsOrder: (appDesktop as FolderData).files,
         iconSelected: "",
     },
     reducers: {

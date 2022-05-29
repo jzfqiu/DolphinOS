@@ -3,12 +3,12 @@ import { Desktop } from "../Desktop";
 import React from "react";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-import { applications, FolderAppData } from "../Utils";
+import { appDesktop, FolderData } from "../Utils";
 
 
 test("Icon integration tests", async () => {
     const user = userEvent.setup();
-    const desktopFiles = (applications.desktop as FolderAppData).files;
+    const desktopFiles = (appDesktop as FolderData).files;
     const nIcons = desktopFiles.length;
 
     // test the first 2 programs

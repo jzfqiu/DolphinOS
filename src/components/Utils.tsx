@@ -15,17 +15,12 @@ import React from "react";
 import { Markdown } from "./Markdown";
 import { Folder } from "./Folder";
 import { Browser } from "./Browser";
-export const applications = applications_data as Applications;
 
 export { previous, dolphin, homeIcon, cross };
 
 /*
-
-Some assets are placed in the public folder for expandability, since I don't 
-want to add another require statement each time I add a file. 
-
-Ref: https://create-react-app.dev/docs/using-the-public-folder/ 
-
+Most contents are placed in the public folder for expandability
+https://create-react-app.dev/docs/using-the-public-folder/ 
 */
 
 type BaseAppData = {
@@ -36,7 +31,7 @@ type BaseAppData = {
 	initialPos?: Point;
 };
 
-export type FolderAppData = BaseAppData & {
+export type FolderData = BaseAppData & {
 	files: string[];
 };
 
@@ -48,9 +43,31 @@ export type LinkData = BaseAppData & {
 	url: string;
 };
 
-export type AppData = FolderAppData | FileData | LinkData | BaseAppData;
+export type AppData = FolderData | FileData | LinkData | BaseAppData;
 
-export type Applications = { [pid: string]: AppData };
+// https://google.github.io/styleguide/tsguide.html#indexable-key-string-number-type
+export const applications = new Map(Object.entries(applications_data)) as Map<
+	string,
+	AppData
+>;
+
+export const app404 = {
+	type: "Markdown",
+	title: "404 Not Found",
+	date: "-",
+} as AppData;
+
+export const getAppData = (program: string) =>
+	applications.get(program) || app404;
+
+export const appDesktop =
+	(applications.get("desktop") as FolderData) ||
+	({
+		type: "Folder",
+		title: "DolphinOS",
+		date: "-",
+		files: [""],
+	} as FolderData);
 
 export type Point = {
 	x: number;
@@ -91,7 +108,7 @@ export function buildContent(appData: AppData, mobile = false) {
 		case "Markdown":
 			return <Markdown appData={appData as FileData} />;
 		case "Folder":
-			return <Folder appData={appData as FolderAppData} mobile={mobile} />;
+			return <Folder appData={appData as FolderData} mobile={mobile} />;
 		case "Image":
 			return <div>TODO</div>;
 		case "HTML":

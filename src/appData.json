@@ -3,7 +3,7 @@
 		"type": "Folder",
 		"date": "-",
 		"title": "Desktop",
-		"files": ["writings", "links", "readme"]
+		"files": ["writings", "links", "readme", "about"]
 	},
 	"404": {
 		"type": "Markdown",
@@ -21,7 +21,7 @@
 		"type": "Markdown",
 		"date": "-",
 		"title": "README.md",
-		"filepath": "/contents/README.md"
+		"filepath": "https://raw.githubusercontent.com/jzfqiu/DolphinOS/main/README.md"
 	},
 	"about": {
 		"type": "HTML",

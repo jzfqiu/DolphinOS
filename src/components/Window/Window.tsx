@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { applications } from "../Utils";
+import { app404, applications } from "../Utils";
 import "./Window.sass";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -28,7 +28,8 @@ type WindowProps = {
 
 export function Window(props: WindowProps) {
 	const program = props.program;
-	const appData = applications[program];
+	// get indexed appData; default 404 if program does not exist
+	const appData = applications.get(program) || app404;
 
 	// Global States
 	const dispatch = useDispatch();

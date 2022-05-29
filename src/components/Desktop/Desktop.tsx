@@ -1,7 +1,7 @@
 import React from "react";
 import { Window } from "../Window";
 import { Icon } from "../Icon";
-import { FolderAppData, applications, buildContent } from "../Utils";
+import { FolderData, buildContent, appDesktop, getAppData } from "../Utils";
 import { RootState } from "../../store";
 import { useSelector, useDispatch } from "react-redux";
 import "./Desktop.sass";
@@ -15,7 +15,7 @@ export function Desktop() {
 	// special apps like desktop is guaranteed to exist in applications
 	// https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
 	for (const [index, program] of (
-		applications.desktop as FolderAppData
+		appDesktop as FolderData
 	).files.entries()) {
 		const pos = {
 			x: 50,
@@ -30,7 +30,7 @@ export function Desktop() {
 	for (const program of Object.keys(processes)) {
 		windows.push(
 			<Window key={program} program={program}>
-				{buildContent(applications[program])}
+				{buildContent(getAppData(program))}
 			</Window>
 		);
 	}
