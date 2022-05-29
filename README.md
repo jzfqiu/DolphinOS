@@ -75,4 +75,5 @@ The project is build with Create React App.
 
 ### Assets Credit
 
-- [Icon source](https://www.flaticon.com/packs/technology-icon-collection/)
+- [File Icon source](https://www.flaticon.com/packs/technology-icon-collection/)
+- [Brand Icon source](https://simpleicons.org/)

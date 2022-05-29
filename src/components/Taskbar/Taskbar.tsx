@@ -25,7 +25,7 @@ export function Taskbar() {
 					src={getIcon(appData.type)}
 					alt={appData.type}
 				></img>
-				<p>{appData.title}</p>``
+				<p>{appData.title}</p>
 				<img
 					className="TaskClose"
 					src={cross}
