@@ -62,6 +62,7 @@ The project is build with Create React App.
 
 ### Design and Style
 
+- [Software Engineering at Google: Lessons Learned from Programming Over Time by Titus Winters](https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791)
 - [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.html)
 - [Project Example: Shopify/polaris-react](https://github.com/Shopify/polaris/tree/main/polaris-react)
 - [React component design priciples](https://overreacted.io/writing-resilient-components/)
