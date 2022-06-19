@@ -20,8 +20,15 @@ DolphinOS is my attempt to learn React, then TypeScript, then Redux, then Jest. 
 
 More importantly, I want to use this project as a learning experience for how professional software engineers approach their work. I try to pay attention to the clarity and maintainability of my code, as if someone else (me) has to work on this project five years from now. Thinking about issues that affect a large codebase maintained by hundreds of professional with such as small personal project may sound a bit ridiculous, but in lieu of a collaborative software development experience one would typically find in an internship, this is the best I can do.
 
-<!-- ### What exactly did you do?
+### What exactly did you do?
 
+I reflect on and apply the tips I've learnt from books and the internet to this codebase. These tips can be as big as design philosophy or as small as code styling. Regardless of scale, I use this project as an opportunity to experiment on the best practices that I found too fragmented to memorize.
+
+Here are a few examples:
+
+TODO
+
+<!-- 
 - **Follow style guides and best practices**
 - **Reflect on design choices**
 - **Learn from real-world examples**
