@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 deploy.sh
 public/contents/
-src/assets/appData.json
+src/appData.json
 
 # dependencies
 /node_modules
