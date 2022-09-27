@@ -1,0 +1,20 @@
+{
+	"desktop": {
+		"type": "Folder",
+		"date": "-",
+		"title": "Desktop",
+		"files": ["test", "404"]
+	},
+	"404": {
+		"type": "Markdown",
+		"date": "-",
+		"title": "404 Not Found",
+		"filepath": "/contents/404.md"
+	},
+	"test": {
+		"type": "Markdown",
+		"date": "-",
+		"title": "test.md",
+		"filepath": "/contents/test.md"
+	}
+}
