@@ -11,8 +11,8 @@ import previous from "../assets/icons/previous.png";
 import dolphin from "../assets/icons/dolphin.png";
 import cross from "../assets/icons/cross.svg";
 
-// import applications_data from "../appData.public.json";
-import applications_data from "../appData.json";
+import applications_data from "../appData.public.json";
+// import applications_data from "../appData.json";
 import React from "react";
 import { Markdown } from "./Markdown";
 import { Folder } from "./Folder";
