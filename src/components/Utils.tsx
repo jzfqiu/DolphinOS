@@ -5,17 +5,19 @@ import linkIcon from "../assets/icons/link.png";
 import imageIcon from "../assets/icons/picture.png";
 import homeIcon from "../assets/icons/house.png";
 import appIcon from "../assets/icons/script.png";
+import tictactoeIcon from "../assets/icons/tictactoe.png";
 
 import previous from "../assets/icons/previous.png";
 import dolphin from "../assets/icons/dolphin.png";
 import cross from "../assets/icons/cross.svg";
 
-import applications_data from "../appData.public.json";
-// import applications_data from "../appData.json";
+// import applications_data from "../appData.public.json";
+import applications_data from "../appData.json";
 import React from "react";
 import { Markdown } from "./Markdown";
 import { Folder } from "./Folder";
 import { Browser } from "./Browser";
+import TicTacToe from "./TicTacToe/TicTacToe";
 
 export { previous, dolphin, homeIcon, cross };
 
@@ -87,6 +89,8 @@ export function getIcon(type: string) {
             return imageIcon;
         case "HTML":
             return browserIcon;
+        case "TicTacToe":
+            return tictactoeIcon;
         default:
             return appIcon;
     }
@@ -114,6 +118,8 @@ export function buildContent(appData: AppData, mobile = false) {
             return <div>TODO</div>;
         case "HTML":
             return <Browser appData={appData as FileData} />;
+        case "TicTacToe":
+            return <TicTacToe/>;
         default:
             return <div>Unknown Contents</div>;
     }

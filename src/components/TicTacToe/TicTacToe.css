@@ -1,0 +1,24 @@
+
+
+.TicTacToe {
+    text-align: center;
+    width: 304px;
+    margin: 200px auto;
+  }
+  
+  .board {
+    border: 1px solid black;
+  }
+  
+  .row {
+    display: flex;
+  }
+  
+  .Cell {
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    font-size: 80px;
+    text-align: center;
+    user-select: none;
+  }
